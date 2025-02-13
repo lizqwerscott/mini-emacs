@@ -1,9 +1,39 @@
 * My Emacs Config
-This is my little Emacs config.
-* Install On Arch Linux
-** Install Emacs git version:
-#+begin_src shell
+This is my mini Emacs config.
+* Install
+** Install Emacs
+*** Arch linux
+**** package
+#+begin_src bash
   sudo pacman -S emacs-git
+#+end_src
+**** compile
+***** Install dependencies
+#+begin_src bash
+  yay -S tree-sitter sqlite3
+#+end_src
+***** Compile
+#+begin_src bash
+  git clone https://github.com/emacs-mirror/emacs.git --depth=1 &&
+  cd emacs && git pull && ./autogen.sh &&
+  ./configure --with-tree-sitter &&
+  sudo make install -j16
+#+end_src
+*** Ubuntu
+**** Install dependencies
+#+begin_src bash
+  sudo apt build-dep emacs
+  sudo apt install libgccjit0 libgccjit-10-dev libjansson4 libjansson-dev \
+      gnutls-bin libtree-sitter-dev gcc-10 imagemagick libmagick++-dev \
+      libwebp-dev webp libxft-dev libxft2 \
+      sqlite3
+#+end_src
+**** Compile
+#+begin_src bash
+  git clone https://github.com/emacs-mirror/emacs.git --depth=1 &&
+  cd emacs && git pull && ./autogen.sh &&
+  ./configure --with-tree-sitter &&
+  sudo make install -j16
 #+end_src
 ** Download source code:
 Use ssh:
@@ -14,41 +44,43 @@ Use http:
 #+begin_src shell
   git clone https://github.com/lizqwerscott/mini-emacs.git  ~/.emacs.d/
 #+end_src
-** Need install some package
+** Dependencies
+*** Need install some package
 1. xclip
-** Need build [[https://github.com/lizqwerscott/tree-sitter-module][tree-sitter]] library
-*** clone build scripts
-**** http
+*** Need build [[https://github.com/lizqwerscott/tree-sitter-module][tree-sitter]] library
+**** clone build scripts
+***** http
 #+begin_src bash
   git clone https://github.com/lizqwerscott/tree-sitter-module.git -b vue
 #+end_src
-**** ssh
+***** ssh
 #+begin_src bash
   git clone git@github.com:lizqwerscott/tree-sitter-module.git -b vue
 #+end_src
-*** build
+**** build
 #+begin_src bash
   JOBS=16 ./batch.sh
 #+end_src
-*** copy library
+**** copy library
 Copy generated library to "~/.emacs.d/tree-sitter"
 #+begin_src bash
   mkdir -p ~/.emacs.d/tree-sitter/
   cp -r ./dist/* ~/.emacs.d/tree-sitter/
 #+end_src
-*** rename gomod library
+**** rename gomod library
 The repository [[https://github.com/camdencheek/tree-sitter-go-mod][lib-tree-sitter-go-mod]] generates a library named `go-mod`, but internally it uses the name `gomod`. Since Emacs looks for `gomod`, we need to rename it accordingly.
 #+begin_src bash
   cd ~/.emacs.d/tree-sitter/
   mv libtree-sitter-go-mod.so libtree-sitter-gomod.so
 #+end_src
 ** Fonts
-*** English
+*** Arch Linux
+**** English
 Source Code Pro
 #+begin_src bash
   yay -S ttf-adobe-source-code-pro-fonts
 #+end_src
-*** Chinese
+**** Chinese
 LXGW WenKai Screen (霞鹜文楷的屏幕舒适阅读版本)
 #+begin_src bash
   yay -S ttf-lxgw-wenkai-screen
