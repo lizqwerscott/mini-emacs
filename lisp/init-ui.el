@@ -40,6 +40,10 @@
 (unless sys/macp
   (toggle-frame-fullscreen))
 
+;;; Header & mode lines
+(require 'init-headerline)
+(require 'init-modeline)
+
 ;;; Line number
 (unless sys/win32p
   (add-hooks '(prog-mode text-mode conf-mode)
