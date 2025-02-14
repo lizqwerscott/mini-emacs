@@ -42,6 +42,29 @@
                  ("C-s-p" . nxml-backward-element)
                  ("C-s-b" . nxml-backward-up-element))))
 
+;;; isearch
+(setq isearch-lazy-count t
+      lazy-count-prefix-format "%s/%s ")
+
+(defvar my/isearch--direction nil)
+
+(defun my/isearch-repeat (&optional arg)
+  (interactive "P")
+  (isearch-repeat my/isearch--direction arg))
+
+(with-eval-after-load 'isearch
+
+  (define-advice isearch-exit (:after nil)
+    (setq-local my/isearch--direction nil))
+  (define-advice isearch-repeat-forward (:after (_))
+    (setq-local my/isearch--direction 'forward))
+  (define-advice isearch-repeat-backward (:after (_))
+    (setq-local my/isearch--direction 'backward))
+
+  (keymap-sets isearch-mode-map
+               '(("<return>" . my/isearch-repeat)
+                 ("<escape>" . isearch-exit))))
+
 ;;; auto mark comment
 ;; from https://github.com/magnars/expand-region.el/blob/b70feaa644310dc2d599dc277cd20a1f2b6446ac/er-basic-expansions.el#L102
 (defun er--point-is-in-comment-p ()
