@@ -37,7 +37,7 @@
         ;; (fullscreen . maximized)
         ))
 
-(unless sys/macp
+(unless (or sys/macp sys/win32p)
   (toggle-frame-fullscreen))
 
 ;;; Header & mode lines
@@ -45,11 +45,10 @@
 (require 'init-modeline)
 
 ;;; Line number
-(unless sys/win32p
-  (add-hooks '(prog-mode text-mode conf-mode)
-             #'(lambda ()
-                 (setq display-line-numbers-type 'relative)
-                 (display-line-numbers-mode 1))))
+(add-hooks '(prog-mode text-mode conf-mode)
+           #'(lambda ()
+               (setq display-line-numbers-type 'relative)
+               (display-line-numbers-mode 1)))
 
 ;;; Suppress GUI features
 (setq use-file-dialog nil
