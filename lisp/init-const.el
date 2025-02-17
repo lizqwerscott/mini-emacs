@@ -34,7 +34,7 @@
   :group 'user
   :type 'number)
 
-(defcustom user/font-win-size 110
+(defcustom user/font-win-size 180
   "The font size in window"
   :group 'user
   :type 'number)
