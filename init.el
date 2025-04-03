@@ -12,7 +12,9 @@
 (require 'init-edit)
 
 ;;; minibuffer
-(fido-vertical-mode +1)
+(fido-vertical-mode t)
+(marginalia-mode t)
+
 (keymap-set icomplete-fido-mode-map "s-j" #'icomplete-fido-exit)
 
 (setq completion-styles '(fussy basic)
@@ -34,6 +36,9 @@
       icomplete-matches-format nil)
 (bind-key "TAB" #'icomplete-force-complete icomplete-minibuffer-map)
 (bind-key "RET" #'icomplete-force-complete-and-exit icomplete-minibuffer-map)
+(add-hook 'icomplete-minibuffer-setup-hook
+          (lambda ()
+            (setq-local max-mini-window-height 0.5)))
 
 (with-eval-after-load 'fussy
   (fussy-setup))

@@ -107,6 +107,7 @@
   '(no-littering
     exec-path-from-shell
 
+    marginalia
     fussy
     helpful
     (watch-other-window :fetcher github :repo "manateelazycat/watch-other-window")
