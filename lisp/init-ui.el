@@ -54,7 +54,8 @@
 (setq use-file-dialog nil
       use-dialog-box nil
       inhibit-startup-screen nil
-      inhibit-startup-message t)
+      inhibit-startup-message t
+      initial-scratch-message "")
 
 ;;; Mouse & Smooth Scroll
 (when (display-graphic-p)
@@ -75,6 +76,22 @@
 (if (fboundp 'pixel-scroll-precision-mode)
     (pixel-scroll-precision-mode t)
   (pixel-scroll-mode t))
+
+;; generate from https://patorjk.com/software/taag/#p=display&f=ANSI%20Shadow&t=MiNI%20Emacs
+(with-current-buffer (get-buffer-create "*scratch*")
+    (insert (format ";;
+;; ███╗   ███╗██╗███╗   ██╗██╗    ███████╗███╗   ███╗ █████╗  ██████╗███████╗
+;; ████╗ ████║██║████╗  ██║██║    ██╔════╝████╗ ████║██╔══██╗██╔════╝██╔════╝
+;; ██╔████╔██║██║██╔██╗ ██║██║    █████╗  ██╔████╔██║███████║██║     ███████╗
+;; ██║╚██╔╝██║██║██║╚██╗██║██║    ██╔══╝  ██║╚██╔╝██║██╔══██║██║     ╚════██║
+;; ██║ ╚═╝ ██║██║██║ ╚████║██║    ███████╗██║ ╚═╝ ██║██║  ██║╚██████╗███████║
+;; ╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝    ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝╚══════╝
+;;   Loading time : %s
+;;   Packages     : %s
+;;
+"
+                    (emacs-init-time)
+                    (number-to-string (length package-activated-list)))))
 
 ;;; highlight
 (global-hl-line-mode 1)
