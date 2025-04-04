@@ -79,6 +79,47 @@
 ;;; highlight
 (global-hl-line-mode 1)
 
+;;; window
+
+(setq display-buffer-alist
+      '(
+        ("\\*.*e?shell\\*"
+         (display-buffer-in-side-window)
+         (window-height . 0.25)
+         (side . bottom)
+         (slot . -1))
+        ("\\*\\(Backtrace\\|Warnings\\|Compile-Log\\|Messages\\|Bookmark List\\|Occur\\|eldoc\\)\\*"
+         (display-buffer-in-side-window)
+         (window-height . 0.25)
+         (side . bottom)
+         (slot . 0))
+        ("\\*\\([Hh]elp\\)\\*"
+         (display-buffer-in-side-window)
+         (window-width . 75)
+         (side . right)
+         (slot . 0))
+        ("\\*\\(helpful.*\\)\\*"
+         (display-buffer-in-side-window)
+         (window-width . 75)
+         (side . right)
+         (slot . 0))
+        ("\\*\\(Ibuffer\\)\\*"
+         (display-buffer-in-side-window)
+         (window-width . 100)
+         (side . right)
+         (slot . 1))
+        ("\\*\\(Flymake diagnostics\\|xref\\|Completions\\)"
+         (display-buffer-in-side-window)
+         (window-height . 0.25)
+         (side . bottom)
+         (slot . 1))
+        ("\\*\\(grep\\|find\\)\\*"
+         (display-buffer-in-side-window)
+         (window-height . 0.25)
+         (side . bottom)
+         (slot . 2))
+        ))
+
 ;;; Another
 
 (which-key-mode)
