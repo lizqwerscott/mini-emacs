@@ -93,7 +93,8 @@
    '("bb" . switch-to-buffer)
    '("bB" . switch-to-buffer-other-window)
    '("bk" . kill-buffer-and-window)
-   '("br" . revert-buffer))
+   '("br" . revert-buffer)
+   '("bi" . ibuffer))
 
   (meow-leader-define-key
    '("si" . imenu)
