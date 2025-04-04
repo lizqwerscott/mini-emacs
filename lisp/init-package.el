@@ -111,12 +111,18 @@
     fussy
     helpful
     (watch-other-window :fetcher github :repo "manateelazycat/watch-other-window")
+    sudo-edit
+
+    markdown-mode
+    csv-mode
 
     (meow :fetcher github :repo "meow-edit/meow")
     vundo
     (fingertip :fetcher github :repo "manateelazycat/fingertip")
     hungry-delete
     super-save
+    (color-rg :fetcher github
+              :repo "manateelazycat/color-rg")
 
     grugru
     magit

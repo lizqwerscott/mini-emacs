@@ -76,6 +76,9 @@
     (pixel-scroll-precision-mode t)
   (pixel-scroll-mode t))
 
+;;; highlight
+(global-hl-line-mode 1)
+
 ;;; Another
 
 (which-key-mode)

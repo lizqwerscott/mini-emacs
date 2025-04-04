@@ -81,15 +81,25 @@
   (meow-leader-define-key
    '("ff" . find-file)
    '("fF" . find-file-other-window)
+   '("fo" . ff-find-other-file)
+   '("fO" . ff-find-other-file-other-window)
    '("fh" . (lambda ()
               (interactive)
-              (ido-find-file-in-dir "~/"))))
+              (ido-find-file-in-dir "~/")))
+   '("fr" . recentf-open)
+   '("fs" . sudo-edit-find-file))
 
   (meow-leader-define-key
    '("bb" . switch-to-buffer)
    '("bB" . switch-to-buffer-other-window)
    '("bk" . kill-buffer-and-window)
    '("br" . revert-buffer))
+
+  (meow-leader-define-key
+   '("si" . imenu)
+   '("sl" . color-rg-search-input-in-current-file)
+   '("sj" . color-rg-search-input)
+   '("sp" . color-rg-search-input-in-project))
 
   (meow-normal-define-key
    '("0" . meow-expand-0)
