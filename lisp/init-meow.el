@@ -94,7 +94,9 @@
    '("bB" . switch-to-buffer-other-window)
    '("bk" . kill-buffer-and-window)
    '("br" . revert-buffer)
-   '("bi" . ibuffer))
+   '("bi" . ibuffer)
+   '("bh" . bury-buffer)
+   '("bl" . unbury-buffer))
 
   (meow-leader-define-key
    '("si" . imenu)
