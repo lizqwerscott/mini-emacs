@@ -76,7 +76,6 @@
             (ibuffer-switch-to-saved-filter-groups "default")))
 (setq ibuffer-show-empty-filter-groups nil) ; don't show empty groups
 
-
 (require 'init-corfu)
 
 (require 'init-dired)
@@ -86,10 +85,30 @@
 
 (require 'init-magit)
 
-(keymap-set mode-specific-map "p" project-prefix-map)
+;;; project
+(defun my/project-files-in-directory (dir)
+  "Use `fd' to list files in DIR."
+  (let* ((default-directory dir)
+         (localdir (file-local-name (expand-file-name dir)))
+         (command (format "fd -H -t f -0 . %s" localdir)))
+    (project--remote-file-names
+     (sort (split-string (shell-command-to-string command) "\0" t)
+           #'string<))))
 
-(with-eval-after-load 'project
-  (keymap-sets project-prefix-map
-               '(("v" . magit-status))))
+(cl-defmethod project-files (project &optional dirs)
+  (if (equal 'transient (car project))
+      (progn
+        (message "eglot transient single file")
+        (when-let* ((server (eglot-current-server))
+                    (buffers (eglot--managed-buffers server))
+                    (paths (project--remote-file-names
+                            (mapcar #'(lambda (buffer)
+                                        (file-truename (buffer-file-name buffer)))
+                                    buffers))))
+          paths))
+    (mapcan #'my/project-files-in-directory
+            (or dirs (list (project-root project))))))
+
+(require 'init-program)
 
 ;;; init.el ends here.

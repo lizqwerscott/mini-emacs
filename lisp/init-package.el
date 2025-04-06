@@ -84,21 +84,9 @@
   (dolist (package packages)
     (package! package)))
 
-(defun site-lisp-update ()
-  "Update site-lisp packages."
-  (interactive)
-  (let ((output-buffer (get-buffer-create "*Update site lisp*")))
-    (async-shell-command
-     (concat "cd "
-             user-emacs-directory
-             " && git submodule foreach git pull")
-     output-buffer)
-    (switch-to-buffer-other-window output-buffer)))
-
 (defun emacs-update ()
   "Update Emacs all packages."
   (interactive)
-  (site-lisp-update)
   (call-interactively #'package-upgrade-all))
 
 ;;; install all package
@@ -123,11 +111,16 @@
     super-save
     (color-rg :fetcher github
               :repo "manateelazycat/color-rg")
-
     grugru
+
     magit
+
     corfu
     cape
+    citre
+    (eglot-booster :fetcher github :repo "jdtsmith/eglot-booster")
+    apheleia
+    yasnippet
 
     org-bullets))
 

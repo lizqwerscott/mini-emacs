@@ -37,6 +37,14 @@
     (if (delete-window)
         (message "finish"))))
 
+(defun help-helpful-lsp ()
+  "Help function with lsp info"
+  (interactive)
+  (if (or (equal major-mode 'emacs-lisp-mode)
+           (equal major-mode 'lisp-interaction-mode))
+        (helpful-at-point)
+    (eldoc-box-help-at-point)))
+
 (defun meow-setup ()
   ;; (meow-motion-overwrite-define-key
   ;;  '("j" . meow-next)
@@ -79,6 +87,19 @@
    '("0" . delete-window))
 
   (meow-leader-define-key
+   '("pf" . project-find-file)
+   '("pd" . project-dired)
+   '("pb" . project-switch-to-buffer)
+   '("pk" . project-kill-buffers)
+
+   '("pp" . project-switch-project)
+   '("pa" . project-remember-projects-under)
+   '("pr" . project-forget-project)
+
+   '("pv" . magit-status)
+   '("ps" . project-eshell))
+
+  (meow-leader-define-key
    '("ff" . find-file)
    '("fF" . find-file-other-window)
    '("fo" . ff-find-other-file)
@@ -103,6 +124,12 @@
    '("sl" . color-rg-search-input-in-current-file)
    '("sj" . color-rg-search-input)
    '("sp" . color-rg-search-input-in-project))
+
+  (meow-leader-define-key
+   '("jf" . apheleia-format-buffer)
+   '("jd" . flymake-show-buffer-diagnostics)
+   '("jr" . eglot-rename)
+   '("ja" . eglot-code-actions))
 
   (meow-normal-define-key
    '("0" . meow-expand-0)
@@ -178,13 +205,15 @@
    '("gr" . xref-find-references)
    '("gd" . xref-find-definitions)
    '("gD" . xref-find-definitions-other-window)
+   '("gi" . eglot-find-implementation)
+   '("gI" . eglot-find-implementation)
    '("C-o" . xref-go-back))
 
   (meow-normal-define-key
    '("C-;" . grugru)
    '("C-y" . meow-clipboard-yank)
    '("Q" . kill-now-buffer)
-   '("?" . helpful-at-point)
+   '("?" . help-helpful-lsp)
    '("gf" . find-file-at-point)
    '("gp" . goto-percent)))
 
