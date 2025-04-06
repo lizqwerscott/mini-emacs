@@ -122,6 +122,7 @@
     apheleia
     yasnippet
 
+    diredfl
     org-bullets))
 
 (packages! *package-early-install-list*)

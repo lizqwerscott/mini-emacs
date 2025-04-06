@@ -96,6 +96,7 @@ At 2nd time it copy current directory to kill-buffer."
 ;;; Hook
 (add-hook 'dired-mode-hook
           #'(lambda ()
+              (diredfl-mode)
               (dired-omit-mode)))
 
 ;;; Keymap
