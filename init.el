@@ -11,38 +11,7 @@
 
 (require 'init-edit)
 
-;;; minibuffer
-(fido-vertical-mode t)
-(marginalia-mode t)
-
-(keymap-set icomplete-fido-mode-map "s-j" #'icomplete-fido-exit)
-
-(setq completion-styles '(fussy basic)
-      completion-category-defaults nil
-      completion-category-overrides '((file (styles basic partial-completion))))
-
-(setq tab-always-indent 'complete
-      icomplete-delay-completions-threshold 0
-      icomplete-compute-delay 0
-      icomplete-show-matches-on-no-input t
-      icomplete-hide-common-prefix nil
-      icomplete-prospects-height 9
-      icomplete-separator " . "
-      icomplete-with-completion-tables t
-      icomplete-in-buffer t
-      icomplete-max-delay-chars 0
-      icomplete-scroll t
-      resize-mini-windows 'grow-only
-      icomplete-matches-format nil)
-(bind-key "TAB" #'icomplete-force-complete icomplete-minibuffer-map)
-(bind-key "RET" #'icomplete-force-complete-and-exit icomplete-minibuffer-map)
-(add-hook 'icomplete-minibuffer-setup-hook
-          (lambda ()
-            (setq-local max-mini-window-height 0.5)))
-
-(with-eval-after-load 'fussy
-  (fussy-setup))
-
+(require 'init-minibuffer)
 ;; Ibuffer filters
 (setq ibuffer-saved-filter-groups
       '(("default"
