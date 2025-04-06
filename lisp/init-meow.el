@@ -30,13 +30,6 @@
   (kill-buffer (current-buffer))
   (delete-window))
 
-(defun my/meow-quit ()
-  (interactive)
-  (if (derived-mode-p 'dired-mode)
-      (kill-now-buffer)
-    (if (delete-window)
-        (message "finish"))))
-
 (defun help-helpful-lsp ()
   "Help function with lsp info"
   (interactive)
@@ -179,7 +172,7 @@
    '("O" . meow-to-block)
    '("p" . meow-yank)
    '("P" . meow-yank-pop)
-   '("q" . my/meow-quit)
+   '("q" . meow-quit)
    ;;   '("Q" . meow-goto-line)
    '("r" . meow-replace)
    '("R" . meow-swap-grab)
