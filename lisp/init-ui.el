@@ -96,8 +96,13 @@
 ;;; highlight
 (global-hl-line-mode 1)
 
-;;; window
+(require 'paren)
+(setq show-paren-delay 0.2
+      show-paren-style 'mixed
+      show-paren-context-when-offscreen t)
+(add-hook 'after-init-hook #'show-paren-mode)
 
+;;; window
 (setq display-buffer-alist
       '(
         ("\\*.*e?shell\\*"
