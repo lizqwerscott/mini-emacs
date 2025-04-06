@@ -45,6 +45,17 @@
             (ibuffer-switch-to-saved-filter-groups "default")))
 (setq ibuffer-show-empty-filter-groups nil) ; don't show empty groups
 
+(with-eval-after-load 'proced
+  (setq proced-enable-color-flag t
+        proced-tree-flag t
+        proced-auto-update-flag 'visible
+        proced-descend t
+        proced-filter 'user))
+
+(add-hook 'proced-mode-hook
+          #'(lambda ()
+              (proced-toggle-auto-update 1)))
+
 (require 'init-corfu)
 
 (require 'init-dired)
