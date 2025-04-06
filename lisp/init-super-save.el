@@ -39,7 +39,9 @@
 
       super-save-all-buffers t)
 
-(add-to-list 'super-save-triggers 'ace-window)
+(add-list-to-list 'super-save-triggers
+                  '(magit-status))
+
 (add-to-list 'super-save-hook-triggers 'find-file-hook)
 
 (super-save-mode +1)
