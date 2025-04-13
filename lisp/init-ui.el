@@ -117,12 +117,12 @@
          (slot . 0))
         ("\\*\\([Hh]elp\\)\\*"
          (display-buffer-in-side-window)
-         (window-width . 75)
+         (window-width . 0.4)
          (side . right)
          (slot . 0))
         ("\\*\\(helpful.*\\)\\*"
          (display-buffer-in-side-window)
-         (window-width . 75)
+         (window-width . 0.4)
          (side . right)
          (slot . 0))
         ("\\*\\(Ibuffer\\)\\*"
