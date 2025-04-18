@@ -103,33 +103,19 @@
 (add-hook 'after-init-hook #'show-paren-mode)
 
 ;;; window
+(defun my-window-select-fit-size (window)
+  (select-window window)
+  (fit-window-to-buffer window
+                        (floor (frame-height) 3)
+                        10))
+
 (setq display-buffer-alist
-      '(
+      '(;; bottom side window
         ("\\*.*e?shell\\*"
          (display-buffer-in-side-window)
          (window-height . 0.25)
          (side . bottom)
          (slot . -1))
-        ("\\*\\(Backtrace\\|Warnings\\|Compile-Log\\|Messages\\|Bookmark List\\|Occur\\|eldoc\\)\\*"
-         (display-buffer-in-side-window)
-         (window-height . 0.25)
-         (side . bottom)
-         (slot . 0))
-        ("\\*\\([Hh]elp\\)\\*"
-         (display-buffer-in-side-window)
-         (window-width . 0.4)
-         (side . right)
-         (slot . 0))
-        ("\\*\\(helpful.*\\)\\*"
-         (display-buffer-in-side-window)
-         (window-width . 0.4)
-         (side . right)
-         (slot . 0))
-        ("\\*\\(Ibuffer\\)\\*"
-         (display-buffer-in-side-window)
-         (window-width . 100)
-         (side . right)
-         (slot . 1))
         ("\\*\\(Flymake diagnostics\\|xref\\|Completions\\)"
          (display-buffer-in-side-window)
          (window-height . 0.25)
@@ -140,7 +126,29 @@
          (window-height . 0.25)
          (side . bottom)
          (slot . 2))
-        ))
+        ;; right side window
+        ((or "\\*\\([Hh]elp\\)\\*" "\\*\\(helpful.*\\)\\*")
+         (display-buffer-in-side-window)
+         (window-width . 0.4)
+         (side . right)
+         (slot . 0))
+        ("\\*\\(Ibuffer\\)\\*"
+         (display-buffer-in-side-window)
+         (window-width . 100)
+         (side . right)
+         (slot . 1))
+        ;; bottom buffer (NOT side window)
+        ((or "\\*\\(Backtrace\\|Warnings\\|Compile-Log\\|Messages\\|Bookmark List\\|Occur\\|eldoc\\)\\*"
+             "\\*\\(Flymake diagnostics\\|xref\\|Completions\\)"
+             "Output\\*$"
+             "\\*ert\\*$"
+
+             "\\*Async Shell Command\\*$"
+             "\\*Apropos\\*$")
+         (display-buffer-reuse-mode-window display-buffer-at-bottom)
+         (dedicated . t)
+         (window-height . 0.25)
+         (body-function . my-window-select-fit-size))))
 
 ;;; Another
 
