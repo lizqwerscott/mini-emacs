@@ -44,26 +44,23 @@
 
 ;;; isearch
 (setq isearch-lazy-count t
-      lazy-count-prefix-format "%s/%s ")
+      lazy-count-prefix-format "%s/%s "
+      search-whitespace-regexp ".*?")
 
-(defvar my/isearch--direction nil)
-
-(defun my/isearch-repeat (&optional arg)
-  (interactive "P")
-  (isearch-repeat my/isearch--direction arg))
+(defun my-occur-from-isearch ()
+    (interactive)
+    (let ((query (if isearch-regexp
+               isearch-string
+             (regexp-quote isearch-string))))
+      (isearch-update-ring isearch-string isearch-regexp)
+      (let (search-nonincremental-instead)
+        (ignore-errors (isearch-done t t)))
+      (occur query)))
 
 (with-eval-after-load 'isearch
-
-  (define-advice isearch-exit (:after nil)
-    (setq-local my/isearch--direction nil))
-  (define-advice isearch-repeat-forward (:after (_))
-    (setq-local my/isearch--direction 'forward))
-  (define-advice isearch-repeat-backward (:after (_))
-    (setq-local my/isearch--direction 'backward))
-
   (keymap-sets isearch-mode-map
-               '(("<return>" . my/isearch-repeat)
-                 ("<escape>" . isearch-exit))))
+               '(("<escape>" . isearch-exit)
+                 ("C-o" . my-occur-from-isearch))))
 
 ;;; auto mark comment
 ;; from https://github.com/magnars/expand-region.el/blob/b70feaa644310dc2d599dc277cd20a1f2b6446ac/er-basic-expansions.el#L102
