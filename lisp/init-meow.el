@@ -90,7 +90,8 @@
    '("pr" . project-forget-project)
 
    '("pv" . magit-status)
-   '("ps" . project-eshell))
+   '("ps" . project-eshell)
+   '("pc" . project-compile))
 
   (meow-leader-define-key
    '("ff" . find-file)
