@@ -33,23 +33,37 @@
 (setq compilation-auto-jump-to-first-error nil)
 (setq compilation-max-output-line-length nil)
 
+(defun get-first-compilation-error ()
+  (when (compilation-buffer-p (current-buffer))
+    (compilation--ensure-parse (point-min))
+    (save-excursion
+      (goto-char (point-min))
+      (condition-case err
+          (progn
+            (compilation-next-error 1)
+            (> (point)
+               (point-min)))
+        (error
+         nil)))))
+
 (defun ar/compile-autoclose-or-jump-first-error (buffer string)
   "Hide successful builds window with BUFFER and STRING."
-  (when (with-current-buffer buffer
-          (eq major-mode 'compilation-mode))
-    (if (and (string-match "finished" string)
-           (not (string-match "^.*warning.*" string)))
-        (progn
-          (message "Build finished :)")
-          (run-with-timer 1 nil
-                          (lambda ()
-                            (when-let* ((multi-window (> (count-windows) 1))
-                                        (live (buffer-live-p buffer))
-                                        (window (get-buffer-window buffer t)))
-                              (delete-window window)))))
-      (progn
-        (message "Compilation %s" string)
-        (call-interactively #'compilation-next-error)))))
+  (with-current-buffer buffer
+    (when (eq major-mode 'compilation-mode)
+      (if (or (string-match "^.*warning.*" string)
+              (get-first-compilation-error)
+              (string-match ".*exited abnormally.*" string))
+          (progn
+            (message "Compilation %s" string)
+            (goto-char (point-min))
+            (call-interactively #'compilation-next-error))
+        (message "Build finished :)")
+        (run-with-timer 1 nil
+                        (lambda ()
+                          (when-let* ((multi-window (> (count-windows) 1))
+                                      (live (buffer-live-p buffer))
+                                      (window (get-buffer-window buffer t)))
+                            (delete-window window))))))))
 
 (setq compilation-finish-functions (list #'ar/compile-autoclose-or-jump-first-error))
 (add-hook 'compilation-filter-hook #'ansi-color-compilation-filter)
