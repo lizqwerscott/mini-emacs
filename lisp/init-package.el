@@ -114,6 +114,7 @@
     grugru
 
     magit
+    diff-hl
 
     corfu
     cape

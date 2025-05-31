@@ -102,6 +102,49 @@
       show-paren-context-when-offscreen t)
 (add-hook 'after-init-hook #'show-paren-mode)
 
+;;; Highlight uncommitted changes using VC
+(require 'diff-hl)
+(setq diff-hl-draw-borders nil)
+(setq diff-hl-disable-on-remote t)
+
+(custom-set-faces
+ '(diff-hl-change ((t (:inherit custom-changed :foreground unspecified :background unspecified))))
+ '(diff-hl-insert ((t (:inherit diff-added :background unspecified))))
+ '(diff-hl-delete ((t (:inherit diff-removed :background unspecified)))))
+
+(keymap-set diff-hl-command-map "SPC" 'diff-hl-mark-hunk)
+
+(setq-default fringes-outside-margins t)
+
+(with-no-warnings
+  (defun my-diff-hl-fringe-bmp-function (_type _pos)
+    "Fringe bitmap function for use as `diff-hl-fringe-bmp-function'."
+    (define-fringe-bitmap 'my-diff-hl-bmp
+      (vector (if sys/linuxp #b11111100 #b11100000))
+      1 8
+      '(center t)))
+  (setq diff-hl-fringe-bmp-function #'my-diff-hl-fringe-bmp-function)
+
+  (unless (display-graphic-p)
+    ;; Fall back to the display margin since the fringe is unavailable in tty
+    (diff-hl-margin-mode 1)
+    ;; Avoid restoring `diff-hl-margin-mode'
+    (with-eval-after-load 'desktop
+      (add-to-list 'desktop-minor-mode-table
+                   '(diff-hl-margin-mode nil))))
+
+  ;; Integration with magit
+  (with-eval-after-load 'magit
+    (add-hook 'magit-pre-refresh-hook #'diff-hl-magit-pre-refresh)
+    (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh)))
+
+(global-diff-hl-mode)
+(global-diff-hl-show-hunk-mouse-mode)
+(add-hook 'dired-mode-hook
+          'diff-hl-dired-mode)
+
+(diff-hl-flydiff-mode)
+
 ;;; window
 (defun my-window-select-fit-size (window)
   (select-window window)
