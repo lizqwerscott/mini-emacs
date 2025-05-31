@@ -209,7 +209,8 @@
    '("Q" . kill-now-buffer)
    '("?" . help-helpful-lsp)
    '("gf" . find-file-at-point)
-   '("gp" . goto-percent)))
+   '("gp" . goto-percent)
+   '("gl" . goto-line)))
 
 (meow-setup)
 (meow-global-mode 1)
