@@ -24,7 +24,9 @@
   :group 'user
   :type 'symbol)
 
-(defcustom user/night-theme 'modus-vivendi-tinted
+(defcustom user/night-theme (if (display-graphic-p)
+                                'modus-vivendi-tinted
+                              'modus-vivendi)
   "User night theme"
   :group 'user
   :type 'symbol)
