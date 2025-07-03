@@ -96,6 +96,7 @@ At 2nd time it copy current directory to kill-buffer."
 ;;; Hook
 (add-hook 'dired-mode-hook
           #'(lambda ()
+              (dired-async-mode)
               (diredfl-mode)
               (dired-omit-mode)))
 
