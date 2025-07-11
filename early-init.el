@@ -16,6 +16,9 @@
   (add-to-list 'load-path
                (expand-file-name
                 (concat user-emacs-directory "lisp")))
+  (add-to-list 'load-path
+               (expand-file-name
+                (concat user-emacs-directory "lib")))
   ;; (setq toggle-debug-on-error t)
   (require 'init-utils)
 
