@@ -108,6 +108,37 @@ At 2nd time it copy current directory to kill-buffer."
                ("C-c +" . dired-create-empty-file)
                ("M-n" . scroll-up-1/3)
                ("M-p" . scroll-down-1/3)
-               ("h" . dired-up-directory)))
+               ("h" . dired-up-directory)
+               ("C-o" . dired-dispatch)))
+
+
+;;; Menu
+(defun transient-show--variable-to-checkbox (v)
+  "Checkbox string representation of variable V.
+V is either nil or non-nil."
+  (if v "[x]" "[ ]"))
+
+(defun transient-show--prefix-label (label prefix)
+  "Label constructed with PREFIX and LABEL separated by a space."
+  (format "%s %s" prefix label))
+
+(defun transient-show-checkbox-label (v label)
+  "Checkbox label using variable V and LABEL."
+  (transient-show--prefix-label label (transient-show--variable-to-checkbox v)))
+
+(require 'transient)
+
+;;;###autoload
+(transient-define-prefix dired-dispatch ()
+  "Dired dispatch menu"
+  [["Directory"
+    ("h" "Hide Details" dired-hide-details-mode
+     :description
+     (lambda ()
+       (transient-show-checkbox-label dired-hide-details-mode "Hide Details")))
+    ("o" "Omit Mode" dired-omit-mode
+     :description
+     (lambda () (transient-show-checkbox-label dired-omit-mode "Omit Mode")))]]
+  [("q" "Quit" transient-quit-all)])
 
 (provide 'init-dired)
