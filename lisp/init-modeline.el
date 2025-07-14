@@ -28,6 +28,9 @@
 (defface modeline-face-strong '((t)) "")
 (defface modeline-face-faded '((t)) "")
 (defface modeline-face-critical '((t)) "")
+(defface modeline-face-info '((t)) "")
+(defface modeline-face-warning '((t)) "")
+(defface modeline-face-urgent '((t)) "")
 
 (defun modeline-set-face (name &optional foreground background weight)
   "Set NAME and NAME-i faces with given FOREGROUND, BACKGROUND and WEIGHT"
@@ -41,6 +44,9 @@
 (modeline-set-face 'modeline-face-strong "#ECEFF4" nil 'regular) ;; Polar Night 0
 (modeline-set-face 'modeline-face-faded "#b6a0ff") ;;
 (modeline-set-face 'modeline-face-critical "#EBCB8B") ;; Aurora 2
+(modeline-set-face 'modeline-face-info "#0000FFFF0000")
+(modeline-set-face 'modeline-face-warning "#b6a0ff")
+(modeline-set-face 'modeline-face-urgent "#FFFF00000000")
 
 ;; from doom-modeline
 (defsubst modeline-encoding ()
@@ -86,6 +92,23 @@
         'local-map mode-line-coding-system-map))
      sep)))
 
+(defsubst modeline-vcs ()
+  (when (and vc-mode buffer-file-name)
+    (when-let* ((vcs-state (vc-state buffer-file-name
+                                     (vc-backend buffer-file-name)))
+                (vcs-icon (cond ((memq vcs-state '(edited added))
+                                 (list "*" 'modeline-face-info))
+                                ((eq vcs-state 'needs-merge)
+                                 (list "?" 'modeline-face-info))
+                                ((eq vcs-state 'needs-update)
+                                 (list "!" 'modeline-face-warning))
+                                ((memq vcs-state '(removed conflict unregistered))
+                                 (list "!" 'modeline-face-urgent))
+                                (t (list "@" 'info))))
+                (vcs-branch-name (cadr (split-string (string-trim vc-mode) "^[A-Z]+[-:]+"))))
+      (propertize (format " %s%s " (car vcs-icon) vcs-branch-name)
+                  'face (cdr vcs-icon)))))
+
 (setq-default mode-line-format
               '(:eval
                 (let ((meow-mode-status (cond ((meow-normal-mode-p) "N")
@@ -104,15 +127,17 @@
                                               (t "unknow"))
                                     " "))
                       (coords (format-mode-line "  L%l:C%c"))
-                      (buffer-encoding (modeline-encoding)))
+                      (buffer-encoding (modeline-encoding))
+                      (vcs-str (modeline-vcs)))
                   (list
                    (propertize (format "  %s  " meow-mode-status) 'face 'modeline-face-faded)
                    (propertize (car prefix) 'face (cdr prefix))
                    (propertize (format-mode-line "%b") 'face buffer-name-face)
                    (propertize coords 'face 'modeline-face-strong)
-                   (propertize " " 'display `(space :align-to (- right ,(length mode) ,(length buffer-encoding))))
+                   (propertize " " 'display `(space :align-to (- right ,(length mode) ,(length buffer-encoding) ,(length vcs-str))))
                    buffer-encoding
-                   (propertize mode 'face 'modeline-face-faded)))))
+                   (propertize mode 'face 'modeline-face-faded)
+                   vcs-str))))
 
 (provide 'init-modeline)
 ;;; init-modeline.el ends here
