@@ -104,18 +104,14 @@
                                  (list "!" 'modeline-face-warning))
                                 ((memq vcs-state '(removed conflict unregistered))
                                  (list "!" 'modeline-face-urgent))
-                                (t (list "@" 'info))))
+                                (t (list "@" 'modeline-face-info))))
                 (vcs-branch-name (cadr (split-string (string-trim vc-mode) "^[A-Z]+[-:]+"))))
       (propertize (format " %s%s " (car vcs-icon) vcs-branch-name)
                   'face (cdr vcs-icon)))))
 
 (setq-default mode-line-format
               '(:eval
-                (let ((meow-mode-status (cond ((meow-normal-mode-p) "N")
-                                              ((meow-motion-mode-p) "M")
-                                              ((meow-keypad-mode-p) "K")
-                                              ((meow-insert-mode-p) "I")
-                                              (t " ")))
+                (let ((meow-mode-status (meow--get-state-name (meow--current-state)))
                       (prefix (cond (buffer-read-only     '("Read " . modeline-face-critical))
                                     ((buffer-modified-p)  '("" . modeline-face-critical))
                                     (t                    '("" . modeline-face-strong))))
@@ -130,7 +126,7 @@
                       (buffer-encoding (modeline-encoding))
                       (vcs-str (modeline-vcs)))
                   (list
-                   (propertize (format "  %s  " meow-mode-status) 'face 'modeline-face-faded)
+                   (propertize (format " %s " meow-mode-status) 'face 'modeline-face-faded)
                    (propertize (car prefix) 'face (cdr prefix))
                    (propertize (format-mode-line "%b") 'face buffer-name-face)
                    (propertize coords 'face 'modeline-face-strong)
