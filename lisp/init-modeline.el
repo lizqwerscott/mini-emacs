@@ -31,6 +31,7 @@
 (defface modeline-face-info '((t)) "")
 (defface modeline-face-warning '((t)) "")
 (defface modeline-face-urgent '((t)) "")
+(defface modeline-face-meow-insert '((t)) "")
 
 (defun modeline-set-face (name &optional foreground background weight)
   "Set NAME and NAME-i faces with given FOREGROUND, BACKGROUND and WEIGHT"
@@ -47,6 +48,12 @@
 (modeline-set-face 'modeline-face-info "#0000FFFF0000")
 (modeline-set-face 'modeline-face-warning "#b6a0ff")
 (modeline-set-face 'modeline-face-urgent "#FFFF00000000")
+(modeline-set-face 'modeline-face-meow-insert "#9fefff")
+
+(defface doom-modeline-evil-insert-state
+  '((t (:inherit (doom-modeline font-lock-keyword-face))))
+  "Face for the insert state tag in evil indicator."
+  :group 'doom-modeline-faces)
 
 ;; from doom-modeline
 (defsubst modeline-encoding ()
@@ -126,7 +133,9 @@
                       (buffer-encoding (modeline-encoding))
                       (vcs-str (modeline-vcs)))
                   (list
-                   (propertize (format " %s " meow-mode-status) 'face 'modeline-face-faded)
+                   (propertize (format " %s " meow-mode-status) 'face (if (meow-insert-mode-p)
+                                                                          'modeline-face-meow-insert
+                                                                        'modeline-face-faded))
                    (propertize (car prefix) 'face (cdr prefix))
                    (propertize (format-mode-line "%b") 'face buffer-name-face)
                    (propertize coords 'face 'modeline-face-strong)
