@@ -58,7 +58,7 @@
 ;; from doom-modeline
 (defsubst modeline-encoding ()
   "Encoding"
-  (let ((sep (propertize " " 'face 'mode-line))
+  (let ((sep " ")
         (face 'modeline-face-strong)
         (mouse-face 'modeline-face-faded))
     (concat
