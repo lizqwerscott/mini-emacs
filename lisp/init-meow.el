@@ -125,7 +125,8 @@
               (interactive)
               (ido-find-file-in-dir "~/")))
    '("fr" . recentf-open)
-   '("fs" . sudo-edit-find-file))
+   '("fs" . sudo-edit-find-file)
+   '("fc" . find-custom-file))
 
   (meow-leader-define-key
    '("bb" . switch-to-buffer)

@@ -128,4 +128,10 @@
         emacs-basic-display
         (not (display-graphic-p)))))
 
+;;;###autoload
+(defun find-custom-file()
+  "Open custom files."
+  (interactive)
+  (find-file custom-file))
+
 (provide 'init-utils)
