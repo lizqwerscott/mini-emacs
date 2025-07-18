@@ -6,14 +6,13 @@
       icomplete-compute-delay 0
       icomplete-show-matches-on-no-input t
       icomplete-hide-common-prefix nil
-      icomplete-prospects-height 9
+      icomplete-prospects-height 10
       icomplete-separator " . "
       icomplete-with-completion-tables t
       icomplete-in-buffer t
       icomplete-max-delay-chars 0
       icomplete-scroll t
-      resize-mini-windows 'grow-only
-      icomplete-matches-format nil)
+      resize-mini-windows 'grow-only)
 
 (if icomplete-in-buffer
       (advice-add 'completion-at-point
