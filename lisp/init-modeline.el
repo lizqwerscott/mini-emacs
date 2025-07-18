@@ -139,7 +139,8 @@
                    (propertize (car prefix) 'face (cdr prefix))
                    (propertize (format-mode-line "%b") 'face buffer-name-face)
                    (propertize coords 'face 'modeline-face-strong)
-                   flymake-mode-line-format
+                   (when flymake-mode
+                     flymake-mode-line-format)
                    (propertize " " 'display `(space :align-to (- right ,(length mode) ,(length buffer-encoding) ,(length vcs-str))))
                    buffer-encoding
                    (propertize mode 'face 'modeline-face-faded)
