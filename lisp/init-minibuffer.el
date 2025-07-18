@@ -323,6 +323,10 @@ away from the bottom.  Counts wrapped lines as real lines."
       completion-category-overrides '((file (styles basic partial-completion)))
       tab-always-indent 'complete)
 
+;; Keep minibuffer lines unwrapped, long lines like on M-y will be truncated
+(add-hook 'minibuffer-setup-hook
+          (lambda () (setq truncate-lines t)))
+
 (with-eval-after-load 'fussy
   (fussy-setup))
 
