@@ -329,5 +329,8 @@ away from the bottom.  Counts wrapped lines as real lines."
 (with-eval-after-load 'fussy
   (fussy-setup))
 
+(minibuffer-depth-indicate-mode 1)
+(minibuffer-electric-default-mode 1)
+
 (provide 'init-minibuffer)
 ;;; init-minibuffer.el ends here.
