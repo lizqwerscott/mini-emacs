@@ -113,7 +113,7 @@
                                  (list "!" 'modeline-face-urgent))
                                 (t (list "@" 'modeline-face-info))))
                 (vcs-branch-name (cadr (split-string (string-trim vc-mode) "^[A-Z]+[-:]+"))))
-      (propertize (format " %s%s " (car vcs-icon) vcs-branch-name)
+      (propertize (format "%s%s" (car vcs-icon) vcs-branch-name)
                   'face (cdr vcs-icon)))))
 
 (setq-default mode-line-format
@@ -125,11 +125,10 @@
                       (buffer-name-face (cond (buffer-read-only     'modeline-face-strong)
                                               ((buffer-modified-p)  'modeline-face-critical)
                                               (t                    'modeline-face-strong)))
-                      (mode (concat " " (cond ((consp mode-name) (car mode-name))
-                                              ((stringp mode-name) mode-name)
-                                              (t "unknow"))
-                                    " "))
-                      (coords (format-mode-line "  L%l:C%c"))
+                      (mode (cond ((consp mode-name) (car mode-name))
+                                  ((stringp mode-name) mode-name)
+                                  (t "unknow")))
+                      (coords (format-mode-line " L%l:C%c"))
                       (buffer-encoding (modeline-encoding))
                       (vcs-str (modeline-vcs)))
                   (list
@@ -141,9 +140,10 @@
                    (propertize coords 'face 'modeline-face-strong)
                    (when flymake-mode
                      flymake-mode-line-format)
-                   (propertize " " 'display `(space :align-to (- right ,(length mode) ,(length buffer-encoding) ,(length vcs-str))))
+                   (propertize " " 'display `(space :align-to (- right ,(length mode) ,(length buffer-encoding) 1 ,(length vcs-str))))
                    buffer-encoding
                    (propertize mode 'face 'modeline-face-faded)
+                   " "
                    vcs-str))))
 
 (provide 'init-modeline)

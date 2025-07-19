@@ -138,12 +138,12 @@
     (add-hook 'magit-pre-refresh-hook #'diff-hl-magit-pre-refresh)
     (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh)))
 
-(global-diff-hl-mode)
-(global-diff-hl-show-hunk-mouse-mode)
-(add-hook 'dired-mode-hook
-          'diff-hl-dired-mode)
+;; (global-diff-hl-mode)
+;; (global-diff-hl-show-hunk-mouse-mode)
+;; (add-hook 'dired-mode-hook
+;;           'diff-hl-dired-mode)
 
-(diff-hl-flydiff-mode)
+;; (diff-hl-flydiff-mode)
 
 ;;; window
 (defun my-window-select-fit-size (window)
