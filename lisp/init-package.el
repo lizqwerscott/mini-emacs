@@ -112,6 +112,7 @@
     (color-rg :fetcher github
               :repo "manateelazycat/color-rg")
     grugru
+    visual-replace
 
     magit
     diff-hl

@@ -42,6 +42,26 @@
                  ("C-s-p" . nxml-backward-element)
                  ("C-s-b" . nxml-backward-up-element))))
 
+;;; Visual Replace
+(require 'visual-replace)
+(setq visual-replace-min-length 1)
+
+(with-eval-after-load 'transient
+  (transient-define-prefix visual-replace-dispatch ()
+    "Visual replace menu."
+    ["Toggles"
+     ("r" "Regexp" visual-replace-toggle-regexp)
+     ("s" "Scope" visual-replace-toggle-scope)
+     ("q" "Query" visual-replace-toggle-query)
+     ("w" "Word" visual-replace-toggle-word)
+     ("c" "Case Fold" visual-replace-toggle-case-fold)
+     ("l" "Lax ws" visual-replace-toggle-lax-ws)]))
+
+(keymap-set visual-replace-mode-map
+            "C-o" #'visual-replace-dispatch)
+(global-set-key (kbd "s-r") #'visual-replace)
+(visual-replace-global-mode 1)
+
 ;;; isearch
 (setq isearch-lazy-count t
       isearch-case-fold-search t
@@ -49,14 +69,14 @@
       search-whitespace-regexp ".*?")
 
 (defun my-occur-from-isearch ()
-    (interactive)
-    (let ((query (if isearch-regexp
-               isearch-string
-             (regexp-quote isearch-string))))
-      (isearch-update-ring isearch-string isearch-regexp)
-      (let (search-nonincremental-instead)
-        (ignore-errors (isearch-done t t)))
-      (occur query)))
+  (interactive)
+  (let ((query (if isearch-regexp
+                   isearch-string
+                 (regexp-quote isearch-string))))
+    (isearch-update-ring isearch-string isearch-regexp)
+    (let (search-nonincremental-instead)
+      (ignore-errors (isearch-done t t)))
+    (occur query)))
 
 (with-eval-after-load 'isearch
   (keymap-sets isearch-mode-map
