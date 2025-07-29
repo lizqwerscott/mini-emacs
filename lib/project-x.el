@@ -237,5 +237,132 @@ buffer, are identical."
      (add-to-list 'safe-local-variable-directories
                   (file-truename project-path)))))
 
+
+;;; from projection
+(defcustom project-find-other-file-suffix
+  '(;; handle C/C++ extensions
+    ("cpp" "h" "hpp" "ipp")
+    ("ipp" "h" "hpp" "cpp")
+    ("hpp" "h" "ipp" "cpp" "cc")
+    ("cxx" "h" "hxx" "ixx")
+    ("ixx" "h" "hxx" "cxx")
+    ("hxx" "h" "ixx" "cxx")
+    ("c"   "h")
+    ("m"   "h")
+    ("mm"  "h")
+    ("h"   "c" "cc" "cpp" "ipp" "hpp" "cxx" "ixx" "hxx" "m" "mm")
+    ("cc"  "h" "hh" "hpp")
+    ("hh"  "cc"))
+  "Alist associating related files in a project by extension.
+Configures relationships between files with similar base-names and different
+extensions. For example foo.h is related to foo.cpp and can be jumped between
+each other with `projection-find-other-file' by adding the following mappings
+to this configuration:
+
+    ((\"h\" \"cpp\")
+     (\"cpp\" \"h\"))
+
+In many cases the mapping between extensions should be reciprocal to ensure
+you can jump between them from either file but this isn't required."
+  :type '(alist :key-type string :value-type (list string)))
+
+(defun project-find--related-extensions (initial-extension)
+  "Get list of file extensions related to INITIAL-EXTENSION.
+Looks for extensions based on `project-find-other-file-suffix'."
+  (let ((extensions (make-hash-table :test #'equal))
+        (searched-extensions (make-hash-table :test #'equal)))
+    (puthash initial-extension t searched-extensions)
+    (dolist (extention (cdr (assoc nil project-find-other-file-suffix)))
+      (puthash extention t extensions))
+
+    (while (> (hash-table-count searched-extensions) 0)
+      (let ((ext (car (hash-table-keys searched-extensions))))
+        (remhash ext searched-extensions)
+        (puthash ext t extensions)
+        (cl-loop for ext in (cdr (assoc ext project-find-other-file-suffix #'string-equal))
+                 when (and ext (not (gethash ext extensions)))
+                   do (puthash ext t searched-extensions))))
+
+    (sort (hash-table-keys extensions) #'string<)))
+
+(defun project-find--related-file-basenames (file-name)
+  "Get list of basenames for other-files to FILE-NAME."
+  (let* ((basename (file-name-nondirectory file-name))
+         (extension (file-name-extension basename))
+         (basename-no-ext
+          (substring basename 0 (- (1+ (length extension)))))
+         (related-extensions
+          (project-find--related-extensions extension))
+         (related-basenames (make-hash-table :test #'equal)))
+    (when (> (length basename-no-ext) 0)
+      (dolist (extension related-extensions)
+        (when (> (length extension) 0)
+          (setq extension (concat "." extension)))
+        ;; File name with just the extension added on.
+        (puthash (concat basename-no-ext extension) t related-basenames)))
+    related-basenames))
+
+(defun project-find--other-file-list (project file-name)
+  "Get list of other files for the FILE-NAME in PROJECT."
+  (unless (file-name-absolute-p file-name)
+    (expand-file-name file-name (project-root project)))
+
+  (let* ((other-file-basenames
+          (project-find--related-file-basenames
+           file-name))
+         other-files)
+    (dolist (file (project-files project))
+      (when (gethash (file-name-nondirectory file) other-file-basenames)
+        (push file other-files)))
+    ;; Ensure current file-name is included in the other file list.
+    (when (and (file-exists-p file-name)
+               (not (gethash (file-name-nondirectory file-name)
+                             other-file-basenames)))
+      (push file-name other-files))
+    ;; Return consistently ordered list of files.
+    other-files))
+
+(defun project-find--other-file ()
+  "Select another file to jump to for `project-find-other-file'."
+  (let* ((project (project-current))
+         (files (project-find--other-file-list
+                 project
+                 (or buffer-file-name
+                     (buffer-name))))
+         ;; Existing position of the current file in the other-file list.
+         (current-file-pos
+          (when buffer-file-name
+            (seq-position files buffer-file-name #'string-equal)))
+         ;; Position of the next file in the other-file list.
+         (other-file-pos (or (when current-file-pos
+                               (unless (equal current-file-pos (1- (length files)))
+                                 (1+ current-file-pos)))
+                           0))
+         ;; Other-files not including the current file.
+         (files-not-current
+          (if current-file-pos
+              (append
+               (seq-take files current-file-pos)
+               (nthcdr   (1+ current-file-pos) files))
+            (seq-copy files))))
+    (cond
+     ((not files-not-current)
+      (error "No other files found"))
+     ;; Select the next file relative to the current one
+     (t
+      (nth other-file-pos files)))))
+
+;;;###autoload
+(defun project-find-other-file ()
+  "Switch between similar files to the current file in this project.
+This function will huerestically determine all files in the project similar
+to the current file and then `find-file' it. For example this can be used to
+switch between C++ header and implementation files assuming the two have the
+same basename and a different extension."
+  (interactive "P")
+  (when-let* ((file
+               (project-find--other-file)))
+    (funcall #'find-file file)))
+
 (provide 'project-x)
 ;;; project-x.el ends here

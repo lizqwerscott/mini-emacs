@@ -72,6 +72,7 @@
   [["Find"
     ("f" "File" project-find-file)
     ("F" "File OW" project-find-file-other-window)
+    ("o" "Other file" project-find-other-file)
     ("d" "Dir" project-dired-dir)
     ]
    ["Buffer"
