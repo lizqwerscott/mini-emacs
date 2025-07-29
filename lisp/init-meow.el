@@ -47,6 +47,15 @@
                               (?c . comment)))
 (meow-normal-define-key (cons "\\" wrap-keymap))
 
+(defun lazy-meow-leader-define-key (&rest keybinds)
+  (let* ((meow-leader-keybinds))
+    (dolist (ele  keybinds)
+      (let ((func (cdar ele))
+            (key (caar ele))
+            (filename (cadr ele)))
+        (autoload func filename nil t)
+        (meow-define-keys 'leader (cons key func))))))
+
 (defun kill-now-buffer ()
   "Close the current buffer."
   (interactive)
@@ -57,8 +66,8 @@
   "Help function with lsp info"
   (interactive)
   (if (or (equal major-mode 'emacs-lisp-mode)
-           (equal major-mode 'lisp-interaction-mode))
-        (helpful-at-point)
+          (equal major-mode 'lisp-interaction-mode))
+      (helpful-at-point)
     (eldoc-box-help-at-point)))
 
 (defun meow-setup ()
@@ -102,19 +111,8 @@
    '("3" . split-window-horizontally)
    '("0" . delete-window))
 
-  (meow-leader-define-key
-   '("pf" . project-find-file)
-   '("pd" . project-dired)
-   '("pb" . project-switch-to-buffer)
-   '("pk" . project-kill-buffers)
-
-   '("pp" . project-switch-project)
-   '("pa" . project-remember-projects-under)
-   '("pr" . project-forget-project)
-
-   '("pv" . magit-status)
-   '("ps" . project-eshell)
-   '("pc" . project-compile))
+  (lazy-meow-leader-define-key
+   '(("p" . project-dispatch) "init-project"))
 
   (meow-leader-define-key
    '("ff" . find-file)
