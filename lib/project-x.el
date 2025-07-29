@@ -359,7 +359,7 @@ This function will huerestically determine all files in the project similar
 to the current file and then `find-file' it. For example this can be used to
 switch between C++ header and implementation files assuming the two have the
 same basename and a different extension."
-  (interactive "P")
+  (interactive)
   (when-let* ((file
                (project-find--other-file)))
     (funcall #'find-file file)))
