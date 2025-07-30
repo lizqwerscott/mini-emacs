@@ -60,6 +60,7 @@
 (keymap-set visual-replace-mode-map
             "C-o" #'visual-replace-dispatch)
 (global-set-key (kbd "s-r") #'visual-replace)
+(global-set-key (kbd "M-r") #'visual-replace)
 (visual-replace-global-mode 1)
 
 ;;; isearch
