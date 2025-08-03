@@ -82,16 +82,6 @@
         (add-subdirs-to-load-path subdir-path)))))
 
 ;;;###autoload
-(defmacro with-proxy (&rest body)
-  `(let ((url-proxy-services (get-url-proxy)))
-     ,@body))
-
-;;;###autoload
-(defmacro with-request-proxy (&rest body)
-  `(let ((request-curl-options (nconc `("--proxy" ,(get-http-proxy)))))
-     ,@body))
-
-;;;###autoload
 (defun +lizqwer/load-theme (new-theme)
   "Load theme."
   (unless (cl-find new-theme custom-enabled-themes)

@@ -20,27 +20,27 @@
   "Are we running on a Mac system?")
 
 (defcustom user/day-theme 'ef-spring
-  "User day theme"
+  "Day theme name."
   :group 'user
   :type 'symbol)
 
 (defcustom user/night-theme 'modus-vivendi
-  "User night theme"
+  "Night theme name."
   :group 'user
   :type 'symbol)
 
 (defcustom user/font-mac-size 230
-  "The font size in mac"
+  "The font size in mac."
   :group 'user
   :type 'number)
 
 (defcustom user/font-win-size 180
-  "The font size in window"
+  "The font size in window."
   :group 'user
   :type 'number)
 
 (defcustom user/font-linux-size 190
-  "The font size in linux"
+  "The font size in linux."
   :group 'user
   :type 'number)
 
