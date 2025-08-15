@@ -11,7 +11,9 @@
 
 (require 'init-edit)
 
+(require 'init-completion)
 (require 'init-minibuffer)
+
 ;; Ibuffer filters
 (setq ibuffer-saved-filter-groups
       '(("default"
@@ -55,8 +57,6 @@
 (add-hook 'proced-mode-hook
           #'(lambda ()
               (proced-toggle-auto-update 1)))
-
-(require 'init-corfu)
 
 (require 'init-dired)
 (require 'init-helpful)

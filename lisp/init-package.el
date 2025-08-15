@@ -95,6 +95,7 @@
   '(no-littering
     exec-path-from-shell
 
+    mct
     marginalia
     fussy
     helpful

@@ -44,5 +44,11 @@
   :group 'user
   :type 'number)
 
+(defcustom user/minibuffer 'fido
+  "The minibuffer farmework."
+  :group 'user
+  :type '(choice (const :tag "fido" fido)
+                 (const :tag "mct" mct)))
+
 (provide 'init-const)
 ;;; init-const.el ends here.
