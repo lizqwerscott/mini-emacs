@@ -26,6 +26,7 @@
 
 ;;;###autoload
 (defmacro keymap-sets (key-map key-bindings)
+  (declare (indent 1))
   `(dolist (key-b ,key-bindings)
      (when-let* ((keys (car key-b))
                  (command (cdr key-b)))

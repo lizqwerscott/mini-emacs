@@ -132,15 +132,15 @@ At 2nd time it copy current directory to kill-buffer."
 
 ;;; Keymap
 (keymap-sets dired-mode-map
-             '(("TAB" . dired-subtree-cycle)
-               ("e" . dired-toggle-read-only)
-               ("W" . dired-copy-path)
-               ("C-c +" . dired-create-empty-file)
-               ("M-n" . scroll-up-1/3)
-               ("M-p" . scroll-down-1/3)
-               ("h" . dired-up-directory)
-               ("C-c e" . dired-do-open-default)
-               ("C-o" . dired-dispatch)))
+  '(("TAB" . dired-subtree-cycle)
+    ("e" . dired-toggle-read-only)
+    ("W" . dired-copy-path)
+    ("C-c +" . dired-create-empty-file)
+    ("M-n" . scroll-up-1/3)
+    ("M-p" . scroll-down-1/3)
+    ("h" . dired-up-directory)
+    ("C-c e" . dired-do-open-default)
+    ("C-o" . dired-dispatch)))
 
 
 ;;; Menu

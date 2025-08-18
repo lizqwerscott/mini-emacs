@@ -8,9 +8,7 @@
 
 ;;; Code:
 
-;;; Base Org
-
-;;; Org base
+;;; Org config
 (require 'org)
 
 (setq org-default-notes-file "~/Documents/Org/index.org")
@@ -59,17 +57,19 @@
 (add-hook 'org-mode-hook
           #'visual-line-mode)
 
-;;; Org key
-(define-key org-mode-map (kbd "C-c TAB") 'org-insert-item)
-(define-key org-mode-map (kbd "M-P") 'org-metaup)
-(define-key org-mode-map (kbd "M-N") 'org-metadown)
-(define-key org-mode-map (kbd "M-H") 'org-metaleft)
-(define-key org-mode-map (kbd "M-L") 'org-metaright)
+;;; keymap
+(keymap-sets org-mode-map
+  '(("C-c TAB" . "C-c TAB")
+    ("M-P" . org-metaup)
+    ("M-N" . org-metadown)
+    ("M-H" . org-metaleft)
+    ("M-L" . org-metaright)
 
-(define-key org-mode-map (kbd "s-<return>") 'org-meta-return)
-(define-key org-mode-map (kbd "s-P") 'org-metaup)
-(define-key org-mode-map (kbd "s-N") 'org-metadown)
-(define-key org-mode-map (kbd "s-H") 'org-metaleft)
-(define-key org-mode-map (kbd "s-L") 'org-metaright)
+    ("s-<return>" . org-meta-return)
+    ("s-P" . org-metaup)
+    ("s-N" . org-metadown)
+    ("s-H" . org-metaleft)
+    ("s-L" . org-metaright)))
 
 (provide 'init-org)
+;;; init-org.el ends here.

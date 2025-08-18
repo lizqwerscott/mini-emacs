@@ -10,8 +10,8 @@
 
 (with-eval-after-load 'eww
   (keymap-sets eww-mode-map
-               '(("M-n" . scroll-up-1/3)
-                 ("M-p" . scroll-down-1/3))))
+    '(("M-n" . scroll-up-1/3)
+      ("M-p" . scroll-down-1/3))))
 
 ;; ;;; ### Watch other window ###
 ;; ;;; --- 滚动其他窗口

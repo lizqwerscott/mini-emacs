@@ -37,10 +37,10 @@
 ;;; nxml
 (with-eval-after-load 'nxml-mode
   (keymap-sets nxml-mode-map
-               '(("C-s-f" . nxml-down-element)
-                 ("C-s-n" . nxml-forward-element)
-                 ("C-s-p" . nxml-backward-element)
-                 ("C-s-b" . nxml-backward-up-element))))
+    '(("C-s-f" . nxml-down-element)
+      ("C-s-n" . nxml-forward-element)
+      ("C-s-p" . nxml-backward-element)
+      ("C-s-b" . nxml-backward-up-element))))
 
 ;;; Visual Replace
 (require 'visual-replace)
@@ -81,8 +81,8 @@
 
 (with-eval-after-load 'isearch
   (keymap-sets isearch-mode-map
-               '(("<escape>" . isearch-exit)
-                 ("C-o" . my-occur-from-isearch))))
+    '(("<escape>" . isearch-exit)
+      ("C-o" . my-occur-from-isearch))))
 
 (defun insert-or-remove-trailing-char (&optional ch)
   (interactive)
