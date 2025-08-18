@@ -110,6 +110,7 @@
     (fingertip :fetcher github :repo "manateelazycat/fingertip")
     hungry-delete
     super-save
+    rg
     (color-rg :fetcher github
               :repo "manateelazycat/color-rg")
     grugru

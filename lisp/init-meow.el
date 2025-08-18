@@ -13,6 +13,7 @@
         (messages-buffer-mode . normal)
         (eww-mode . normal)
         (color-rg-mode . insert)
+        (rg-mode . insert)
         (lsp-bridge-ref-mode . insert)
         (vterm-mode . insert)
         (Info-mode-hook . motion)))
@@ -139,7 +140,8 @@
    '("si" . imenu)
    '("sl" . color-rg-search-input-in-current-file)
    '("sj" . color-rg-search-input)
-   '("sp" . color-rg-search-input-in-project))
+   '("sp" . color-rg-search-input-in-project)
+   '("sr" . rg-menu))
 
   (meow-leader-define-key
    '("jf" . apheleia-format-buffer)

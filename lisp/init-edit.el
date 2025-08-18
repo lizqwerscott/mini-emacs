@@ -84,6 +84,14 @@
     '(("<escape>" . isearch-exit)
       ("C-o" . my-occur-from-isearch))))
 
+;;; rg
+(with-eval-after-load 'rg
+  (keymap-sets rg-mode-map
+    '(("s-n" . compilation-next-error)
+      ("s-p" . compilation-previous-error)
+      ("s-N" . rg-next-file)
+      ("s-P" . rg-prev-file))))
+
 (defun insert-or-remove-trailing-char (&optional ch)
   (interactive)
   (let ((ch (or ch (read-char "Input char: ")))
