@@ -40,7 +40,7 @@
       super-save-all-buffers t)
 
 (add-list-to-list 'super-save-triggers
-                  '(magit-status))
+                  '(magit-status magit-project-status))
 
 (add-to-list 'super-save-hook-triggers 'find-file-hook)
 
