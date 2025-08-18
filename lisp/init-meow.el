@@ -1,3 +1,8 @@
+;;; init-meow.el --- init meow package               -*- lexical-binding: t; -*-
+;; Copyright (C) 2025  lizqwer scott
+;;; Commentary:
+;;; Code:
+
 (require 'meow)
 (setq meow-esc-delay 0.001)
 (setq meow-keypad-leader-dispatch "C-c")
@@ -8,6 +13,7 @@
         (conf-mode . normal)
         (elfeed-show-mode . normal)
         (helpful-mode . normal)
+        (help-mode . normal)
         (cargo-process-mode . normal)
         (compilation-mode . normal)
         (messages-buffer-mode . normal)
@@ -238,3 +244,4 @@
 (meow-global-mode 1)
 
 (provide 'init-meow)
+;;; init-meow.el ends here
