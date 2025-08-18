@@ -181,6 +181,11 @@
          (side . right)
          (slot . 1))
         ;; bottom buffer (NOT side window)
+        ((or (derived-mode . compilation-mode) (derived-mode . cargo-process-mode))
+         (display-buffer-reuse-mode-window display-buffer-at-bottom)
+         (window-height . 0.3)
+         (preserve-size . (t . t))
+         (body-function . select-window))
         ((or "\\*\\(Backtrace\\|Warnings\\|Compile-Log\\|Messages\\|Bookmark List\\|Occur\\|eldoc\\)\\*"
              "\\*\\(Flymake diagnostics\\|xref\\|Completions\\)"
              "Output\\*$"
