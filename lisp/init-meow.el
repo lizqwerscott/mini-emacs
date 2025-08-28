@@ -77,39 +77,24 @@
       (helpful-at-point)
     (eldoc-box-help-at-point)))
 
-(defun meow-setup ()
-  ;; (meow-motion-overwrite-define-key
-  ;;  '("j" . meow-next)
-  ;;  '("k" . meow-prev)
-  ;;  '("h" . meow-left)
-  ;;  '("l" . meow-right)
-  ;;  '("o" . meow-block)
-  ;;  '("x" . meow-line)
-  ;;  '("W" . meow-mark-symbol)
-  ;;  '("w" . meow-mark-word)
-  ;;  '("C-j" . (lambda ()
-  ;;              (interactive)
-  ;;              (dotimes (i 2)
-  ;;   	         (call-interactively 'meow-next))))
-  ;;  '("C-k" . (lambda ()
-  ;;              (interactive)
-  ;;              (dotimes (i 2)
-  ;;   	         (call-interactively 'meow-prev))))
-  ;;  '("<escape>" . ignore))
+(keymap-sets goto-map
+  '(("r" . xref-find-references)
+    ("d" . xref-find-definitions)
+    ("D" . xref-find-definitions-other-window)
+    ("u" . eglot-find-implementation)))
 
+(global-set-keys
+ '(("C-o" . xref-go-back)))
+
+;; meow while translate i into TAB
+(keymap-unset goto-map "TAB")
+(keymap-sets goto-map
+  '(("f" . find-file-at-point)
+    ("p" . goto-percent)
+    ("l" . meow-goto-line)))
+
+(defun meow-setup ()
   (meow-leader-define-key
-   ;; Use SPC (0-9) for digit arguments.
-   ;; '("1" . meow-digit-argument)
-   ;; '("2" . meow-digit-argument)
-   ;; '("3" . meow-digit-argument)
-   ;; '("4" . meow-digit-argument)
-   ;; '("5" . meow-digit-argument)
-   ;; '("6" . meow-digit-argument)
-   ;; '("7" . meow-digit-argument)
-   ;; '("8" . meow-digit-argument)
-   ;; '("9" . meow-digit-argument)
-   ;; '("0" . meow-digit-argument)
-   ;; '("/" . meow-keypad-describe-key)
    '("?" . meow-cheatsheet))
 
   (meow-leader-define-key
@@ -143,7 +128,6 @@
    '("bl" . unbury-buffer))
 
   (meow-leader-define-key
-   '("si" . imenu)
    '("sl" . color-rg-search-input-in-current-file)
    '("sj" . color-rg-search-input)
    '("sp" . color-rg-search-input-in-project)
@@ -183,7 +167,6 @@
    '("e" . meow-next-word)
    '("E" . meow-next-symbol)
    '("f" . meow-find)
-   ;; '("g" . meow-cancel-selection)
    '("G" . meow-grab)
    '("h" . meow-left)
    '("H" . meow-left-expand)
@@ -202,7 +185,6 @@
    '("p" . meow-yank)
    '("P" . meow-yank-pop)
    '("q" . meow-quit)
-   ;;   '("Q" . meow-goto-line)
    '("r" . meow-replace)
    '("R" . meow-swap-grab)
    '("d" . meow-kill)
@@ -210,38 +192,28 @@
    '("t" . meow-till)
    '("u" . meow-undo)
    '("U" . meow-undo-in-selection)
-   ;; '("v" . meow-visit)
    '("v" . meow-cancel-selection)
    '("w" . meow-mark-word)
    '("W" . meow-mark-symbol)
    '("x" . meow-line)
-   ;; '("X" . meow-goto-line)
    '("y" . meow-save)
-   ;; '("Y" . meow-sync-grab)
    '("Y" . meow-clipboard-save)
    '("z" . meow-pop-selection)
    '("'" . repeat)
    '("<escape>" . ignore))
 
   (meow-normal-define-key
-   '("gr" . xref-find-references)
-   '("gd" . xref-find-definitions)
-   '("gD" . xref-find-definitions-other-window)
-   '("gi" . eglot-find-implementation)
-   '("gI" . eglot-find-implementation)
-   '("C-o" . xref-go-back))
+   '("g" . "M-g"))
 
   (meow-normal-define-key
-   '("C-;" . grugru)
-   '("C-y" . meow-clipboard-yank)
    '("Q" . kill-now-buffer)
-   '("?" . help-helpful-lsp)
-   '("gf" . find-file-at-point)
-   '("gp" . goto-percent)
-   '("gl" . goto-line)))
+   '("?" . help-helpful-lsp)))
 
 (meow-setup)
 (meow-global-mode 1)
+
+(global-set-keys
+ '(("C-y" . meow-clipboard-yank)))
 
 (provide 'init-meow)
 ;;; init-meow.el ends here
