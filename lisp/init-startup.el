@@ -155,6 +155,9 @@
 (setq imenu-max-item-length 100)
 (setq breadcrumb-imenu-max-length 100)
 
+;;; Bookmark
+(setq bookmark-save-flag 1)
+
 ;;; Auto Revert
 (setopt global-auto-revert-non-file-buffers t
         auto-revert-verbose nil)
