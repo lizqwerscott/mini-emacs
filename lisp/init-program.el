@@ -68,6 +68,17 @@
 (setq compilation-finish-functions (list #'ar/compile-autoclose-or-jump-first-error))
 (add-hook 'compilation-filter-hook #'ansi-color-compilation-filter)
 
+(defun not-split-window (orig-fn &rest args)
+  "Let ORIG-FN not split window.
+ARGS is ORIG-FN args."
+  (let ((split-height-threshold nil)
+        (split-width-threshold nil))
+    (apply orig-fn args)))
+
+(advice-add #'next-error-no-select :around #'not-split-window)
+(advice-add #'previous-error-no-select :around #'not-split-window)
+(advice-add #'compile-goto-error :around #'not-split-window)
+
 ;;; lisp
 (add-hook 'before-save-hook
           #'(lambda ()
