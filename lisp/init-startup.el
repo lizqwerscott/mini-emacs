@@ -115,7 +115,6 @@
       )
 
 (customize-set-variable 'kill-do-not-save-duplicates t)
-(customize-set-variable 'auto-revert-interval 1)
 (setq ad-redefinition-action 'accept)
 
 (setq delete-old-versions t)
@@ -155,6 +154,11 @@
 ;;; Imenu
 (setq imenu-max-item-length 100)
 (setq breadcrumb-imenu-max-length 100)
+
+;;; Auto Revert
+(setopt global-auto-revert-non-file-buffers t
+        auto-revert-verbose nil)
+(global-auto-revert-mode)
 
 ;;; vc
 (setq vc-handled-backends '(Git))
