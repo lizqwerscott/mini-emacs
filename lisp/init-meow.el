@@ -122,7 +122,7 @@
    '("bb" . switch-to-buffer)
    '("bB" . switch-to-buffer-other-window)
    '("bk" . kill-buffer-and-window)
-   '("br" . revert-buffer)
+   '("br" . revert-buffer-quick)
    '("bi" . ibuffer)
    '("bh" . bury-buffer)
    '("bl" . unbury-buffer))
