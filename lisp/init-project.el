@@ -34,13 +34,13 @@
 ;; (defalias 'project-prefix-map project-prefix-map)
 
 ;; (define-key mode-specific-map "p" 'project-prefix-map)
-(define-key project-prefix-map (kbd "B") #'project-switch-to-buffer-other-window)
+(define-key project-prefix-map (kbd "B") #'consult-project-buffer-other-window)
 (define-key project-prefix-map (kbd "v") #'magit-project-status)
 
 ;;; project-switch-commands
 (setq project-switch-commands nil)
 (add-to-list 'project-switch-commands '(project-find-file "Find file") t)
-(add-to-list 'project-switch-commands '(project-switch-to-buffer "switch to buffer") t)
+(add-to-list 'project-switch-commands '(consult-project-buffer "switch to buffer") t)
 (add-to-list 'project-switch-commands '(magit-project-status "Git Status") t)
 (add-to-list 'project-switch-commands '(project-find-dir "Find Dir") t)
 (add-to-list 'project-switch-commands '(project-dired "Dired") t)
@@ -74,10 +74,11 @@
     ("F" "File OW" project-find-file-other-window)
     ("o" "Other file" project-find-other-file)
     ("d" "Dir" project-dired-dir)
+    ("D" "Dir Fuzzy" consult-project-fd-dir)
     ]
    ["Buffer"
-    ("b" "Switch" project-switch-to-buffer)
-    ("B" "Switch OW" project-switch-to-buffer-other-window)
+    ("b" "Switch" consult-project-buffer)
+    ("B" "Switch OW" consult-project-buffer-other-window)
     ("k" "Kill" project-kill-buffers)]
    ["Build"
     ("c" "Compile" project-compile)]

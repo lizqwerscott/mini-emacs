@@ -91,10 +91,27 @@
 (keymap-sets goto-map
   '(("f" . find-file-at-point)
     ("p" . goto-percent)
-    ("l" . meow-goto-line)))
+    ("l" . consult-goto-line)
+    ("o" . consult-outline)
+    ("m" . consult-mark)
+    ("k" . consult-global-mark)
+    ("e" . consult-compile-error)
+    ("i" . consult-imenu)
+    ("I" . consult-imenu-multi)
+    ("b" . consult-bookmark)))
+
+(keymap-sets search-map
+  '(("l" . consult-line)
+    ("L" . consult-line-multi)
+    ("u" . consult-isearch-history)
+    ("f" . ("Search file" . consult-fd))
+    ("d" . ("Search dir" . consult-fd-dir))))
+
+(defalias 'search-map search-map)
 
 (defun meow-setup ()
   (meow-leader-define-key
+   '("/". meow-keypad-describe-key)
    '("?" . meow-cheatsheet))
 
   (meow-leader-define-key
@@ -107,35 +124,19 @@
    '(("p" . project-dispatch) "init-project"))
 
   (meow-leader-define-key
-   '("ff" . find-file)
-   '("fF" . find-file-other-window)
-   '("fo" . ff-find-other-file)
-   '("fO" . ff-find-other-file-other-window)
-   '("fh" . (lambda ()
-              (interactive)
-              (ido-find-file-in-dir "~/")))
-   '("fr" . recentf-open)
-   '("fs" . sudo-edit-find-file)
-   '("fc" . find-custom-file))
+   '("f" . find-file)
+   '("F" . find-file-other-window))
 
   (meow-leader-define-key
-   '("bb" . switch-to-buffer)
-   '("bB" . switch-to-buffer-other-window)
-   '("bk" . kill-buffer-and-window)
-   '("br" . revert-buffer-quick)
-   '("bi" . ibuffer)
-   '("bh" . bury-buffer)
-   '("bl" . unbury-buffer))
+   '("b" . consult-buffer)
+   '("B" . consult-buffer-other-window))
 
   (meow-leader-define-key
-   '("sl" . color-rg-search-input-in-current-file)
-   '("sj" . color-rg-search-input)
-   '("sp" . color-rg-search-input-in-project)
-   '("sr" . rg-menu))
+   (cons "s" '("Search" . search-map)))
 
   (meow-leader-define-key
    '("jf" . apheleia-format-buffer)
-   '("jd" . flymake-show-buffer-diagnostics)
+   '("jd" . consult-flymake)
    '("jr" . eglot-rename)
    '("ja" . eglot-code-actions))
 

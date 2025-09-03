@@ -100,6 +100,8 @@
     fussy
     helpful
     sudo-edit
+    consult
+    consult-dir
 
     markdown-mode
     csv-mode

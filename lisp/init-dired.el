@@ -142,6 +142,8 @@ At 2nd time it copy current directory to kill-buffer."
     ("C-c e" . dired-do-open-default)
     ("C-o" . dired-dispatch)))
 
+(global-set-keys
+ '(("C-x J" . dired-jump-other-window)))
 
 ;;; Menu
 (defun transient-show--variable-to-checkbox (v)

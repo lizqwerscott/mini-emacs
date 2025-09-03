@@ -74,5 +74,71 @@
 
 (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
 
+;;; consult
+(require 'consult)
+
+;; use narrow
+(setq consult-narrow-key "<")
+;; not auto preview
+(setq consult-preview-key "C-o")
+
+(add-hook 'completion-list-mode-hook 'consult-preview-at-point-mode)
+
+(defun buffer-list-filter ()
+  "Get buffer list with filter."
+  (let ((buffers (buffer-list))
+        (res))
+    (dolist (buffer buffers)
+      (unless (string-match-p "*help" (buffer-name buffer))
+        (push buffer res)))
+    res))
+
+(setq consult-buffer-list-function #'buffer-list-filter)
+
+;;;###autoload
+(defun consult-fd-dir ()
+  (interactive)
+  (let ((consult-fd-args (append consult-fd-args
+                                 (list
+                                  "--type directory"))))
+    (consult-fd "~/")))
+
+;; consult dir
+(require 'consult-dir)
+;; A function that returns a list of directories
+(defun consult-dir--quick-dir ()
+  "Return list of fasd dirs."
+  (list "~" "~/Downloads/" "~/Documents/" "~/MyProject/" "~/github/"))
+
+;; A consult source that calls this function
+(defvar consult-dir--source-quick
+  `(
+    :name     "quick"
+    :narrow   ?q
+    :category file
+    :face     consult-file
+    :history  file-name-history
+    ;; :enabled  t
+    :items    ,#'consult-dir--quick-dir)
+  "Fasd directory source for `consult-dir'.")
+
+;; Adding to the list of consult-dir sources
+(add-to-list 'consult-dir-sources 'consult-dir--source-quick)
+
+(global-set-keys
+ '(("C-x C-d" . consult-dir)))
+
+(keymap-sets minibuffer-local-map
+  '(("M-s" . consult-history)
+    ("M-r" . consult-history)
+    ("C-i" . (lambda ()
+               "Insert the currunt symbol."
+               (interactive)
+               (insert (save-excursion
+                         (set-buffer (window-buffer (minibuffer-selected-window)))
+                         (or (thing-at-point 'symbol t) "")))))
+    ("C-x C-d" . consult-dir)
+    ("C-x C-j" . consult-dir-jump-file)))
+
 (provide 'init-minibuffer)
 ;;; init-minibuffer.el ends here.

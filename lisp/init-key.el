@@ -8,11 +8,38 @@
    (("M-P" "s-P") . scroll-other-window-down-1/3)
    (("s-x" "M-x") . execute-extended-command)
    ("C-s-f" . forward-sexp)
-   ("C-s-b" . backward-sexp)))
+   ("C-s-b" . backward-sexp)
+
+   ("C-x C-r" . consult-recent-file)
+   ("C-x C-b" . ibuffer-refersh)))
+
+(keymap-unset ctl-x-map "C-k")
+
+(defun ibuffer-refersh ()
+  (interactive)
+  (when-let* ((buffer (get-buffer "*Ibuffer*")))
+    (kill-buffer buffer))
+  (ibuffer))
 
 (with-eval-after-load 'eww
   (keymap-sets eww-mode-map
     '(("M-n" . scroll-up-1/3)
       ("M-p" . scroll-down-1/3))))
+
+;;; Color rg
+(require 'rg)
+
+(keymap-sets rg-mode-map
+  '(("s-n" . compilation-next-error)
+    ("s-p" . compilation-previous-error)
+    ("s-N" . rg-next-file)
+    ("s-P" . rg-prev-file)))
+
+(global-set-keys
+ '(("M-s s" . rg-dwim)
+   ("M-s R" . rg-menu)
+   ("M-s r" . rg)
+   ("M-s t" . rg-literal)
+   ("M-s p" . rg-project)))
 
 (provide 'init-key)

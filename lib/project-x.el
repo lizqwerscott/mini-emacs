@@ -217,6 +217,11 @@ buffer, are identical."
   (interactive (list (project--read-project-buffer)))
   (switch-to-buffer-other-window buffer-or-name))
 
+(defun consult-project-buffer-other-window ()
+  "Open project buffer in other window."
+  (interactive)
+  (let ((consult--buffer-display #'switch-to-buffer-other-window))
+    (consult-project-buffer)))
 
 (defun project-edit-dir-local ()
   "Edit project root dir local."
@@ -363,6 +368,15 @@ same basename and a different extension."
   (when-let* ((file
                (project-find--other-file)))
     (funcall #'find-file file)))
+
+;;;###autoload
+(defun consult-project-fd-dir ()
+  "Use fd find dir in project."
+  (interactive)
+  (let ((consult-fd-args (append consult-fd-args
+                                 (list
+                                  "--type directory"))))
+    (consult-fd (project-root (project-current)))))
 
 (provide 'project-x)
 ;;; project-x.el ends here

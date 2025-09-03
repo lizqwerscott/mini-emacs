@@ -10,8 +10,8 @@
 ;;; Code:
 
 ;;; Xref
-(setq xref-show-xrefs-function #'xref-show-definitions-completing-read)
-(setq xref-show-definitions-function #'xref-show-definitions-completing-read)
+(setq xref-show-xrefs-function 'consult-xref)
+(setq xref-show-definitions-function 'consult-xref)
 
 ;;; flymake
 (add-hook 'prog-mode-hook
