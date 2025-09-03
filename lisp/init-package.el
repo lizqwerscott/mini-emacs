@@ -99,7 +99,6 @@
     marginalia
     fussy
     helpful
-    (watch-other-window :fetcher github :repo "manateelazycat/watch-other-window")
     sudo-edit
 
     markdown-mode
