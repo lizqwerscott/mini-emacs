@@ -1,3 +1,8 @@
+;;; init-key.el --- binding key                      -*- lexical-binding: t; -*-
+;;; Commentary:
+;;; Code:
+
+
 (global-set-keys
  '(("RET" . newline-and-indent)
    ("S-<return>" . comment-indent-new-line)
@@ -11,7 +16,9 @@
    ("C-s-b" . backward-sexp)
 
    ("C-x C-r" . consult-recent-file)
-   ("C-x C-b" . ibuffer-refersh)))
+   ("C-x C-b" . ibuffer-refersh)
+
+   ("C-x b g" . revert-buffer-quick)))
 
 (keymap-unset ctl-x-map "C-k")
 
@@ -43,3 +50,4 @@
    ("M-s p" . rg-project)))
 
 (provide 'init-key)
+;;; init-key.el ends here
