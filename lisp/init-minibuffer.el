@@ -29,6 +29,7 @@
 (bind-key "TAB" #'icomplete-force-complete icomplete-minibuffer-map)
 (bind-key "RET" #'icomplete-force-complete-and-exit icomplete-minibuffer-map)
 (keymap-set icomplete-fido-mode-map "s-j" #'icomplete-fido-exit)
+(keymap-set icomplete-fido-mode-map "C-j" #'icomplete-fido-exit)
 
 (add-hook 'icomplete-minibuffer-setup-hook
           (lambda ()
