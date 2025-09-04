@@ -62,12 +62,6 @@
         (autoload func filename nil t)
         (meow-define-keys 'leader (cons key func))))))
 
-(defun kill-now-buffer ()
-  "Close the current buffer."
-  (interactive)
-  (kill-buffer (current-buffer))
-  (delete-window))
-
 (defun help-helpful-lsp ()
   "Help function with lsp info"
   (interactive)
@@ -206,7 +200,7 @@
    '("g" . "M-g"))
 
   (meow-normal-define-key
-   '("Q" . kill-now-buffer)
+   '("Q" . kill-buffer-and-window)
    '("?" . help-helpful-lsp)))
 
 (meow-setup)
