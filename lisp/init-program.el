@@ -231,6 +231,12 @@ ARGS is ORIG-FN args."
           #'(lambda ()
               (c-toggle-auto-hungry-state)))
 
+;; elisp
+(keymap-sets emacs-lisp-mode-map
+  '(("C-c r" . eval-buffer)))
+
+(keymap-sets (emacs-lisp-mode-map lisp-interaction-mode-map)
+  '(("C-c C-p" . ielm)))
 
 (provide 'init-program)
 ;;; init-program.el ends heres.

@@ -155,7 +155,7 @@
 
 (setq display-buffer-alist
       '(;; bottom side window
-        ("\\*.*e?shell\\*"
+        ((or "\\*.*e?shell\\*" "*ielm*")
          (display-buffer-in-side-window)
          (window-height . 0.25)
          (side . bottom)
