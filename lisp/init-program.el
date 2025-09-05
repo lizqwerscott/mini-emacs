@@ -17,7 +17,7 @@
  '(("M-g r" . xref-find-references)
    ("M-g d" . xref-find-definitions)
    ("M-g D" . xref-find-definitions-other-window)
-   
+
    ("C-o" . xref-go-back)))
 
 ;;; flymake
@@ -116,7 +116,7 @@ ARGS is ORIG-FN args."
 (add-hook 'before-save-hook
           #'(lambda ()
               (when (and (equal major-mode 'elisp-mode)
-                       (equal major-mode 'lisp-mode))
+                         (equal major-mode 'lisp-mode))
                 (call-interactively #'check-parens))))
 
 ;;; snippet
