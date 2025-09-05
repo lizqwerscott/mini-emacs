@@ -38,6 +38,29 @@
 (global-set-keys
  '(("C-c j d" . consult-flymake)))
 
+;;; eldoc
+(with-eval-after-load 'eldoc
+  (when (childframe-workable-p)
+    (require 'eldoc-box)
+    (setq eldoc-box-lighter nil
+          eldoc-box-only-multi-line t
+          eldoc-box-clear-with-C-g t)
+
+    (defface posframe-border
+      `((t (:inherit region)))
+      "Face used by the `posframe' border."
+      :group 'posframe)
+
+    (custom-set-faces
+     '(eldoc-box-border ((t (:inherit posframe-border :background unspecified))))
+     '(eldoc-box-body ((t (:inherit tooltip)))))
+
+    ;; (add-hook 'eglot-managed-mode-hook
+    ;;           #'eldoc-box-hover-at-point-mode)
+
+    (setf (alist-get 'left-fringe eldoc-box-frame-parameters) 8
+          (alist-get 'right-fringe eldoc-box-frame-parameters) 8)))
+
 ;;; complile
 (setq compilation-scroll-output nil)
 (setq compilation-auto-jump-to-first-error nil)

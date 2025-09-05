@@ -124,6 +124,7 @@
     (eglot-booster :fetcher github :repo "jdtsmith/eglot-booster")
     apheleia
     yasnippet
+    eldoc-box
 
     diredfl
     org-bullets))
