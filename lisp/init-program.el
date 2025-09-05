@@ -13,6 +13,10 @@
 (setq xref-show-xrefs-function 'consult-xref)
 (setq xref-show-definitions-function 'consult-xref)
 
+;; Use faster search tool
+(when (executable-find "rg")
+  (setq xref-search-program 'ripgrep))
+
 (global-set-keys
  '(("M-g r" . xref-find-references)
    ("M-g d" . xref-find-definitions)
