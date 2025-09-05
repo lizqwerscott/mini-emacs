@@ -79,7 +79,7 @@
 
 ;; generate from https://patorjk.com/software/taag/#p=display&f=ANSI%20Shadow&t=MiNI%20Emacs
 (with-current-buffer (get-buffer-create "*scratch*")
-    (insert (format ";;
+  (insert (format ";;
 ;; ███╗   ███╗██╗███╗   ██╗██╗    ███████╗███╗   ███╗ █████╗  ██████╗███████╗
 ;; ████╗ ████║██║████╗  ██║██║    ██╔════╝████╗ ████║██╔══██╗██╔════╝██╔════╝
 ;; ██╔████╔██║██║██╔██╗ ██║██║    █████╗  ██╔████╔██║███████║██║     ███████╗
@@ -90,8 +90,8 @@
 ;;   Packages     : %s
 ;;
 "
-                    (emacs-init-time)
-                    (number-to-string (length package-activated-list)))))
+                  (emacs-init-time)
+                  (number-to-string (length package-activated-list)))))
 
 ;;; highlight
 (global-hl-line-mode 1)
