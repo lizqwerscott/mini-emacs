@@ -70,15 +70,6 @@
       (helpful-at-point)
     (eldoc-box-help-at-point)))
 
-(keymap-sets goto-map
-  '(("r" . xref-find-references)
-    ("d" . xref-find-definitions)
-    ("D" . xref-find-definitions-other-window)
-    ("u" . eglot-find-implementation)))
-
-(global-set-keys
- '(("C-o" . xref-go-back)))
-
 ;; meow while translate i into TAB
 (keymap-unset goto-map "TAB")
 (keymap-sets goto-map
@@ -126,12 +117,6 @@
 
   (meow-leader-define-key
    (cons "s" '("Search" . search-map)))
-
-  (meow-leader-define-key
-   '("jf" . apheleia-format-buffer)
-   '("jd" . consult-flymake)
-   '("jr" . eglot-rename)
-   '("ja" . eglot-code-actions))
 
   (meow-normal-define-key
    '("0" . meow-expand-0)

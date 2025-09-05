@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;; Code:
 
+(keymap-unset ctl-x-map "b")
+(keymap-unset ctl-x-map "C-k")
 
 (global-set-keys
  '(("RET" . newline-and-indent)
@@ -19,8 +21,6 @@
    ("C-x C-b" . ibuffer-refersh)
 
    ("C-x b g" . revert-buffer-quick)))
-
-(keymap-unset ctl-x-map "C-k")
 
 (defun ibuffer-refersh ()
   (interactive)

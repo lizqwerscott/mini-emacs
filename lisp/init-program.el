@@ -13,6 +13,13 @@
 (setq xref-show-xrefs-function 'consult-xref)
 (setq xref-show-definitions-function 'consult-xref)
 
+(global-set-keys
+ '(("M-g r" . xref-find-references)
+   ("M-g d" . xref-find-definitions)
+   ("M-g D" . xref-find-definitions-other-window)
+   
+   ("C-o" . xref-go-back)))
+
 ;;; flymake
 (add-hook 'prog-mode-hook
           #'flymake-mode)
@@ -27,6 +34,9 @@
 
 (setq flymake-no-changes-timeout nil
       flymake-fringe-indicator-position 'right-fringe)
+
+(global-set-keys
+ '(("C-c j d" . consult-flymake)))
 
 ;;; complile
 (setq compilation-scroll-output nil)
@@ -138,6 +148,20 @@ ARGS is ORIG-FN args."
 (setq eglot-stay-out-of
       '(imenu))
 
+;;; keymap
+(defun eglot-restart ()
+  "Restart eglot."
+  (interactive)
+  (call-interactively #'eglot-shutdown)
+  (call-interactively #'eglot))
+
+(keymap-sets eglot-mode-map
+  '(("C-c j r" . eglot-rename)
+    ("C-c j R" . eglot-restart)
+    ("C-c j a" . eglot-code-actions)
+
+    ("M-g u" . eglot-find-implementation)))
+
 (add-hook 'prog-mode-hook
           #'(lambda ()
               (unless (derived-mode-p 'emacs-lisp-mode 'lisp-mode 'makefile-mode 'snippet-mode 'json-ts-mode)
@@ -161,6 +185,9 @@ ARGS is ORIG-FN args."
 
 (setf (alist-get 'cargo-fmt apheleia-formatters)
       '("cargo" "fmt"))
+
+(global-set-keys
+ '(("C-c j f" . apheleia-format-buffer)))
 
 ;;; language
 ;; config c++ style
