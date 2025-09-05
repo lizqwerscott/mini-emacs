@@ -1,11 +1,17 @@
-;; Note that the built-in `describe-function' includes both functions
-;; and macros. `helpful-function' is functions only, so we provide
-;; `helpful-callable' as a drop-in replacement.
-(global-set-key (kbd "C-h f") #'helpful-callable)
-(global-set-key (kbd "C-h F") #'helpful-function)
+;;; init-helpful.el --- init helpful package         -*- lexical-binding: t; -*-
+;;; Commentary:
+;;; Code:
 
-(global-set-key (kbd "C-h v") #'helpful-variable)
-(global-set-key (kbd "C-h k") #'helpful-key)
-(global-set-key (kbd "C-h x") #'helpful-command)
+(global-set-keys
+ '(("C-h f" . helpful-callable)
+   ("C-h C-f" . helpful-callable)
+   ("C-h k" . helpful-key)
+   ("C-h v" . helpful-variable)
+   ("C-h F" . helpful-function)
+   ("C-h C" . helpful-command)))
+
+(add-hooks '(help-mode helpful-mode)
+           #'visual-line-mode)
 
 (provide 'init-helpful)
+;;; init-helpful.el ends here
