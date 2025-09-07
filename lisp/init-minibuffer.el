@@ -46,11 +46,8 @@
   (require 'minibuffer-prefix))
 
 ;;; mct
-(require 'mct)
-(keymap-sets mct-minibuffer-local-completion-map
-  '(("TAB" . mct-edit-completion)))
-
 (when (equal user/minibuffer 'mct)
+  (require 'mct)
   (mct-mode))
 
 ;;; minibuffer setting
