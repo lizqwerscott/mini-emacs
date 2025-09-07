@@ -1,3 +1,7 @@
+;;; init-dired.el --- dired                          -*- lexical-binding: t; -*-
+;;; Commentary:
+;;; Code:
+
 ;;; dired
 (require 'dired)
 ;; (setq trash-directory "~/.trashs/")
@@ -52,9 +56,9 @@
 (setq dired-omit-verbose nil)
 (setq dired-omit-files (rx string-start
                            (or ".DS_Store"
-                              ".cache"
-                              ".vscode"
-                              ".ccls-cache" ".clangd")
+                               ".cache"
+                               ".vscode"
+                               ".ccls-cache" ".clangd")
                            string-end))
 (setq dired-omit-files
       (concat dired-omit-files "\\|^\\..*$"))
@@ -175,3 +179,4 @@ V is either nil or non-nil."
   [("q" "Quit" transient-quit-all)])
 
 (provide 'init-dired)
+;;; init-dired.el ends here

@@ -9,6 +9,13 @@
 
 ;;; Code:
 
+;; Tree-sitter
+(require 'treesit)
+(customize-set-variable 'treesit-font-lock-level 4)
+
+(treesit-font-lock-recompute-features
+ '(command string variable function operator bracket keyword))
+
 ;;; Xref
 (setq xref-show-xrefs-function 'consult-xref)
 (setq xref-show-definitions-function 'consult-xref)
@@ -217,11 +224,42 @@ ARGS is ORIG-FN args."
  '(("C-c j f" . apheleia-format-buffer)))
 
 ;;; language
+(add-to-list 'auto-mode-alist '("\\.launch$" . xml-mode))
+(add-to-list 'auto-mode-alist '("\\.urdf\\'" . nxml-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
+(add-to-list 'auto-mode-alist '("\\Dockerfile\\'" . dockerfile-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.lua\\'" . lua-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-ts-mode))
+
+(add-list-to-list 'major-mode-remap-alist
+                  '((sh-mode . bash-ts-mode)
+                    (rust-mode . rust-ts-mode)
+                    (python-mode . python-ts-mode)
+                    (c++-mode . c++-ts-mode)
+                    (c-mode . c-ts-mode)
+                    (go-mode . go-ts-mode)
+                    (csharp-mode . csharp-ts-mode)
+                    (conf-toml-mode . toml-ts-mode)
+                    (js-json-mode . json-ts-mode)))
+
+(add-hook 'json-mode-hook #'(lambda () (treesit-parser-create 'json)))
+(add-hook 'ielm-mode-hook #'(lambda () (treesit-parser-create 'elisp)))
+
+(add-hook 'lisp-mode-hook #'(lambda () (treesit-parser-create 'elisp)))
+(add-hook 'emacs-lisp-mode-hook #'(lambda () (treesit-parser-create 'elisp)))
+
+(add-hook 'sh-mode-hook #'(lambda () (treesit-parser-create 'bash)))
+
+;;; c++
 ;; config c++ style
 (setq c-default-style "linux"
-      c-basic-offset 4)
+      c-basic-offset 4
+      c-ts-mode-indent-offset 4)
 
-(setf c-ts-mode-indent-offset 4)
+(add-to-list 'auto-mode-alist '("\\CMakeLists.txt\\'" . cmake-ts-mode))
 
 (add-hook 'c-mode-hook
           #'(lambda ()

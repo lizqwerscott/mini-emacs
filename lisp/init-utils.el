@@ -1,4 +1,6 @@
-(require 'cl-lib)
+;;; init-utils.el --- utils                          -*- lexical-binding: t; -*-
+;;; Commentary:
+;;; Code:
 
 ;;;###autoload
 (defun mapcar-if (fn seq handle)
@@ -86,8 +88,8 @@ or a list of keys, and COMMAND is the command to bind to those keys."
         ;; 目录下有 .el .so .dll 文件的路径才添加到 `load-path' 中, 提升Emacs启动速度
         (when (cl-some #'(lambda (subdir-file)
                            (and (file-regular-p (concat subdir-path subdir-file))
-                              ;; .so .dll 文件指非Elisp语言编写的Emacs动态库
-                              (member (file-name-extension subdir-file) '("el" "so" "dll"))))
+                                ;; .so .dll 文件指非Elisp语言编写的Emacs动态库
+                                (member (file-name-extension subdir-file) '("el" "so" "dll"))))
                        (directory-files subdir-path))
 
           ;; 注意：`add-to-list' 函数的第三个参数必须为 t , 表示加到列表末尾
@@ -110,8 +112,8 @@ or a list of keys, and COMMAND is the command to bind to those keys."
 (defun single-cons-p (c)
   "判断 C 是否为单个 cons 对象（cdr 不是 cons 且不为 nil）。"
   (and (consp c)
-     (not (consp (cdr c)))
-     (not (null (cdr c)))))
+       (not (consp (cdr c)))
+       (not (null (cdr c)))))
 
 (defun cons-to-list-s (s)
   (if (single-cons-p s)
@@ -131,8 +133,8 @@ or a list of keys, and COMMAND is the command to bind to those keys."
 (defun childframe-workable-p ()
   "Whether childframe is workable."
   (not (or noninteractive
-        emacs-basic-display
-        (not (display-graphic-p)))))
+           emacs-basic-display
+           (not (display-graphic-p)))))
 
 ;;;###autoload
 (defun find-custom-file()
@@ -141,3 +143,4 @@ or a list of keys, and COMMAND is the command to bind to those keys."
   (find-file custom-file))
 
 (provide 'init-utils)
+;;; init-utils.el ends here

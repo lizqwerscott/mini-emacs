@@ -1,3 +1,7 @@
+;;; init-font.el --- font                            -*- lexical-binding: t; -*-
+;;; Commentary:
+;;; Code:
+
 (defun font-installed-p (font-name)
   "Check if font with FONT-NAME is available."
   (find-font (font-spec :name font-name)))
@@ -55,3 +59,4 @@
 (add-hook 'server-after-make-frame-hook #'setup-fonts)
 
 (provide 'init-font)
+;;; init-font.el ends here

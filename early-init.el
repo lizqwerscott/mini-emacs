@@ -1,3 +1,7 @@
+;;; early-init.el --- early init                     -*- lexical-binding: t; -*-
+;;; Commentary:
+;;; Code:
+
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
@@ -22,10 +26,12 @@
   (require 'init-utils)
 
   (setq custom-file (locate-user-emacs-file "custom.el"))
-  
+
   (require 'init-package)
   (require 'init-const)
   (when sys/macp
     (add-to-list 'default-frame-alist '(undecorated-round . t)))
   (require 'init-startup)
   (require 'init-font))
+
+;;; early-init.el ends here

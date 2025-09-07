@@ -1,5 +1,6 @@
 ;;; init-git.el --- Git SCM support -*- lexical-binding: t -*-
 ;;; Commentary:
+;;; Code:
 
 ;;; ediff
 (setq ediff-split-window-function 'split-window-horizontally
@@ -28,3 +29,4 @@
           #'magit-wip-mode)
 
 (provide 'init-git)
+;;; init-git.el ends here
