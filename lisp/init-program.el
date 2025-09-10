@@ -269,6 +269,16 @@ ARGS is ORIG-FN args."
           #'(lambda ()
               (c-toggle-auto-hungry-state)))
 
+(with-eval-after-load 'cc-mode
+  (autoload #'insert-trailing-semi-and-indent "insert-trailing-semi" nil t)
+  (keymap-sets (c-mode-map c++-mode-map)
+    '((";" . insert-trailing-semi-and-indent))))
+
+(with-eval-after-load 'c-ts-mode
+  (autoload #'insert-trailing-semi-and-indent "insert-trailing-semi" nil t)
+  (keymap-sets (c-ts-mode-map c++-ts-mode-map)
+    '((";" . insert-trailing-semi-and-indent))))
+
 ;; elisp
 (defun eval-buffer-and-message ()
   "Eval elisp buffer and message finish."

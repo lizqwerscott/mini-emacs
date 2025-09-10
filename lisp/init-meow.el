@@ -193,6 +193,7 @@
    (cons "F" find-map))
 
   (meow-normal-define-key
+   '("C-;" . grugru)
    '("Q" . kill-buffer-and-window)
    '("?" . help-helpful-lsp)))
 

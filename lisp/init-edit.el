@@ -9,6 +9,8 @@
 
 ;;; Code:
 
+(require 'lib-edit)
+
 ;;; can use superword-mode
 (add-hook 'prog-mode-hook
           'superword-mode)
@@ -92,62 +94,12 @@
       ("s-N" . rg-next-file)
       ("s-P" . rg-prev-file))))
 
-(defun insert-or-remove-trailing-char (&optional ch)
-  (interactive)
-  (let ((ch (or ch (read-char "Input char: ")))
-        (fn (lambda (ch)
-              (end-of-line)
-              (if (eq (char-before) ch)
-                  (delete-backward-char 1)
-                (insert-char ch)))))
-    (save-excursion
-      (if (region-active-p)
-          (save-restriction
-            (narrow-to-region (region-beginning) (region-end))
-            (deactivate-mark)
-            (goto-char (point-min))
-            (funcall fn ch)
-            (while (< (point) (- (point-max) 1))
-              (next-line)
-              (funcall fn ch)))
-        (funcall fn ch)))))
-
-(defun insert-or-remove-trailing-semi ()
-  (interactive)
-  (insert-or-remove-trailing-char ?\;))
-
-(defun insert-or-remove-trailing-comma ()
-  (interactive)
-  (insert-or-remove-trailing-char ?,))
-
-(defun insert-trailing-char (&optional ch)
-  (interactive)
-  (let ((ch (or ch (read-char "Input char: ")))
-        (fn (lambda (ch)
-              (end-of-line)
-              (unless (eq (char-before) ch)
-                (insert-char ch)))))
-    (save-excursion
-      (if (region-active-p)
-          (save-restriction
-            (narrow-to-region (region-beginning) (region-end))
-            (deactivate-mark)
-            (goto-char (point-min))
-            (funcall fn ch)
-            (while (< (point) (- (point-max) 1))
-              (next-line)
-              (funcall fn ch)))
-        (funcall fn ch)))))
-
-(defun insert-trailing-semi ()
-  (interactive)
-  (insert-trailing-char ?\;))
-
-(defun insert-trailing-semi-and-indent ()
-  (interactive)
-  (insert-trailing-char ?\;)
-  (forward-char)
-  (newline-and-indent))
+(global-set-keys
+ '(("M-s s" . rg-dwim)
+   ("M-s R" . rg-menu)
+   ("M-s r" . rg)
+   ("M-s t" . rg-literal)
+   ("M-s p" . rg-project)))
 
 ;;; grugru
 (grugru-default-setup)
@@ -180,56 +132,6 @@
    (symbol "True" "False"))
   ((emacs-lisp-mode lisp-mode)
    (symbol "when-let" "if-let")))
-
-(keymap-sets prog-mode-map
-  '(("C-;" . grugru)))
-
-;;; add rectangle number lines
-;;;###autoload
-(defun my/insert-number-lines (start-at end-at step format)
-  (interactive
-   (list (read-number "Number to count from: " 1)
-         (read-number "Number to count end: " 5)
-         (read-number "step: " 1)
-         (read-string "Format string: "
-                      "%d ")))
-  (save-excursion
-    (dolist (i (number-sequence start-at end-at step))
-      (insert (format format i))
-      (newline-and-indent))))
-
-;;; goto precent
-;;;###autoload
-(defun goto-percent (percent)
-  "Goto PERCENT of buffer."
-  (interactive "nGoto percent: ")
-  (goto-char (/ (* percent (point-max)) 100)))
-
-(defun scroll-up-1/3 ()
-  (interactive)
-  (scroll-up (/ (window-body-height) 3)))
-
-(defun scroll-down-1/3 ()
-  (interactive)
-  (scroll-down (/ (window-body-height) 3)))
-
-(defun scroll-other-window-up-1/3 ()
-  (interactive)
-  (scroll-other-window (/ (window-body-height) 3)))
-
-(defun scroll-other-window-down-1/3 ()
-  (interactive)
-  (scroll-other-window-down (/ (window-body-height) 3)))
-
-;;;###autoload
-(defun toggle-sub-word-or-super-word ()
-  (interactive)
-  (if subword-mode
-      (progn
-        (superword-mode)
-        (message "开启 super-word-mode"))
-    (subword-mode)
-    (message "开启 sub-word-mode")))
 
 (provide 'init-edit)
 ;;; init-edit.el ends here.
