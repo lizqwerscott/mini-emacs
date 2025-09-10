@@ -92,6 +92,14 @@
 
 (defalias 'search-map search-map)
 
+(defvar-keymap find-map
+  :doc "Keymap for find commands."
+  "c" #'find-custom-file
+  "l" #'find-library
+  "v" #'find-variable)
+
+(defalias 'find-map find-map)
+
 (defun meow-setup ()
   (meow-leader-define-key
    '("/". meow-keypad-describe-key)
@@ -181,7 +189,8 @@
    '("<escape>" . ignore))
 
   (meow-normal-define-key
-   '("g" . "M-g"))
+   '("g" . "M-g")
+   (cons "F" find-map))
 
   (meow-normal-define-key
    '("Q" . kill-buffer-and-window)
