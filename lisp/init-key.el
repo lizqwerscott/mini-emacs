@@ -18,15 +18,8 @@
    ("C-s-b" . backward-sexp)
 
    ("C-x C-r" . consult-recent-file)
-   ("C-x C-b" . ibuffer-refersh)
 
    ("C-x b g" . revert-buffer-quick)))
-
-(defun ibuffer-refersh ()
-  (interactive)
-  (when-let* ((buffer (get-buffer "*Ibuffer*")))
-    (kill-buffer buffer))
-  (ibuffer))
 
 (with-eval-after-load 'eww
   (keymap-sets eww-mode-map

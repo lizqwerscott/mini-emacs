@@ -211,6 +211,7 @@
 (add-hook 'prog-mode-hook
           'goto-address-prog-mode)
 
+;;; Ibuffer
 ;; Ibuffer filters
 (setq ibuffer-saved-filter-groups
       '(("default"
@@ -244,6 +245,17 @@
             (ibuffer-switch-to-saved-filter-groups "default")))
 (setq ibuffer-show-empty-filter-groups nil) ; don't show empty groups
 
+(defun ibuffer-refersh ()
+  "Open and refresh ibuffer."
+  (interactive)
+  (when-let* ((buffer (get-buffer "*Ibuffer*")))
+    (kill-buffer buffer))
+  (ibuffer))
+
+(global-set-keys
+ '(("C-x C-b" . ibuffer-refersh)))
+
+;;; proced
 (with-eval-after-load 'proced
   (setq proced-enable-color-flag t
         proced-tree-flag t
