@@ -9,7 +9,6 @@
 
 (require 'init-ui)
 
-(require 'init-key)
 (require 'init-meow)
 
 (require 'init-edit)
@@ -19,6 +18,8 @@
 
 (require 'init-dired)
 (require 'init-helpful)
+
+(require 'init-tools)
 
 (require 'init-org)
 

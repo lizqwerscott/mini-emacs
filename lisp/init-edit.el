@@ -133,5 +133,23 @@
   ((emacs-lisp-mode lisp-mode)
    (symbol "when-let" "if-let")))
 
+(keymap-unset ctl-x-map "b")
+(keymap-unset ctl-x-map "C-k")
+
+(global-set-keys
+ '(("RET" . newline-and-indent)
+   ("S-<return>" . comment-indent-new-line)
+   (("s-o" "M-o") . other-window)
+   (("s-n" "M-n") . scroll-up-1/3)
+   (("s-p" "M-p") . scroll-down-1/3)
+   (("M-N" "s-N") . scroll-other-window-up-1/3)
+   (("M-P" "s-P") . scroll-other-window-down-1/3)
+   ("C-s-f" . forward-sexp)
+   ("C-s-b" . backward-sexp)
+
+   ("M-g p" . goto-percent)
+
+   ("C-x b g" . revert-buffer-quick)))
+
 (provide 'init-edit)
 ;;; init-edit.el ends here.

@@ -123,6 +123,11 @@ ARGS is ORIG-FN args."
 (advice-add #'previous-error-no-select :around #'not-split-window)
 (advice-add #'compile-goto-error :around #'not-split-window)
 
+(with-eval-after-load 'compile
+  (keymap-sets compilation-mode-map
+    '(("s-n" . compilation-next-error)
+      ("s-p" . compilation-previous-error))))
+
 ;;; lisp
 (add-hook 'before-save-hook
           #'(lambda ()
