@@ -147,6 +147,64 @@
   (diff-hl-flydiff-mode))
 
 ;;; window
+;;; ace window
+(require 'ace-window)
+(add-to-list 'aw-ignored-buffers "*Ilist*")
+(setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+(add-hook 'after-init-hook
+          #'ace-window-posframe-mode)
+
+(custom-set-faces
+ '(aw-leading-char-face ((t (:inherit font-lock-keyword-face :foreground unspecified :bold t :height 3.0))))
+ '(aw-minibuffer-leading-char-face ((t (:inherit font-lock-keyword-face :bold t :height 1.0))))
+ '(aw-mode-line-face ((t (:inherit mode-line-emphasis :bold t)))))
+
+(require 'transient)
+(transient-define-prefix window-dispatch ()
+  "Window Management."
+  :transient-non-suffix 'transient--do-stay
+  [["Actions"
+    ("TAB" "switch" other-window :transient t)
+    ("x" "delete" ace-delete-window :transient t)
+    ("X" "delete other" ace-delete-other-windows)
+    ("s" "swap" ace-swap-window :transient t)
+    ("a" "select" ace-select-window)
+    ("m" "maximize" toggle-frame-maximized)
+    ("u" "fullscreen" toggle-frame-fullscreen)]
+   ["Resize"
+    ("h" "←" shrink-window-horizontally :transient t)
+    ("j" "↓" enlarge-window :transient t)
+    ("k" "↑" shrink-window :transient t)
+    ("l" "→" enlarge-window-horizontally :transient t)
+    ("n" "balance" balance-windows :transient t)]
+   ["Split"
+    ("3" "horizontally" split-window-right :transient t)
+    ("2" "vertically" split-window-below :transient t)
+    ("t" "Clockwise Rotate" rotate-windows :transient t)
+    ("T" "Counterclockwise Rotate" rotate-windows-back :transient t)]
+   ["Zoom"
+    ("+" "in" text-scale-increase :transient t)
+    ("=" "in" text-scale-increase :transient t)
+    ("-" "out" text-scale-decrease :transient t)
+    ("0" "reset" (lambda () (interactive) (text-scale-increase 0)) :transient t)]
+   ["Misc"
+    ("o" "frame font" set-frame-font :transient t)
+    ("f" "new frame" make-frame-command :transient t)
+    ("d" "delete frame" delete-frame :transient t)
+    ("<left>" "winner undo" winner-undo :transient t)
+    ("<right>" "winner redo" winner-redo :transient t)
+    ("q" "Quit" transient-quit-one)]])
+
+(global-set-keys
+ '((("s-o" "M-o") . ace-window)
+   ("C-c w" . window-dispatch)))
+
+;;; winner mode
+(winner-mode 1)
+(keymap-sets winner-mode-map
+  '(("C-c H" . winner-undo)
+    ("C-c L" . winner-redo)))
+
 (defun my-window-select-fit-size (window)
   (select-window window)
   (fit-window-to-buffer window
