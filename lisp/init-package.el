@@ -129,6 +129,7 @@
     yasnippet
     eldoc-box
 
+    posframe
     ace-window
 
     diredfl
