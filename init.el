@@ -5,6 +5,9 @@
 (when (file-exists-p custom-file)
   (load custom-file))
 
+(require 'lib-elisp-utils)
+(require 'lib-utils)
+
 (require 'init-super-save)
 
 (require 'init-ui)

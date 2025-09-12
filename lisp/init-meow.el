@@ -28,12 +28,17 @@
 (require 'mark-comment)
 (meow-thing-register 'comment #'mark-comment-inner-of-comment #'mark-comment-inner-of-comment)
 
-(setq wrap-keymap (let ((map (make-keymap)))
-                    (suppress-keymap map)
-                    (dolist (k '("(" "[" "{" "<"))
-                      (define-key map k #'insert-pair))
-                    map)
-      meow-char-thing-table '((?\( . round)
+(defvar wrap-keymap
+  (let ((map (make-keymap)))
+    (suppress-keymap map)
+    (dolist (k '("(" "[" "{" "<"))
+      (define-key map k #'insert-pair))
+    map)
+  "Keymap for wrap.")
+
+(meow-normal-define-key (cons "\\" wrap-keymap))
+
+(setq meow-char-thing-table '((?\( . round)
                               (?\) . round)
                               (?\g .  string)
                               (?\[ . square)
@@ -52,23 +57,6 @@
                               (?c . comment)))
 (meow-normal-define-key (cons "\\" wrap-keymap))
 
-(defun lazy-meow-leader-define-key (&rest keybinds)
-  (let* ((meow-leader-keybinds))
-    (dolist (ele  keybinds)
-      (let ((func (cdar ele))
-            (key (caar ele))
-            (filename (cadr ele)))
-        (autoload func filename nil t)
-        (meow-define-keys 'leader (cons key func))))))
-
-(defun help-helpful-lsp ()
-  "Help function with lsp info"
-  (interactive)
-  (if (or (equal major-mode 'emacs-lisp-mode)
-          (equal major-mode 'lisp-interaction-mode))
-      (helpful-at-point)
-    (eldoc-box-help-at-point)))
-
 (keymap-sets goto-map
   '(("f" . find-file-at-point)))
 
@@ -80,6 +68,10 @@
 
 (defalias 'find-map find-map)
 
+(autoload #'project-dispatch "init-project" nil t)
+(global-set-keys
+ '(("C-c p" . project-dispatch)))
+
 (defun meow-setup ()
   (meow-leader-define-key
    '("/". meow-keypad-describe-key)
@@ -90,9 +82,6 @@
    '("2" . split-window-below)
    '("3" . split-window-horizontally)
    '("0" . delete-window))
-
-  (lazy-meow-leader-define-key
-   '(("p" . project-dispatch) "init-project"))
 
   (meow-leader-define-key
    '("f" . find-file)
@@ -171,7 +160,8 @@
   (meow-normal-define-key
    '("C-;" . grugru)
    '("Q" . kill-buffer-and-window)
-   '("?" . help-helpful-lsp)))
+   '("?" . "C-h ?")
+   '("/" . consult-ripgrep)))
 
 (meow-setup)
 (meow-global-mode 1)
