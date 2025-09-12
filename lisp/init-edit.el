@@ -139,7 +139,6 @@
 (global-set-keys
  '(("RET" . newline-and-indent)
    ("S-<return>" . comment-indent-new-line)
-   (("s-o" "M-o") . other-window)
    (("s-n" "M-n") . scroll-up-1/3)
    (("s-p" "M-p") . scroll-down-1/3)
    (("M-N" "s-N") . scroll-other-window-up-1/3)
