@@ -19,7 +19,7 @@
   (eq system-type 'darwin)
   "Are we running on a Mac system?")
 
-(defcustom user/day-theme 'ef-spring
+(defcustom user/day-theme 'modus-operandi
   "Day theme name."
   :group 'user
   :type 'symbol)
