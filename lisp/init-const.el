@@ -44,6 +44,16 @@
   :group 'user
   :type 'number)
 
+(defcustom user/start-fullscreen t
+  "Is fullscreen in start."
+  :group 'user
+  :type 'boolean)
+
+(defcustom user/start-transparent nil
+  "Is transparent in start."
+  :group 'user
+  :type 'boolean)
+
 (defcustom user/minibuffer 'fido
   "The minibuffer farmework."
   :group 'user
