@@ -127,6 +127,7 @@
     eldoc-box
 
     posframe
+    rainbow-delimiters
     ace-window
 
     diredfl

@@ -95,11 +95,19 @@
 
 ;;; highlight
 (global-hl-line-mode 1)
+(add-hooks '(eshell-mode shell-mode term-mode)
+           #'(lambda () (setq-local global-hl-line-mode nil)))
 
+;;; Highlight matching parens
 (require 'paren)
-(setq show-paren-delay 0.2
-      show-paren-style 'mixed
+(setq show-paren-when-point-inside-paren t
+      show-paren-when-point-in-periphery nil
+      show-paren-delay 0.2)
+(setq show-paren-style 'mixed
       show-paren-context-when-offscreen t)
+(custom-set-faces
+ '(show-paren-match ((t (:foreground "SpringGreen3" :underline t :weight bold)))))
+
 (add-hook 'after-init-hook #'show-paren-mode)
 
 ;;; Highlight uncommitted changes using VC
@@ -145,6 +153,12 @@
             'diff-hl-dired-mode)
 
   (diff-hl-flydiff-mode))
+
+;;; Highlight brackets according to their depth
+(add-hooks '(emacs-lisp-mode lisp-mode)
+           #'(lambda ()
+               (require 'rainbow-delimiters)
+               (rainbow-delimiters-mode 1)))
 
 ;;; window
 ;;; ace window
