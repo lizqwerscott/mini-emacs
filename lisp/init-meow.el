@@ -73,6 +73,7 @@
  '(("C-c p" . project-dispatch)))
 
 (defun meow-setup ()
+  "Meow setup functions."
   (meow-leader-define-key
    '("/". meow-keypad-describe-key)
    '("?" . meow-cheatsheet))
