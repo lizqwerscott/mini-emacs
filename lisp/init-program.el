@@ -70,7 +70,10 @@
     ;;           #'eldoc-box-hover-at-point-mode)
 
     (setf (alist-get 'left-fringe eldoc-box-frame-parameters) 8
-          (alist-get 'right-fringe eldoc-box-frame-parameters) 8)))
+          (alist-get 'right-fringe eldoc-box-frame-parameters) 8)
+
+    (global-set-keys
+       '(("C-h ?" . eldoc-box-help-at-point)))))
 
 ;;; complile
 (setq compilation-scroll-output nil)
@@ -295,7 +298,8 @@ ARGS is ORIG-FN args."
   '(("C-c r" . eval-buffer-and-message)))
 
 (keymap-sets (emacs-lisp-mode-map lisp-interaction-mode-map)
-  '(("C-c C-p" . ielm)))
+  '(("C-c C-p" . ielm)
+    ("C-h ?" . helpful-at-point)))
 
 (provide 'init-program)
 ;;; init-program.el ends heres.
