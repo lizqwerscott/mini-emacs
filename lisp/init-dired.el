@@ -3,7 +3,6 @@
 ;;; Code:
 
 (require 'lib-dired)
-(require 'dired-menu)
 
 ;;; dired
 (require 'dired)
@@ -74,6 +73,21 @@
                 (dired-async-mode))
               (diredfl-mode)
               (dired-omit-mode)))
+
+(require 'lib-transient)
+;;; Menu
+(transient-define-prefix dired-dispatch ()
+  "Dired dispatch menu."
+  [["Directory"
+    ("h" "Hide Details" dired-hide-details-mode
+     :class transient-toggle
+     :toggle (lambda () (bound-and-true-p dired-hide-details-mode))
+     :transient t)
+    ("o" "Omit Mode" dired-omit-mode
+     :class transient-toggle
+     :toggle (lambda () (bound-and-true-p dired-omit-mode))
+     :transient t)]]
+  [("q" "Quit" transient-quit-all)])
 
 ;;; Keymap
 (keymap-sets dired-mode-map
