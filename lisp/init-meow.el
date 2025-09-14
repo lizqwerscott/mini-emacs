@@ -73,21 +73,21 @@
  '(("C-c p" . project-dispatch)))
 
 (require 'lib-transient)
-(transient-define-prefix transient-toggles ()
+(pretty-transient-define-prefix transient-toggles ()
   "Toggles menu."
   :transient-non-suffix 'transient--do-stay
   ["Toggles"
    ["Ui"
-    ("n" "Line number" display-line-numbers-mode :class transient-toggle :toggle (lambda () (bound-and-true-p display-line-numbers-mode)) :transient t)
-    ("d" "Dark theme" +lizqwer/toggle-dark-theme :class transient-toggle :toggle (lambda () (cl-find user/night-theme custom-enabled-themes)) :transient t)
-    ("T" "Transparent" +lizqwer/toggle-transparent :class transient-toggle :toggle (lambda () (not (eq (frame-parameter (selected-frame) 'alpha-background) 100))) :transient t)]
+    ("n" "Line number" display-line-numbers-mode :toggle t :transient t)
+    ("d" "Dark theme" +lizqwer/toggle-dark-theme :toggle (lambda () (cl-find user/night-theme custom-enabled-themes)) :transient t)
+    ("T" "Transparent" +lizqwer/toggle-transparent :toggle (lambda () (not (eq (frame-parameter (selected-frame) 'alpha-background) 100))) :transient t)]
    ["Edit"
-    ("w" "Sub or super word" toggle-sub-word-or-super-word :class transient-toggle :toggle (lambda () (bound-and-true-p subword-mode)) :transient t)
-    ("e" "Electric pair" electric-pair-mode :class transient-toggle :toggle (lambda () (bound-and-true-p electric-pair-mode)) :transient t)]
+    ("w" "Sub or super word" toggle-sub-word-or-super-word :toggle (lambda () (bound-and-true-p subword-mode)) :transient t)
+    ("e" "Electric pair" electric-pair-mode :toggle t :transient t)]
    ["Debug"
-    ("E" "Debug on error" toggle-debug-on-error :class transient-toggle :toggle (lambda () (bound-and-true-p debug-on-error)) :transient t)]
+    ("E" "Debug on error" toggle-debug-on-error :toggle (lambda () (bound-and-true-p debug-on-error)) :transient t)]
    ["Program"
-    ("f" "Flymake" flymake-mode :class transient-toggle :toggle (lambda () (bound-and-true-p flymake-mode)) :transient t)]]
+    ("f" "Flymake" flymake-mode :toggle t :transient t)]]
   [("q" "Quit" transient-quit-one)])
 
 (defun meow-setup ()
