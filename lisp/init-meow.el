@@ -78,8 +78,9 @@
   :transient-non-suffix 'transient--do-stay
   [["Basic"
     ("w" "Sub or super word" toggle-sub-word-or-super-word
-    :toggle (lambda () (bound-and-true-p subword-mode)) :transient t)
-    ("e" "Electric pair" electric-pair-mode :toggle t :transient t)]
+     :toggle (lambda () (bound-and-true-p subword-mode)) :transient t)
+    ("e" "Electric pair" electric-pair-mode :toggle t :transient t)
+    ("s" "Auto save" super-save-mode :toggle t :transient t)]
 
    ["Highlight"
     ("h l" "Line highlight" global-hl-line-mode :toggle t :transient t)
