@@ -188,9 +188,6 @@
         auto-revert-verbose nil)
 (global-auto-revert-mode)
 
-;;; vc
-(setq vc-handled-backends '(Git))
-
 ;;; exec path from shell
 (setq exec-path-from-shell-variables '("PATH" "MANPATH" "GOROOT" "GOPATH" "EDITOR" "PYTHONPATH"))
 
