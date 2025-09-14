@@ -76,19 +76,45 @@
 (pretty-transient-define-prefix transient-toggles ()
   "Toggles menu."
   :transient-non-suffix 'transient--do-stay
-  ["Toggles"
+  [["Basic"
+    ("w" "Sub or super word" toggle-sub-word-or-super-word
+    :toggle (lambda () (bound-and-true-p subword-mode)) :transient t)
+    ("e" "Electric pair" electric-pair-mode :toggle t :transient t)]
+
+   ["Highlight"
+    ("h l" "Line highlight" global-hl-line-mode :toggle t :transient t)
+    ("h p" "Paren highlight" show-paren-mode :toggle t :transient t)
+    ("h w" "Whitespace"
+     (lambda ()
+       (interactive)
+       (setq-default show-trailing-whitespace
+                     (not show-trailing-whitespace)))
+     :toggle (lambda () show-trailing-whitespace) :transient t)
+    ("h d" "Rainbow delimiters" rainbow-delimiters-mode :toggle t :transient t)]
+
    ["Ui"
     ("n" "Line number" display-line-numbers-mode :toggle t :transient t)
-    ("d" "Dark theme" +lizqwer/toggle-dark-theme :toggle (lambda () (cl-find user/night-theme custom-enabled-themes)) :transient t)
-    ("T" "Transparent" +lizqwer/toggle-transparent :toggle (lambda () (not (eq (frame-parameter (selected-frame) 'alpha-background) 100))) :transient t)]
-   ["Edit"
-    ("w" "Sub or super word" toggle-sub-word-or-super-word :toggle (lambda () (bound-and-true-p subword-mode)) :transient t)
-    ("e" "Electric pair" electric-pair-mode :toggle t :transient t)]
-   ["Debug"
-    ("E" "Debug on error" toggle-debug-on-error :toggle (lambda () (bound-and-true-p debug-on-error)) :transient t)]
+    ("d" "Dark theme" +lizqwer/toggle-dark-theme
+     :toggle (lambda () (cl-find user/night-theme custom-enabled-themes)) :transient t)
+    ("T" "Transparent" +lizqwer/toggle-transparent
+     :toggle (lambda ()
+               (not (eq (frame-parameter (selected-frame) 'alpha-background) 100)))
+     :transient t)]
+
    ["Program"
-    ("f" "Flymake" flymake-mode :toggle t :transient t)]]
+    ("f" "Flymake" flymake-mode :toggle t :transient t)
+    ("v" "Diff-hl gutter" global-diff-hl-mode :toggle t :transient t)
+    ("M" "Margin gutter" diff-hl-margin-mode :toggle t :transient t)
+    ("E" "Debug on error" toggle-debug-on-error
+     :toggle (lambda () (default-value 'debug-on-error)) :transient t)
+    ("Q" "Debug on quit" toggle-debug-on-quit
+     :toggle (lambda () (default-value 'debug-on-quit)) :transient t)]]
+
   [("q" "Quit" transient-quit-one)])
+
+(global-set-keys
+ '(("C-c T" . transient-toggles)
+   ("<f6>" . transient-toggles)))
 
 (defun meow-setup ()
   "Meow setup functions."
@@ -107,7 +133,6 @@
    '("F" . find-file-other-window))
 
   (meow-leader-define-key
-   '("T" . transient-toggles)
    '("s" . "M-s"))
 
   (meow-normal-define-key
