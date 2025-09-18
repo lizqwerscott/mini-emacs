@@ -294,11 +294,9 @@ ARGS is ORIG-FN args."
   (eval-buffer)
   (message "Eval buffer finish!"))
 
-(keymap-sets emacs-lisp-mode-map
-  '(("C-c r" . eval-buffer-and-message)))
-
 (keymap-sets (emacs-lisp-mode-map lisp-interaction-mode-map)
-  '(("C-c C-p" . ielm)
+  '(("C-c r" . eval-buffer-and-message)
+    ("C-c C-p" . ielm)
     ("C-h ?" . helpful-at-point)))
 
 (provide 'init-program)
