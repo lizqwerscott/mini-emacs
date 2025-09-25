@@ -138,7 +138,8 @@ and `@` for a clean state."
                   'face (cdr vcs-icon)))))
 
 (setq-default mode-line-format
-              '((:eval (meow-indicator))
+              '("%e" mode-line-front-space
+                (:eval (meow-indicator))
                 (:eval (let ((prefix (cond (buffer-read-only     '("Read " . modeline-face-critical))
                                            ((buffer-modified-p)  '("" . modeline-face-critical))
                                            (t                    '("" . modeline-face-strong)))))
@@ -155,7 +156,9 @@ and `@` for a clean state."
                              (buffer-encoding (modeline-encoding))
                              (vcs-str (modeline-vcs)))
                          (list
-                          (propertize " " 'display `(space :align-to (- right ,(length mode) ,(length buffer-encoding) 1 ,(length vcs-str))))
+                          (propertize " " 'display `(space :align-to (- right ,(length current-input-method-title) ,(length mode) ,(length buffer-encoding) 1 ,(length vcs-str))))
+                          current-input-method-title
+                          " "
                           buffer-encoding
                           (propertize mode 'face 'modeline-face-faded)
                           " "
