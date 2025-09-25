@@ -21,15 +21,13 @@
       org-pretty-entities nil
       org-hide-emphasis-markers t)
 
-(setq org-format-latex-options
-      (plist-put org-format-latex-options :scale 2.0))
-
+(setq org-enforce-todo-dependencies t)
 (setq org-todo-keywords
       '((sequence "TODO(t)" "DOING(i)" "HANGUP(h)" "|" "DONE(d)" "CANCEL(c)")
         (sequence "⚑(T)" "🏴(I)" "❓(H)" "|" "✔(D)" "✘(C)")))
 
-(setq org-format-latex-options (plist-put org-format-latex-options :scale 4.0))
-(setq org-enforce-todo-dependencies t)
+(setq org-format-latex-options
+      (plist-put org-format-latex-options :scale 4.0))
 
 ;;; Org babel
 (org-babel-do-load-languages
@@ -43,7 +41,7 @@
 
 ;;; UI
 
-;;; 中文标记隐藏空格
+;; 中文标记隐藏空格
 (font-lock-add-keywords 'org-mode
                         '(("\\cc\\( \\)[/+*_=~][^a-zA-Z0-9/+*_=~\n]+?[/+*_=~]\\( \\)?\\cc?"
                            (1 (prog1 () (compose-region (match-beginning 1) (match-end 1) ""))))
@@ -76,7 +74,7 @@
     ("s-N" . org-metadown)
     ("s-H" . org-metaleft)
     ("s-L" . org-metaright)
-    
+
     ("M-g o" . consult-org-heading)))
 
 (provide 'init-org)
