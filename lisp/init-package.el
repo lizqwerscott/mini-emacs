@@ -131,7 +131,7 @@
     ace-window
 
     diredfl
-    org-bullets))
+    org-superstar))
 
 (packages! *package-early-install-list*)
 
