@@ -24,40 +24,57 @@
 
 ;;; Code:
 
-(defface modeline-face-default '((t)) "")
-(defface modeline-face-strong '((t)) "")
-(defface modeline-face-faded '((t)) "")
-(defface modeline-face-critical '((t)) "")
-(defface modeline-face-info '((t)) "")
-(defface modeline-face-warning '((t)) "")
-(defface modeline-face-urgent '((t)) "")
-(defface modeline-face-meow-insert '((t)) "")
+(defface modeline-face-strong
+  '((t (:foreground "#ECEFF4" :weight regular)))
+  "Modeline strong face.
+Used to highlight important information in the mode line.")
+
+(defface modeline-face-faded
+  '((t (:foreground "#b6a0ff")))
+  "Modeline faded face.
+Used to de-emphasize less important information in the mode line.")
+
+;; #EBCB8B
+(defface modeline-face-critical
+  '((t (:foreground "#f1fa8c")))
+  "Modeline critical face.
+Used to indicate critical errors or very important states in the mode line.")
+
+(defface modeline-face-info
+  '((t (:foreground "#0000FFFF0000")))
+  "Modeline info face.
+Used to display informational or neutral status in the mode line.")
+
+(defface modeline-face-warning
+  '((t (:foreground "#b6a0ff")))
+  "Modeline warning face.
+Used to display warnings or cautionary messages in the mode line.")
+
+(defface modeline-face-urgent
+  '((t (:foreground "#FFFF00000000")))
+  "Modeline urgent face.
+Used to indicate urgent or high-priority issues in the mode line.")
 
 (defun modeline-set-face (name &optional foreground background weight)
-  "Set NAME and NAME-i faces with given FOREGROUND, BACKGROUND and WEIGHT"
-
+  "Set face NAME with given FOREGROUND, BACKGROUND and WEIGHT.
+FOREGROUND and BACKGROUND should be color strings.
+WEIGHT is a symbol such as 'regular, 'bold, or 'light."
   (apply #'set-face-attribute `(,name nil
                                       ,@(when foreground `(:foreground ,foreground))
                                       ,@(when background `(:background ,background))
                                       ,@(when weight `(:weight ,weight)))))
 
-(modeline-set-face 'modeline-face-default "#ECEFF4" "#2E3440") ;; Snow Storm 3
-(modeline-set-face 'modeline-face-strong "#ECEFF4" nil 'regular) ;; Polar Night 0
-(modeline-set-face 'modeline-face-faded "#b6a0ff") ;;
-(modeline-set-face 'modeline-face-critical "#EBCB8B") ;; Aurora 2
-(modeline-set-face 'modeline-face-info "#0000FFFF0000")
-(modeline-set-face 'modeline-face-warning "#b6a0ff")
-(modeline-set-face 'modeline-face-urgent "#FFFF00000000")
-(modeline-set-face 'modeline-face-meow-insert "#9fefff")
-
-(defface doom-modeline-evil-insert-state
-  '((t (:inherit (doom-modeline font-lock-keyword-face))))
-  "Face for the insert state tag in evil indicator."
-  :group 'doom-modeline-faces)
+(with-eval-after-load 'meow
+  (modeline-set-face 'meow-keypad-indicator "#b6a0ff")
+  (modeline-set-face 'meow-normal-indicator "#50fa7b")
+  (modeline-set-face 'meow-insert-indicator "#ff79c6")
+  (modeline-set-face 'meow-beacon-indicator "#f1fa8c")
+  (modeline-set-face 'meow-motion-indicator "#8995ba"))
 
 ;; from doom-modeline
 (defsubst modeline-encoding ()
-  "Encoding"
+  "Return the encoding and EOL style for the current buffer in the mode line.
+Shows both end-of-line type (LF, CRLF, CR) and the coding system (e.g. UTF-8)."
   (let ((sep " ")
         (face 'modeline-face-strong)
         (mouse-face 'modeline-face-faded))
@@ -100,6 +117,10 @@
      sep)))
 
 (defsubst modeline-vcs ()
+  "Return VCS branch and state for the current buffer in the mode line.
+Shows the branch name and an icon for the file status:
+`*` for modified/added, `?` for needs merge, `!` for warning/conflict,
+and `@` for a clean state."
   (when (and vc-mode buffer-file-name)
     (when-let* ((vcs-state (vc-state buffer-file-name
                                      (vc-backend buffer-file-name)))
@@ -117,34 +138,28 @@
                   'face (cdr vcs-icon)))))
 
 (setq-default mode-line-format
-              '(:eval
-                (let ((meow-mode-status (meow--get-state-name (meow--current-state)))
-                      (prefix (cond (buffer-read-only     '("Read " . modeline-face-critical))
-                                    ((buffer-modified-p)  '("" . modeline-face-critical))
-                                    (t                    '("" . modeline-face-strong))))
-                      (buffer-name-face (cond (buffer-read-only     'modeline-face-strong)
-                                              ((buffer-modified-p)  'modeline-face-critical)
-                                              (t                    'modeline-face-strong)))
-                      (mode (cond ((consp mode-name) (car mode-name))
-                                  ((stringp mode-name) mode-name)
-                                  (t "unknow")))
-                      (coords (format-mode-line " L%l:C%c"))
-                      (buffer-encoding (modeline-encoding))
-                      (vcs-str (modeline-vcs)))
-                  (list
-                   (propertize (format " %s " meow-mode-status) 'face (if (meow-insert-mode-p)
-                                                                          'modeline-face-meow-insert
-                                                                        'modeline-face-faded))
-                   (propertize (car prefix) 'face (cdr prefix))
-                   (propertize (format-mode-line "%b") 'face buffer-name-face)
-                   (propertize coords 'face 'modeline-face-strong)
-                   (when flymake-mode
-                     flymake-mode-line-format)
-                   (propertize " " 'display `(space :align-to (- right ,(length mode) ,(length buffer-encoding) 1 ,(length vcs-str))))
-                   buffer-encoding
-                   (propertize mode 'face 'modeline-face-faded)
-                   " "
-                   vcs-str))))
+              '((:eval (meow-indicator))
+                (:eval (let ((prefix (cond (buffer-read-only     '("Read " . modeline-face-critical))
+                                           ((buffer-modified-p)  '("" . modeline-face-critical))
+                                           (t                    '("" . modeline-face-strong)))))
+                         (propertize (car prefix) 'face (cdr prefix))))
+                (:eval (propertize "%12b" 'face (cond (buffer-read-only     'modeline-face-strong)
+                                                      ((buffer-modified-p)  'modeline-face-critical)
+                                                      (t                    'modeline-face-strong))))
+                (:propertize " L%l:C%c" 'face modeline-face-strong)
+                (flymake-mode flymake-mode-line-format)
+                mode-line-misc-info
+                (:eval (let ((mode (cond ((consp mode-name) (car mode-name))
+                                         ((stringp mode-name) mode-name)
+                                         (t "unknow")))
+                             (buffer-encoding (modeline-encoding))
+                             (vcs-str (modeline-vcs)))
+                         (list
+                          (propertize " " 'display `(space :align-to (- right ,(length mode) ,(length buffer-encoding) 1 ,(length vcs-str))))
+                          buffer-encoding
+                          (propertize mode 'face 'modeline-face-faded)
+                          " "
+                          vcs-str)))))
 
 (provide 'init-modeline)
 ;;; init-modeline.el ends here
