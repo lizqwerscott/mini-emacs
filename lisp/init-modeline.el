@@ -24,6 +24,16 @@
 
 ;;; Code:
 
+(defcustom modeline-display-time t
+  "Whether the time is displayed by default in the modeline."
+  :group 'user
+  :type 'boolean)
+
+(defcustom modeline-display-battery nil
+  "Whether battery information is displayed by default on the modeline."
+  :group 'user
+  :type 'boolean)
+
 (defface modeline-face-strong
   '((t (:foreground "#ECEFF4" :weight regular)))
   "Modeline strong face.
@@ -138,7 +148,17 @@ and `@` for a clean state."
                   'face (cdr vcs-icon)))))
 
 (setq display-time-string-forms
-        '(24-hours ":" minutes " "))
+      '(24-hours ":" minutes " "))
+
+
+(when modeline-display-time
+  (add-hook 'after-init-hook
+            #'display-time-mode))
+
+(when (and modeline-display-battery
+           (not (my/unsupport-battery-or-charging)))
+  (add-hook 'after-init-hook
+            #'display-battery-mode))
 
 (setq-default mode-line-format
               '("%e" mode-line-front-space

@@ -233,6 +233,13 @@ With DEPTH, clone with --depth=1."
                                      (user-error (format "%s\n%s" command output))))))
     (set-process-filter proc #'comint-output-filter)))
 
+(require 'battery)
+(defun my/unsupport-battery-or-charging ()
+  "Return t if battery status is unsupported or device is charging."
+  (let* ((battery-infos (funcall battery-status-function))
+         (power-supply-status (alist-get ?L battery-infos)))
+    (or (string= power-supply-status "N/A")
+        (string= power-supply-status "AC"))))
 
 (provide 'lib-utils)
 ;;; lib-utils.el ends here
