@@ -86,6 +86,12 @@
     '(("<escape>" . isearch-exit)
       ("C-o" . my-occur-from-isearch))))
 
+;; repeat for isearch
+(defvar-keymap isearch-repeat-map
+  :repeat t
+  "s" #'isearch-repeat-forward
+  "r" #'isearch-repeat-backward)
+
 ;;; rg
 (with-eval-after-load 'rg
   (keymap-sets rg-mode-map
@@ -133,6 +139,7 @@
   ((emacs-lisp-mode lisp-mode)
    (symbol "when-let" "if-let")))
 
+;;; keymap
 (keymap-unset ctl-x-map "b")
 (keymap-unset ctl-x-map "C-k")
 
@@ -149,6 +156,17 @@
    ("M-g p" . goto-percent)
 
    ("C-x b g" . revert-buffer-quick)))
+
+;; repeat for scroll up
+(defvar-keymap scroll-repeat-map
+  :repeat t
+  "n" #'scroll-up-1/3
+  "p" #'scroll-down-1/3)
+
+(defvar-keymap scroll-other-window-repeat-map
+  :repeat t
+  "n" #'scroll-other-window-up-1/3
+  "p" #'scroll-other-window-down-1/3)
 
 (provide 'init-edit)
 ;;; init-edit.el ends here.
