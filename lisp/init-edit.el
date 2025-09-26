@@ -69,9 +69,12 @@
 (setq isearch-lazy-count t
       isearch-case-fold-search t
       lazy-count-prefix-format "%s/%s "
-      search-whitespace-regexp ".*?")
+      search-whitespace-regexp ".*?"
+      isearch-repeat-on-direction-change t
+      isearch-wrap-pause nil)
 
 (defun my-occur-from-isearch ()
+  "Generate occur from isearch."
   (interactive)
   (let ((query (if isearch-regexp
                    isearch-string
@@ -81,10 +84,42 @@
       (ignore-errors (isearch-done t t)))
     (occur query)))
 
+(defun my-isearch-consult-line-from-isearch ()
+  "Invoke `consult-line' from isearch."
+  (interactive)
+  (let ((query (if isearch-regexp
+                   isearch-string
+                 (regexp-quote isearch-string))))
+    (isearch-update-ring isearch-string isearch-regexp)
+    (let (search-nonincremental-instead)
+      (ignore-errors (isearch-done t t)))
+    (consult-line query)))
+
+(defun isearch-yank-thing-at-point ()
+  "Isearch yank thing at point."
+  (interactive)
+  (if-let* ((word (thing-at-point 'word)))
+      (isearch-yank-string word)
+    (if-let* ((symbol (thing-at-point 'symbol)))
+        (isearch-yank-string word))))
+
+(defun isearch-yank-thing-at-point-and-forward ()
+  "Isearch yank thing at point and isearch forward."
+  (interactive)
+  (when (isearch-yank-thing-at-point)
+    (isearch-repeat-forward)))
+
 (with-eval-after-load 'isearch
   (keymap-sets isearch-mode-map
     '(("<escape>" . isearch-exit)
-      ("C-o" . my-occur-from-isearch))))
+      ("s-r" . isearch-toggle-regexp)
+      ("s-e" . isearch-edit-string)
+
+      ("C-w" . isearch-yank-thing-at-point-and-forward)
+
+      ("C-v" . visual-replace-from-isearch)
+      ("C-o" . my-occur-from-isearch)
+      ("C-j" . my-isearch-consult-line-from-isearch))))
 
 ;; repeat for isearch
 (defvar-keymap isearch-repeat-map
