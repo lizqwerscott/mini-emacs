@@ -137,6 +137,9 @@ and `@` for a clean state."
       (propertize (format "%s%s" (car vcs-icon) vcs-branch-name)
                   'face (cdr vcs-icon)))))
 
+(setq display-time-string-forms
+        '(24-hours ":" minutes " "))
+
 (setq-default mode-line-format
               '("%e" mode-line-front-space
                 (:eval (meow-indicator))
@@ -149,7 +152,9 @@ and `@` for a clean state."
                                                       (t                    'modeline-face-strong))))
                 (:propertize " L%l:C%c" 'face modeline-face-strong)
                 (flymake-mode flymake-mode-line-format)
+                " "
                 mode-line-misc-info
+                " "
                 (:eval (let ((mode (cond ((consp mode-name) (car mode-name))
                                          ((stringp mode-name) mode-name)
                                          (t "unknow")))
