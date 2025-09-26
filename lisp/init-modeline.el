@@ -156,7 +156,7 @@ and `@` for a clean state."
                              (buffer-encoding (modeline-encoding))
                              (vcs-str (modeline-vcs)))
                          (list
-                          (propertize " " 'display `(space :align-to (- right ,(length current-input-method-title) ,(length mode) ,(length buffer-encoding) 1 ,(length vcs-str))))
+                          (propertize " " 'display `(space :align-to (- right ,(length current-input-method-title) 1 ,(length mode) ,(length buffer-encoding) 1 ,(length vcs-str))))
                           current-input-method-title
                           " "
                           buffer-encoding
