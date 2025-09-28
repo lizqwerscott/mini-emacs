@@ -125,6 +125,7 @@
     apheleia
     yasnippet
     eldoc-box
+    outli
 
     posframe
     rainbow-delimiters

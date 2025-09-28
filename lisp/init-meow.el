@@ -101,6 +101,7 @@
      :toggle (lambda ()
                (not (eq (frame-parameter (selected-frame) 'alpha-background) 100)))
      :transient t)
+    ("o" "Outline" outli-mode :toggle t :transient t)
     ("m t" "Modeline time" display-time-mode :toggle t :transient t)
     ("m b" "Modeline battery" display-battery-mode :toggle t :transient t)]
 
