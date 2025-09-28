@@ -197,8 +197,9 @@
    ["Split"
     ("3" "horizontally" split-window-right :transient t)
     ("2" "vertically" split-window-below :transient t)
-    ("t" "Clockwise Rotate" rotate-windows :transient t)
-    ("T" "Counterclockwise Rotate" rotate-windows-back :transient t)]
+    ("t" "Transpose Window Layout" window-layout-transpose :transient t)
+    ("r" "Clockwise Rotate" rotate-windows :transient t)
+    ("R" "Counterclockwise Rotate" rotate-windows-back :transient t)]
    ["Zoom"
     ("+" "in" text-scale-increase :transient t)
     ("=" "in" text-scale-increase :transient t)
