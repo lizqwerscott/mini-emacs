@@ -175,8 +175,8 @@
    (symbol "when-let" "if-let")))
 
 ;;; keymap
-(keymap-unset ctl-x-map "b")
 (keymap-unset ctl-x-map "C-k")
+(keymap-unset ctl-x-map "C-x")
 
 (global-set-keys
  '(("RET" . newline-and-indent)
@@ -188,9 +188,7 @@
    ("C-s-f" . forward-sexp)
    ("C-s-b" . backward-sexp)
 
-   ("M-g p" . goto-percent)
-
-   ("C-x b g" . revert-buffer-quick)))
+   ("M-g p" . goto-percent)))
 
 ;; repeat for scroll up
 (defvar-keymap scroll-repeat-map
