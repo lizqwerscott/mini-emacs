@@ -29,12 +29,12 @@
 (when (executable-find "rg")
   (setq xref-search-program 'ripgrep))
 
-(global-set-keys
- '(("M-g r" . xref-find-references)
-   ("M-g d" . xref-find-definitions)
-   ("M-g D" . xref-find-definitions-other-window)
+(global-bind-keys
+ ("M-g r" . xref-find-references)
+ ("M-g d" . xref-find-definitions)
+ ("M-g D" . xref-find-definitions-other-window)
 
-   ("C-o" . xref-go-back)))
+ ("C-o" . xref-go-back))
 
 ;;; flymake
 (add-hook 'prog-mode-hook
@@ -51,8 +51,8 @@
 (setq flymake-no-changes-timeout nil
       flymake-fringe-indicator-position 'right-fringe)
 
-(global-set-keys
- '(("C-c j d" . consult-flymake)))
+(global-bind-keys
+ ("C-c j d" . consult-flymake))
 
 ;;; eldoc
 (with-eval-after-load 'eldoc
@@ -77,8 +77,8 @@
     (setf (alist-get 'left-fringe eldoc-box-frame-parameters) 8
           (alist-get 'right-fringe eldoc-box-frame-parameters) 8)
 
-    (global-set-keys
-       '(("C-h ?" . eldoc-box-help-at-point)))))
+    (global-bind-keys
+     ("C-h ?" . eldoc-box-help-at-point))))
 
 ;;; complile
 (setq compilation-scroll-output nil)
@@ -132,9 +132,9 @@ ARGS is ORIG-FN args."
 (advice-add #'compile-goto-error :around #'not-split-window)
 
 (with-eval-after-load 'compile
-  (keymap-sets compilation-mode-map
-    '(("s-n" . compilation-next-error)
-      ("s-p" . compilation-previous-error))))
+  (keymap-binds compilation-mode-map
+    ("s-n" . compilation-next-error)
+    ("s-p" . compilation-previous-error)))
 
 ;;; lisp
 (add-hook 'before-save-hook
@@ -202,12 +202,12 @@ ARGS is ORIG-FN args."
   (call-interactively #'eglot-shutdown)
   (call-interactively #'eglot))
 
-(keymap-sets eglot-mode-map
-  '(("C-c j r" . eglot-rename)
-    ("C-c j R" . eglot-restart)
-    ("C-c j a" . eglot-code-actions)
+(keymap-binds eglot-mode-map
+  ("C-c j r" . eglot-rename)
+  ("C-c j R" . eglot-restart)
+  ("C-c j a" . eglot-code-actions)
 
-    ("M-g u" . eglot-find-implementation)))
+  ("M-g u" . eglot-find-implementation))
 
 (add-hook 'prog-mode-hook
           #'(lambda ()
@@ -233,8 +233,8 @@ ARGS is ORIG-FN args."
 (setf (alist-get 'cargo-fmt apheleia-formatters)
       '("cargo" "fmt"))
 
-(global-set-keys
- '(("C-c j f" . apheleia-format-buffer)))
+(global-bind-keys
+ ("C-c j f" . apheleia-format-buffer))
 
 ;;; language
 (add-to-list 'auto-mode-alist '("\\.launch$" . xml-mode))
@@ -284,13 +284,13 @@ ARGS is ORIG-FN args."
 
 (with-eval-after-load 'cc-mode
   (autoload #'insert-trailing-semi-and-indent "insert-trailing-semi" nil t)
-  (keymap-sets (c-mode-map c++-mode-map)
-    '((";" . insert-trailing-semi-and-indent))))
+  (keymap-binds (c-mode-map c++-mode-map)
+    (";" . insert-trailing-semi-and-indent)))
 
 (with-eval-after-load 'c-ts-mode
   (autoload #'insert-trailing-semi-and-indent "insert-trailing-semi" nil t)
-  (keymap-sets (c-ts-mode-map c++-ts-mode-map)
-    '((";" . insert-trailing-semi-and-indent))))
+  (keymap-binds (c-ts-mode-map c++-ts-mode-map)
+    (";" . insert-trailing-semi-and-indent)))
 
 ;; elisp
 (defun eval-buffer-and-message ()
@@ -299,10 +299,10 @@ ARGS is ORIG-FN args."
   (eval-buffer)
   (message "Eval buffer finish!"))
 
-(keymap-sets (emacs-lisp-mode-map lisp-interaction-mode-map)
-  '(("C-c r" . eval-buffer-and-message)
-    ("C-c C-p" . ielm)
-    ("C-h ?" . helpful-at-point)))
+(keymap-binds (emacs-lisp-mode-map lisp-interaction-mode-map)
+  ("C-c r" . eval-buffer-and-message)
+  ("C-c C-p" . ielm)
+  ("C-h ?" . helpful-at-point))
 
 (provide 'init-program)
 ;;; init-program.el ends heres.

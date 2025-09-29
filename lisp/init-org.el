@@ -62,20 +62,20 @@
           #'visual-line-mode)
 
 ;;; keymap
-(keymap-sets org-mode-map
-  '(("C-c TAB" . "C-c TAB")
-    ("M-P" . org-metaup)
-    ("M-N" . org-metadown)
-    ("M-H" . org-metaleft)
-    ("M-L" . org-metaright)
+(keymap-binds org-mode-map
+  ("C-c TAB" . "C-c TAB")
+  ("M-P" . org-metaup)
+  ("M-N" . org-metadown)
+  ("M-H" . org-metaleft)
+  ("M-L" . org-metaright)
 
-    ("s-<return>" . org-meta-return)
-    ("s-P" . org-metaup)
-    ("s-N" . org-metadown)
-    ("s-H" . org-metaleft)
-    ("s-L" . org-metaright)
+  ("s-<return>" . org-meta-return)
+  ("s-P" . org-metaup)
+  ("s-N" . org-metadown)
+  ("s-H" . org-metaleft)
+  ("s-L" . org-metaright)
 
-    ("M-g o" . consult-org-heading)))
+  ("M-g o" . consult-org-heading))
 
 (provide 'init-org)
 ;;; init-org.el ends here.

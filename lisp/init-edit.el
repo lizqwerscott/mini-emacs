@@ -38,11 +38,11 @@
 
 ;;; nxml
 (with-eval-after-load 'nxml-mode
-  (keymap-sets nxml-mode-map
-    '(("C-s-f" . nxml-down-element)
-      ("C-s-n" . nxml-forward-element)
-      ("C-s-p" . nxml-backward-element)
-      ("C-s-b" . nxml-backward-up-element))))
+  (keymap-binds nxml-mode-map
+    ("C-s-f" . nxml-down-element)
+    ("C-s-n" . nxml-forward-element)
+    ("C-s-p" . nxml-backward-element)
+    ("C-s-b" . nxml-backward-up-element)))
 
 ;;; Visual Replace
 (require 'visual-replace)
@@ -110,16 +110,16 @@
     (isearch-repeat-forward)))
 
 (with-eval-after-load 'isearch
-  (keymap-sets isearch-mode-map
-    '(("<escape>" . isearch-exit)
-      ("s-r" . isearch-toggle-regexp)
-      ("s-e" . isearch-edit-string)
+  (keymap-binds isearch-mode-map
+    ("<escape>" . isearch-exit)
+    ("s-r" . isearch-toggle-regexp)
+    ("s-e" . isearch-edit-string)
 
-      ("C-w" . isearch-yank-thing-at-point-and-forward)
+    ("C-w" . isearch-yank-thing-at-point-and-forward)
 
-      ("C-v" . visual-replace-from-isearch)
-      ("C-o" . my-occur-from-isearch)
-      ("C-j" . my-isearch-consult-line-from-isearch))))
+    ("C-v" . visual-replace-from-isearch)
+    ("C-o" . my-occur-from-isearch)
+    ("C-j" . my-isearch-consult-line-from-isearch)))
 
 ;; repeat for isearch
 (defvar-keymap isearch-repeat-map
@@ -129,18 +129,18 @@
 
 ;;; rg
 (with-eval-after-load 'rg
-  (keymap-sets rg-mode-map
-    '(("s-n" . compilation-next-error)
-      ("s-p" . compilation-previous-error)
-      ("s-N" . rg-next-file)
-      ("s-P" . rg-prev-file))))
+  (keymap-binds rg-mode-map
+    ("s-n" . compilation-next-error)
+    ("s-p" . compilation-previous-error)
+    ("s-N" . rg-next-file)
+    ("s-P" . rg-prev-file)))
 
-(global-set-keys
- '(("M-s s" . rg-dwim)
-   ("M-s R" . rg-menu)
-   ("M-s r" . rg)
-   ("M-s t" . rg-literal)
-   ("M-s p" . rg-project)))
+(global-bind-keys
+ ("M-s s" . rg-dwim)
+ ("M-s R" . rg-menu)
+ ("M-s r" . rg)
+ ("M-s t" . rg-literal)
+ ("M-s p" . rg-project))
 
 ;;; grugru
 (grugru-default-setup)
@@ -178,17 +178,17 @@
 (keymap-unset ctl-x-map "C-k")
 (keymap-unset ctl-x-map "C-x")
 
-(global-set-keys
- '(("RET" . newline-and-indent)
-   ("C-<return>" . comment-indent-new-line)
-   (("s-n" "M-n") . scroll-up-1/3)
-   (("s-p" "M-p") . scroll-down-1/3)
-   (("M-N" "s-N") . scroll-other-window-up-1/3)
-   (("M-P" "s-P") . scroll-other-window-down-1/3)
-   ("C-s-f" . forward-sexp)
-   ("C-s-b" . backward-sexp)
+(global-bind-keys
+ ("RET" . newline-and-indent)
+ ("C-<return>" . comment-indent-new-line)
+ (("s-n" "M-n") . scroll-up-1/3)
+ (("s-p" "M-p") . scroll-down-1/3)
+ (("M-N" "s-N") . scroll-other-window-up-1/3)
+ (("M-P" "s-P") . scroll-other-window-down-1/3)
+ ("C-s-f" . forward-sexp)
+ ("C-s-b" . backward-sexp)
 
-   ("M-g p" . goto-percent)))
+ ("M-g p" . goto-percent))
 
 ;; repeat for scroll up
 (defvar-keymap scroll-repeat-map

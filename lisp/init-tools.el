@@ -3,9 +3,9 @@
 ;;; Code:
 
 (with-eval-after-load 'eww
-  (keymap-sets eww-mode-map
-    '(("M-n" . scroll-up-1/3)
-      ("M-p" . scroll-down-1/3))))
+  (keymap-binds eww-mode-map
+    ("M-n" . scroll-up-1/3)
+    ("M-p" . scroll-down-1/3)))
 
 ;;; Ibuffer
 ;; Ibuffer filters
@@ -48,8 +48,8 @@
     (kill-buffer buffer))
   (ibuffer))
 
-(global-set-keys
- '(("C-x C-b" . ibuffer-refersh)))
+(global-bind-keys
+ ("C-x C-b" . ibuffer-refersh))
 
 ;;; proced
 (setq proced-auto-update-flag 'visible

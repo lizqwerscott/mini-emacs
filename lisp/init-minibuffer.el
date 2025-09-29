@@ -135,28 +135,28 @@ configuration of the virtual buffer sources."
 
 ;; meow while translate i into TAB
 (keymap-unset goto-map "TAB")
-(global-set-keys
- '(("C-x C-r" . consult-recent-file)
+(global-bind-keys
+ ("C-x C-r" . consult-recent-file)
 
-   ("M-y" . consult-yank-pop)
+ ("M-y" . consult-yank-pop)
 
-   ("C-c b" . consult-buffer)
-   ("C-c B" . consult-buffer-other-window)
+ ("C-c b" . consult-buffer)
+ ("C-c B" . consult-buffer-other-window)
 
-   ("M-g l" . consult-goto-line)
-   ("M-g o" . consult-outline)
-   ("M-g m" . consult-mark)
-   ("M-g k" . consult-global-mark)
-   ("M-g e" . consult-compile-error)
-   ("M-g i" . consult-imenu)
-   ("M-g I" . consult-imenu-multi)
-   ("M-g b" . consult-bookmark)
+ ("M-g l" . consult-goto-line)
+ ("M-g o" . consult-outline)
+ ("M-g m" . consult-mark)
+ ("M-g k" . consult-global-mark)
+ ("M-g e" . consult-compile-error)
+ ("M-g i" . consult-imenu)
+ ("M-g I" . consult-imenu-multi)
+ ("M-g b" . consult-bookmark)
 
-   ("M-s l" . consult-line)
-   ("M-s L" . consult-line-multi)
-   ("M-s u" . consult-isearch-history)
-   ("M-s f" . ("Search file" . consult-fd))
-   ("M-s d" . ("Search dir" . consult-fd-dir))))
+ ("M-s l" . consult-line)
+ ("M-s L" . consult-line-multi)
+ ("M-s u" . consult-isearch-history)
+ ("M-s f" . ("Search file" . consult-fd))
+ ("M-s d" . ("Search dir" . consult-fd-dir)))
 
 ;; consult dir
 (require 'consult-dir)
@@ -180,23 +180,23 @@ configuration of the virtual buffer sources."
 ;; Adding to the list of consult-dir sources
 (add-to-list 'consult-dir-sources 'consult-dir--source-quick)
 
-(global-set-keys
- '(("C-x C-d" . consult-dir)))
+(global-bind-keys
+ ("C-x C-d" . consult-dir))
 
-(keymap-sets minibuffer-local-map
-  '(("M-s" . consult-history)
-    ("M-r" . consult-history)
-    ("C-i" . (lambda ()
-               "Insert the currunt symbol."
-               (interactive)
-               (insert (save-excursion
-                         (set-buffer (window-buffer (minibuffer-selected-window)))
-                         (or (thing-at-point 'symbol t) "")))))
-    ("C-x C-d" . consult-dir)
-    ("C-x C-j" . consult-dir-jump-file)))
+(keymap-binds minibuffer-local-map
+  ("M-s" . consult-history)
+  ("M-r" . consult-history)
+  ("C-i" . (lambda ()
+             "Insert the currunt symbol."
+             (interactive)
+             (insert (save-excursion
+                       (set-buffer (window-buffer (minibuffer-selected-window)))
+                       (or (thing-at-point 'symbol t) "")))))
+  ("C-x C-d" . consult-dir)
+  ("C-x C-j" . consult-dir-jump-file))
 
-(global-set-keys
- '((("s-x" "M-x") . execute-extended-command)))
+(global-bind-keys
+ (("s-x" "M-x") . execute-extended-command))
 
 (provide 'init-minibuffer)
 ;;; init-minibuffer.el ends here.

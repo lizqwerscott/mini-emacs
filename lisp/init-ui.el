@@ -213,15 +213,15 @@
     ("<right>" "winner redo" winner-redo :transient t)
     ("q" "Quit" transient-quit-one)]])
 
-(global-set-keys
- '((("s-o" "M-o") . ace-window)
-   ("C-c w" . window-dispatch)))
+(global-bind-keys
+ (("s-o" "M-o") . ace-window)
+ ("C-c w" . window-dispatch))
 
 ;;; winner mode
 (winner-mode 1)
-(keymap-sets winner-mode-map
-  '(("C-c H" . winner-undo)
-    ("C-c L" . winner-redo)))
+(keymap-binds winner-mode-map
+  ("C-c H" . winner-undo)
+  ("C-c L" . winner-redo))
 
 (defun my-window-select-fit-size (window)
   (select-window window)

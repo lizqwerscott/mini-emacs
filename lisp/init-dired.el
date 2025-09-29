@@ -84,19 +84,19 @@
   [("q" "Quit" transient-quit-all)])
 
 ;;; Keymap
-(keymap-sets dired-mode-map
-  '(("TAB" . dired-subtree-cycle)
-    ("e" . dired-toggle-read-only)
-    ("W" . dired-copy-path)
-    ("C-c +" . dired-create-empty-file)
-    ("M-n" . scroll-up-1/3)
-    ("M-p" . scroll-down-1/3)
-    ("h" . dired-up-directory)
-    ("C-c e" . dired-do-open-default)
-    ("C-o" . dired-dispatch)))
+(keymap-binds dired-mode-map
+  ("TAB" . dired-subtree-cycle)
+  ("e" . dired-toggle-read-only)
+  ("W" . dired-copy-path)
+  ("C-c +" . dired-create-empty-file)
+  ("M-n" . scroll-up-1/3)
+  ("M-p" . scroll-down-1/3)
+  ("h" . dired-up-directory)
+  ("C-c e" . dired-do-open-default)
+  ("C-o" . dired-dispatch))
 
-(global-set-keys
- '(("C-x J" . dired-jump-other-window)))
+(global-bind-keys
+ ("C-x J" . dired-jump-other-window))
 
 (provide 'init-dired)
 ;;; init-dired.el ends here

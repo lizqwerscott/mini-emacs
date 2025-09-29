@@ -57,8 +57,8 @@
                               (?c . comment)))
 (meow-normal-define-key (cons "\\" wrap-keymap))
 
-(keymap-sets goto-map
-  '(("f" . find-file-at-point)))
+(keymap-binds goto-map
+  ("f" . find-file-at-point))
 
 (defvar-keymap find-map
   :doc "Keymap for find commands."
@@ -69,8 +69,8 @@
 (defalias 'find-map find-map)
 
 (autoload #'project-dispatch "init-project" nil t)
-(global-set-keys
- '(("C-c p" . project-dispatch)))
+(global-bind-keys
+ ("C-c p" . project-dispatch))
 
 (require 'lib-transient)
 (pretty-transient-define-prefix transient-toggles ()
@@ -116,9 +116,9 @@
 
   [("q" "Quit" transient-quit-one)])
 
-(global-set-keys
- '(("C-c T" . transient-toggles)
-   ("<f6>" . transient-toggles)))
+(global-bind-keys
+ ("C-c T" . transient-toggles)
+ ("<f6>" . transient-toggles))
 
 (defun meow-setup ()
   "Meow setup functions."
@@ -215,8 +215,8 @@
 (meow-setup)
 (meow-global-mode 1)
 
-(global-set-keys
- '(("C-y" . meow-clipboard-yank)))
+(global-bind-keys
+ ("C-y" . meow-clipboard-yank))
 
 (provide 'init-meow)
 ;;; init-meow.el ends here
