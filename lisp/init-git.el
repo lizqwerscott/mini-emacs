@@ -16,6 +16,13 @@
         ediff-merge-revisions-with-ancestor t
         ediff-show-clashes-only t))
 
+(add-hook 'ediff-startup-hook
+          (lambda ()
+            (dolist (buffer (list ediff-buffer-A ediff-buffer-B ediff-buffer-C))
+              (when buffer
+                (with-current-buffer buffer
+                  (outline-show-all))))))
+
 ;;; diff-mode
 (with-eval-after-load 'diff-mode
   (setq diff-default-read-only t
