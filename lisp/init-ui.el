@@ -197,6 +197,8 @@
    ["Split"
     ("3" "horizontally" split-window-right :transient t)
     ("2" "vertically" split-window-below :transient t)
+    ("w 3" "root horizontally" split-root-window-right :transient t)
+    ("w 2" "root vertically" split-root-window-below :transient t)
     ("t" "Transpose Window Layout" window-layout-transpose :transient t)
     ("r" "Clockwise Rotate" rotate-windows :transient t)
     ("R" "Counterclockwise Rotate" rotate-windows-back :transient t)]
