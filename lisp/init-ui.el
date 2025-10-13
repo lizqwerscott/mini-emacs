@@ -96,13 +96,12 @@
                   (emacs-init-time)
                   (number-to-string (length package-activated-list)))))
 
-;;; highlight
+;;; Highlight the current line
 (global-hl-line-mode 1)
 (add-hooks '(eshell-mode shell-mode term-mode)
            #'(lambda () (setq-local global-hl-line-mode nil)))
 
 ;;; Highlight matching parens
-(require 'paren)
 (setq show-paren-when-point-inside-paren t
       show-paren-when-point-in-periphery nil
       show-paren-delay 0.2)
@@ -114,54 +113,54 @@
 (add-hook 'after-init-hook #'show-paren-mode)
 
 ;;; Highlight uncommitted changes using VC
-(require 'diff-hl)
-(setq diff-hl-draw-borders nil)
-(setq diff-hl-disable-on-remote t)
+(setopt diff-hl-draw-borders nil
+        diff-hl-disable-on-remote t)
 
 (custom-set-faces
  '(diff-hl-change ((t (:inherit custom-changed :foreground unspecified :background unspecified))))
  '(diff-hl-insert ((t (:inherit diff-added :background unspecified))))
  '(diff-hl-delete ((t (:inherit diff-removed :background unspecified)))))
 
-(keymap-set diff-hl-command-map "SPC" 'diff-hl-mark-hunk)
+(with-eval-after-load 'diff-hl
+  (unless sys/macp
+    (setopt diff-hl-update-async t))
 
-(setq-default fringes-outside-margins t)
+  (keymap-set diff-hl-command-map "SPC" 'diff-hl-mark-hunk)
+  (keymap-unset diff-hl-command-map "n")
+  (setq-default fringes-outside-margins t)
 
-(with-no-warnings
-  (defun my-diff-hl-fringe-bmp-function (_type _pos)
-    "Fringe bitmap function for use as `diff-hl-fringe-bmp-function'."
-    (define-fringe-bitmap 'my-diff-hl-bmp
-      (vector (if sys/linuxp #b11111100 #b11100000))
-      1 8
-      '(center t)))
-  (setq diff-hl-fringe-bmp-function #'my-diff-hl-fringe-bmp-function)
+  ;; (diff-hl-flydiff-mode)
 
-  (unless (display-graphic-p)
-    ;; Fall back to the display margin since the fringe is unavailable in tty
-    (diff-hl-margin-mode 1)
-    ;; Avoid restoring `diff-hl-margin-mode'
-    (with-eval-after-load 'desktop
-      (add-to-list 'desktop-minor-mode-table
-                   '(diff-hl-margin-mode nil))))
+  (with-no-warnings
+    (defun my-diff-hl-fringe-bmp-function (_type _pos)
+      "Fringe bitmap function for use as `diff-hl-fringe-bmp-function'."
+      (define-fringe-bitmap 'my-diff-hl-bmp
+        (vector (if sys/linuxp #b11111100 #b11100000))
+        1 8
+        '(center t)))
+    (setq diff-hl-fringe-bmp-function #'my-diff-hl-fringe-bmp-function)
 
-  ;; Integration with magit
-  (with-eval-after-load 'magit
-    (add-hook 'magit-pre-refresh-hook #'diff-hl-magit-pre-refresh)
-    (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh)))
+    (unless (display-graphic-p)
+      ;; Fall back to the display margin since the fringe is unavailable in tty
+      (diff-hl-margin-mode 1)
+      ;; Avoid restoring `diff-hl-margin-mode'
+      (with-eval-after-load 'desktop
+        (add-to-list 'desktop-minor-mode-table
+                     '(diff-hl-margin-mode nil))))
 
-(unless sys/macp
-  (global-diff-hl-mode)
-  (global-diff-hl-show-hunk-mouse-mode)
-  (add-hook 'dired-mode-hook
-            'diff-hl-dired-mode)
+    ;; Integration with magit
+    (with-eval-after-load 'magit
+      (add-hook 'magit-pre-refresh-hook #'diff-hl-magit-pre-refresh)
+      (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh))))
 
-  (diff-hl-flydiff-mode))
+(global-diff-hl-mode)
+(global-diff-hl-show-hunk-mouse-mode)
+(add-hook 'dired-mode-hook
+          #'diff-hl-dired-mode)
 
 ;;; Highlight brackets according to their depth
 (add-hooks '(emacs-lisp-mode lisp-mode)
-           #'(lambda ()
-               (require 'rainbow-delimiters)
-               (rainbow-delimiters-mode 1)))
+           #'rainbow-delimiters-mode)
 
 ;;; window
 ;;; ace window
