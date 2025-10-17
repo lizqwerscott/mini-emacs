@@ -98,6 +98,7 @@
     mct
     marginalia
     fussy
+    orderless
     helpful
     sudo-edit
     consult

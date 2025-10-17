@@ -2,28 +2,42 @@
 ;;; Commentary:
 ;;; Code:
 
-;;; minibuffer
+;; Add prompt indicator to `completing-read-multiple'.
+;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
+(defun crm-indicator (args)
+  (cons (format "[CRM%s] %s"
+                (replace-regexp-in-string
+                 "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+                 crm-separator)
+                (car args))
+        (cdr args)))
+(advice-add #'completing-read-multiple :filter-args #'crm-indicator)
 
-(with-eval-after-load 'fussy
-  (fussy-setup))
+;; Only list the commands of the current modes
+(when (boundp 'read-extended-command-predicate)
+  (setq read-extended-command-predicate
+        #'command-completion-default-include-p))
 
-;;; completion
-(setq completion-styles '(basic substring initials fussy partial-completion)
-      completion-category-defaults nil
-      completion-category-overrides '((file (styles . (basic partial-completion initials substring))))
-      tab-always-indent 'complete)
+(setq completion-cycle-threshold 4)
 
+;;; fussy
 
-;; (setq completion-styles '(basic substring initials flex partial-completion))
-;; (setq completion-category-defaults nil)
-;; (setq completion-category-overrides
-;;       '((file (styles . (basic partial-completion initials substring)))))
+(setopt fussy-filter-fn 'fussy-filter-orderless-flex
+        fussy-use-cache t
+        fussy-compare-same-score-fn 'fussy-histlen->strlen<)
 
-(setq completion-cycle-threshold 2)
-(setq completion-ignore-case t)
-(setq completion-show-inline-help nil)
+(fussy-setup)
+(fussy-eglot-setup)
 
-(setq completions-detailed t)
+(with-eval-after-load 'corfu
+  ;; For cache functionality.
+  (advice-add 'corfu--capf-wrapper :before 'fussy-wipe-cache)
+
+  (add-hook 'corfu-mode-hook
+            (lambda ()
+              (setq-local fussy-max-candidate-limit 5000
+                          fussy-default-regex-fn 'fussy-pattern-first-letter
+                          fussy-prefer-prefix nil))))
 
 ;;; corfu
 (require 'init-corfu)
