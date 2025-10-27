@@ -57,6 +57,18 @@
                               (?c . comment)))
 (meow-normal-define-key (cons "\\" wrap-keymap))
 
+(defun my/meow-reverse ()
+  "Just exchange point and mark.
+
+This command supports `meow-selection-command-fallback'."
+  (interactive)
+  (meow--with-selection-fallback
+   (call-interactively #'exchange-point-and-mark)
+   (if (member last-command
+               '(meow-visit meow-search meow-mark-symbol meow-mark-word))
+       (meow--highlight-regexp-in-buffer (car regexp-search-ring))
+     (meow--maybe-highlight-num-positions))))
+
 (keymap-binds goto-map
   ("f" . find-file-at-point))
 
@@ -151,7 +163,7 @@
    '("2" . meow-expand-2)
    '("1" . meow-expand-1)
    '("-" . negative-argument)
-   '(";" . meow-reverse)
+   '(";" . my/meow-reverse)
    '("," . meow-inner-of-thing)
    '("." . meow-bounds-of-thing)
    '("[" . meow-beginning-of-thing)
