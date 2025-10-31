@@ -40,6 +40,14 @@
                           fussy-default-regex-fn 'fussy-pattern-first-letter
                           fussy-prefer-prefix nil))))
 
+(add-list-to-list 'completion-category-overrides
+                  '((file (styles partial-completion orderless))
+                    (project-file (styles orderless fussy))
+                    (multi-category (styles orderless fussy basic))
+                    (consult-location (styles orderless fussy basic))
+                    (org-heading (styles orderless fussy basic))
+                    (bookmark (styles orderless fussy basic))))
+
 ;;; corfu
 (require 'init-corfu)
 
