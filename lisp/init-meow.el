@@ -74,11 +74,10 @@ This command supports `meow-selection-command-fallback'."
 
 (defvar-keymap find-map
   :doc "Keymap for find commands."
+  :prefix t
   "c" #'find-custom-file
   "l" #'find-library
   "v" #'find-variable)
-
-(defalias 'find-map find-map)
 
 (global-bind-keys
  ("<escape>" . keyboard-quit))
