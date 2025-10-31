@@ -29,7 +29,9 @@
 (defun transient-show--variable-to-checkbox (v)
   "Checkbox string representation of variable V.
 V is either nil or non-nil."
-  (if v "[x]" "[ ]"))
+  (if v
+      (propertize "[x]" 'face 'font-lock-keyword-face)
+    (propertize "[ ]" 'face 'font-lock-comment-face)))
 
 (defun transient-show--prefix-label (label prefix)
   "Label constructed with PREFIX and LABEL separated by a space."
