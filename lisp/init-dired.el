@@ -46,29 +46,27 @@
 (advice-add 'find-file :around 'find-file-auto)
 
 ;;; dired-aux
-(require 'dired-aux)
-(setq dired-isearch-filenames 'dwim)
-(setq dired-create-destination-dirs 'ask)
-(setq dired-vc-rename-file t)
+(setopt dired-isearch-filenames 'dwim
+        dired-create-destination-dirs 'ask
+        dired-vc-rename-file t)
 
 ;;; dired-x
-(require 'dired-x)
-(setq dired-bind-vm nil)
-(setq dired-bind-man nil)
-(setq dired-bind-info nil)
-(setq dired-omit-verbose nil)
-(setq dired-omit-files (rx string-start
-                           (or ".DS_Store"
-                               ".cache"
-                               ".vscode"
-                               ".ccls-cache" ".clangd")
-                           string-end))
-(setq dired-omit-files
-      (concat dired-omit-files "\\|^\\..*$"))
+(setopt dired-bind-vm nil
+        dired-bind-man nil
+        dired-bind-info nil
+        dired-omit-verbose nil
+        dired-omit-files (rx string-start
+                             (or ".DS_Store"
+                                 ".cache"
+                                 ".vscode"
+                                 ".ccls-cache" ".clangd")
+                             string-end)
+        dired-omit-files (concat dired-omit-files "\\|^\\..*$"))
 
 ;;; Hook
 (add-hook 'dired-mode-hook
           #'(lambda ()
+              (dired-hide-details-mode)
               (when (boundp 'dired-async-mode)
                 (dired-async-mode))
               (diredfl-mode)
@@ -85,18 +83,31 @@
 
 ;;; Keymap
 (keymap-binds dired-mode-map
-  ("TAB" . dired-subtree-cycle)
   ("e" . dired-toggle-read-only)
+  ("f" . (lambda ()
+           (interactive)
+           (consult-fd default-directory)))
+  ("F" . consult-fd-dir)
   ("W" . dired-copy-path)
   ("C-c +" . dired-create-empty-file)
-  ("M-n" . scroll-up-1/3)
-  ("M-p" . scroll-down-1/3)
+  ("C-+" . dired-create-empty-file)
   ("h" . dired-up-directory)
   ("C-c e" . dired-do-open-default)
-  ("C-o" . dired-dispatch))
+  ("C-o" . dired-dispatch)
+
+  ("/" . prot-dired-limit-regexp)
+  ("C-c C-l" . prot-dired-limit-regexp)
+
+  (("M-n" "s-n") . prot-dired-subdirectory-next)
+  (("M-p" "s-p") . prot-dired-subdirectory-previous)
+  ("C-c C-n" . prot-dired-subdirectory-next)
+  ("C-c C-p" . prot-dired-subdirectory-previous)
+
+  ("J" . dired-jump-first-file))
 
 (global-bind-keys
- ("C-x J" . dired-jump-other-window))
+ ("C-x J" . dired-jump-other-window)
+ ("C-x x e" . dired-do-open-default))
 
 (provide 'init-dired)
 ;;; init-dired.el ends here
