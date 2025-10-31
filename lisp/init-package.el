@@ -96,6 +96,7 @@
     exec-path-from-shell
 
     mct
+    vertico
     marginalia
     fussy
     orderless
