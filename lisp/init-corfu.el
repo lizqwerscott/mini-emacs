@@ -62,8 +62,7 @@
                    #'elisp-completion-at-point
                    #'my/ignore-elisp-keywords)
                   #'cape-dabbrev)
-                cape-file)
-              cape-dabbrev-min-length 5))
+                cape-file)))
 (add-hook 'emacs-lisp-mode-hook #'my/setup-elisp)
 
 (defun my/eglot-capf ()
