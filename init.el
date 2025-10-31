@@ -25,6 +25,7 @@
 
 (require 'init-org)
 
+(require 'init-project)
 (require 'init-git)
 
 (require 'init-program)

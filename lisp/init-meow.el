@@ -80,9 +80,8 @@ This command supports `meow-selection-command-fallback'."
 
 (defalias 'find-map find-map)
 
-(autoload #'project-dispatch "init-project" nil t)
 (global-bind-keys
- ("C-c p" . project-dispatch))
+ ("<escape>" . keyboard-quit))
 
 (require 'lib-transient)
 (pretty-transient-define-prefix transient-toggles ()
@@ -150,6 +149,9 @@ This command supports `meow-selection-command-fallback'."
 
   (meow-leader-define-key
    '("s" . "M-s"))
+
+  (meow-leader-define-key
+   '("p" . "C-x p"))
 
   (meow-normal-define-key
    '("0" . meow-expand-0)
