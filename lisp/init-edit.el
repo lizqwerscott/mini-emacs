@@ -188,6 +188,8 @@
  ("C-s-f" . forward-sexp)
  ("C-s-b" . backward-sexp)
 
+ ("C-x x b" . browse-this-file)
+
  ("M-g p" . goto-percent))
 
 ;; repeat for scroll up
