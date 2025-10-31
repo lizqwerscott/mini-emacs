@@ -109,7 +109,7 @@
 
     (meow :fetcher github :repo "meow-edit/meow")
     vundo
-    (fingertip :fetcher github :repo "manateelazycat/fingertip")
+    puni
     hungry-delete
     super-save
     rg
