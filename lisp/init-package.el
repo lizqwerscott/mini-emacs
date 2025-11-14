@@ -25,7 +25,8 @@
 (require 'use-package)
 
 (custom-set-variables
- '(package-vc-register-as-project nil))
+ '(package-vc-register-as-project nil)
+ '(package-native-compile t))
 
 (defun my/vc-git-clone (fn remote directory rev)
   (if (or (not (string-match-p "elpa" directory))
