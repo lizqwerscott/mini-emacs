@@ -2,16 +2,6 @@
 ;;; Commentary:
 ;;; Code:
 
-(defcustom user/day-theme 'modus-operandi
-  "Day theme name."
-  :group 'user
-  :type 'symbol)
-
-(defcustom user/night-theme 'modus-vivendi
-  "Night theme name."
-  :group 'user
-  :type 'symbol)
-
 (defcustom user/minibuffer 'fido
   "The minibuffer farmework."
   :group 'user
