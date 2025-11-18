@@ -24,24 +24,46 @@
 (setq frame-title-format '("Emacs - %b")
       icon-title-format frame-title-format)
 
-(setq default-frame-alist
-      `((alpha-background . ,(if user/start-transparent
-                                 90
-                               100))
-        ;; (fullscreen . maximized)
-        ))
-
 (setq initial-frame-alist
       '((top . 0.5)
         (left . 0.5)
         (width . 0.9)
-        (height . 0.9)
-        ;; (fullscreen . maximized)
-        ))
+        (height . 0.9)))
 
-(when user/start-fullscreen
-  (unless (or sys/macp sys/win32p)
-    (toggle-frame-fullscreen)))
+(defun set-alpha-background (symbol value)
+  "Set SYMBOL VALUE.
+and update transparent."
+  (set-default-toplevel-value symbol value)
+  (setf (alist-get 'alpha-background default-frame-alist) value)
+  (when-let* ((frame (selected-frame)))
+    (set-frame-parameter frame 'alpha-background value)))
+
+(defcustom user/alpha-background 100
+  "Default alpha background."
+  :group 'user
+  :type 'number
+  :set #'set-alpha-background)
+
+(defun set-fullscreenp (symbol value)
+  "Set SYMBOL VALUE."
+  (set-default-toplevel-value symbol value)
+  (when value
+    (add-list-to-list 'initial-frame-alist
+                      '((fullscreen . fullboth))))
+  (let* ((frame (selected-frame))
+         (fullscreen (frame-parameter frame 'fullscreen)))
+    (if value
+        (modify-frame-parameters frame `((fullscreen . fullboth) (fullscreen-restore . ,fullscreen)))
+      (let ((fullscreen-restore (frame-parameter frame 'fullscreen-restore)))
+	    (if (memq fullscreen-restore '(maximized fullheight fullwidth))
+	        (set-frame-parameter frame 'fullscreen fullscreen-restore)
+	      (set-frame-parameter frame 'fullscreen nil))))))
+
+(defcustom user/start-fullscreenp t
+  "Is fullscreen in start."
+  :group 'user
+  :type 'boolean
+  :set #'set-fullscreenp)
 
 ;;; Header & mode lines
 (require 'init-headerline)
