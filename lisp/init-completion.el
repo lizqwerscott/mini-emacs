@@ -23,8 +23,15 @@
 
 ;;; fussy
 
-(setopt fussy-filter-fn 'fussy-filter-orderless-flex
-        fussy-use-cache t
+(autoload #'fussy-orderless-score-with-flx "fussy-orderless")
+
+(with-eval-after-load 'fussy
+  (add-to-list 'fussy-whitespace-ok-fns
+               #'fussy-orderless-score-with-flx))
+
+(setopt fussy-score-fn 'fussy-orderless-score-with-flx
+        fussy-filter-fn 'fussy-filter-orderless-flex
+        fussy-use-cache nil
         fussy-compare-same-score-fn 'fussy-histlen->strlen<)
 
 (fussy-setup)
@@ -32,21 +39,13 @@
 
 (with-eval-after-load 'corfu
   ;; For cache functionality.
-  (advice-add 'corfu--capf-wrapper :before 'fussy-wipe-cache)
+  ;; (advice-add 'corfu--capf-wrapper :before 'fussy-wipe-cache)
 
   (add-hook 'corfu-mode-hook
             (lambda ()
               (setq-local fussy-max-candidate-limit 5000
                           fussy-default-regex-fn 'fussy-pattern-first-letter
                           fussy-prefer-prefix nil))))
-
-(add-list-to-list 'completion-category-overrides
-                  '((file (styles orderless fussy))
-                    (project-file (styles orderless fussy))
-                    (multi-category (styles orderless fussy basic))
-                    (consult-location (styles orderless fussy basic))
-                    (org-heading (styles orderless fussy basic))
-                    (bookmark (styles orderless fussy basic))))
 
 ;;; corfu
 (require 'init-corfu)
