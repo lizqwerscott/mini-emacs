@@ -112,7 +112,6 @@
     (meow :fetcher github :repo "meow-edit/meow")
     vundo
     puni
-    hungry-delete
     super-save
     rg
     grugru
