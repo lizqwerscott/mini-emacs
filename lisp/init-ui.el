@@ -65,8 +65,11 @@ and update transparent."
   :type 'boolean
   :set #'set-fullscreenp)
 
-;;; Header & mode lines
-(require 'init-headerline)
+;;; Head line
+(setq breadcrumb-imenu-max-length 100)
+(breadcrumb-mode)
+
+;;; mode lines
 (require 'init-modeline)
 
 ;;; Line number

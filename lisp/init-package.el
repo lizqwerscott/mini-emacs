@@ -125,6 +125,7 @@
     cape
     citre
     (eglot-booster :fetcher github :repo "jdtsmith/eglot-booster")
+    breadcrumb
     apheleia
     yasnippet
     eldoc-box
