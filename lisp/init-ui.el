@@ -70,7 +70,7 @@ and update transparent."
 (require 'init-modeline)
 
 ;;; Line number
-(add-hooks '(prog-mode text-mode conf-mode)
+(add-hooks '(prog-mode conf-mode)
            #'(lambda ()
                (setq display-line-numbers-type 'relative)
                (display-line-numbers-mode 1)))
