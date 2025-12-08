@@ -41,19 +41,33 @@
  ("C-o" . xref-go-back))
 
 ;;; flymake
-(add-hook 'prog-mode-hook
-          #'flymake-mode)
+(defun my-elisp-flymake-byte-compile (fn &rest args)
+  "Wrapper for `elisp-flymake-byte-compile'."
+  (let ((elisp-flymake-byte-compile-load-path
+         (append elisp-flymake-byte-compile-load-path load-path)))
+    (apply fn args)))
+(advice-add 'elisp-flymake-byte-compile :around #'my-elisp-flymake-byte-compile)
 
-(setq flymake-show-diagnostics-at-end-of-line nil
-      flymake-show-diagnostics-at-end-of-line 'short
-      flymake-indicator-type 'margins
-      flymake-margin-indicators-string
+(setq flymake-no-changes-timeout nil
+      flymake-fringe-indicator-position 'right-fringe
+      flymake-margin-indicator-position 'right-margin)
+
+(setq flymake-margin-indicators-string
       `((error "!" compilation-error) ;; Alternatives: », E, W, i, !, ?)
         (warning "?" compilation-warning)
         (note "i" compilation-info)))
 
-(setq flymake-no-changes-timeout nil
-      flymake-fringe-indicator-position 'right-fringe)
+(add-hook 'prog-mode-hook
+          #'flymake-mode)
+
+(setq flymake-popon-width 80)
+
+(custom-set-faces
+ '(flymake-popon ((t :inherit default :height 0.85)))
+ `(flymake-popon-posframe-border ((t :foreground ,(face-background 'posframe-border nil t)))))
+
+(add-hook #'flymake-mode-hook
+          #'flymake-popon-mode)
 
 (global-bind-keys
  ("C-c j d" . consult-flymake))

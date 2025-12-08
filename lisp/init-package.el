@@ -128,6 +128,7 @@
     apheleia
     yasnippet
     eldoc-box
+    flymake-popon
     outli
 
     posframe
