@@ -52,7 +52,8 @@
       flymake-fringe-indicator-position 'right-fringe
       flymake-margin-indicator-position 'right-margin)
 
-(setq flymake-margin-indicators-string
+(setq flymake-indicator-type 'margins
+      flymake-margin-indicators-string
       `((error "!" compilation-error) ;; Alternatives: », E, W, i, !, ?)
         (warning "?" compilation-warning)
         (note "i" compilation-info)))
