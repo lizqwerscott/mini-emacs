@@ -19,6 +19,8 @@
         #'command-completion-default-include-p))
 
 (setq completion-cycle-threshold 4
+      completions-detailed t
+      completion-auto-help nil
       completion-styles '(basic))
 
 ;;; fussy
@@ -31,7 +33,7 @@
 
 (setopt fussy-score-fn 'fussy-orderless-score-with-flx
         fussy-filter-fn 'fussy-filter-orderless-flex
-        fussy-use-cache t
+        fussy-use-cache nil
         fussy-compare-same-score-fn 'fussy-histlen->strlen<)
 
 (fussy-setup)
