@@ -61,7 +61,7 @@
   ("B" . consult-project-buffer-other-window)
 
   ("s" . ("Eshell" . project-eshell))
-  ("v" . magit-project-status)
+  ("v" . unpackaged/magit-project-status)
 
   ("M" . project-manage-dispatch)
   ("P" . project-switch-project-open))

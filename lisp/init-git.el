@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;; Code:
 
+(require 'lib-git)
+
 ;;; vc
 (setq vc-handled-backends '(Git)
       vc-follow-symlinks t)
@@ -34,7 +36,9 @@
         magit-save-repository-buffers nil
         magit-revision-insert-related-refs nil)
 
-  (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1))
+  (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
+
+  (add-hook 'magit-status-sections-hook #'magit-insert-worktrees t))
 
 (add-hook 'magit-mode-hook
           #'magit-wip-mode)
