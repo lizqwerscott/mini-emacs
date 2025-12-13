@@ -192,9 +192,15 @@
  ("C-s-f" . forward-sexp)
  ("C-s-b" . backward-sexp)
 
+ ("C-x C-n" . next-buffer)
+ ("C-x C-p" . previous-buffer)
+
+ ("C-x k" . kill-current-buffer)
+ ("C-x K" . kill-buffer)
+
  ("C-x x b" . browse-this-file)
 
- ("M-g p" . goto-percent))
+ ("M-g P" . goto-percent))
 
 ;; repeat for scroll up
 (defvar-keymap scroll-repeat-map
