@@ -16,6 +16,12 @@
       (expand-file-name "config/" user-emacs-directory))
 (require 'no-littering)
 
+(add-to-list 'trusted-content
+             (abbreviate-file-name (expand-file-name "lisp/" user-emacs-directory)))
+
+(add-to-list 'trusted-content
+             (abbreviate-file-name (expand-file-name "lib/" user-emacs-directory)))
+
 ;;; Encoding
 ;; UTF-8 as the default coding system
 (when (fboundp 'set-charset-priority)
