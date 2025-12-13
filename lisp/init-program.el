@@ -313,7 +313,8 @@ ARGS is ORIG-FN args."
   (eval-buffer)
   (message "Eval buffer finish!"))
 
-(setopt elisp-fontify-semantically t)
+(setopt elisp-fontify-semantically t
+        elisp-add-help-echo nil)
 
 (keymap-binds (emacs-lisp-mode-map lisp-interaction-mode-map)
   ("C-c r" . eval-buffer-and-message)
