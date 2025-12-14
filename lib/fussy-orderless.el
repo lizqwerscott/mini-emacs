@@ -31,7 +31,8 @@
 
 (defcustom fussy-orderless-affix-dispatch-alist '((?= . fussy-orderless-chinese-regexp-score)
                                                   (?! . fussy-orderless-not-score)
-                                                  (?, . fussy-orderless-initialism-score))
+                                                  (?, . fussy-orderless-initialism-score)
+                                                  (?^ . fussy-orderless-literal-prefix-score))
   "A affix dispatch alist for score."
   :group 'fussy
   :type `(alist
@@ -40,6 +41,7 @@
                        (const :tag "Chinese Regexp" ,#'fussy-orderless-chinese-regexp-score)
                        (const :tag "Not" ,#'fussy-orderless-not-score)
                        (const :tag "Initialism" ,#'fussy-orderless-initialism-score)
+                       (const :tag "Literal prefix" ,#'fussy-orderless-literal-prefix-score)
                        (function :tag "Custom matching style"))))
 
 (defun fussy-orderless--get-dispatch-key ()
@@ -63,18 +65,53 @@
       (setq index (1+ index)))
     (list (reverse prefix-items) (reverse other-items) (length querys))))
 
+(defvar fussy-orderless--chinese-regexp-cache (make-hash-table :test #'equal)
+  "Chinese regexp cache.")
+
+(defun fussy-orderless--chinese-cache-put (key value)
+  "Store VALUE in the Chinese regexp cache under KEY.
+
+KEY is a string used as the lookup key, and VALUE is the corresponding regexp
+pattern to store.
+
+The actual cache key is computed by applying `secure-hash' with MD5 algorithm to
+KEY for efficient storage and lookup.
+
+This function updates the hash table `fussy-orderless--chinese-regexp-cache'
+with the computed hash key and VALUE pair."
+  (let ((hash-key (secure-hash 'md5 key)))
+    (puthash hash-key value fussy-orderless--chinese-regexp-cache)))
+
+(defun fussy-orderless--chinese-cache-get (key)
+  "Retrieve the cached regexp value for KEY from the Chinese regexp cache.
+
+KEY is a string used as the lookup key.
+
+This function computes the MD5 hash of KEY using `secure-hash' and looks up the
+corresponding value in the hash table `fussy-orderless--chinese-regexp-cache'.
+
+Return the cached regexp pattern if found, or nil if no entry exists for KEY."
+  (let ((hash-key (secure-hash 'md5 key)))
+    (gethash hash-key fussy-orderless--chinese-regexp-cache)))
+
 (defun fussy-orderless-chinese-regexp-score (string query)
   "Use QUERY and STRING calc chinese regexp score."
   (require 'pyim)
   (when-let* (((string-match-p "\\cc" string))
               (regexp (when (fboundp 'pyim-cregexp-build)
-                        (pyim-cregexp-build query))))
+                        (let* ((cache (fussy-orderless--chinese-cache-get query)))
+                          (if cache
+                              cache
+                            (let ((regexp (pyim-cregexp-build query)))
+                              (fussy-orderless--chinese-cache-put query regexp)
+                              regexp))))))
     (string-match regexp string)
     (pcase-let* ((`(,start ,end) (match-data))
                  (len (length string)))
       (when (< end len)
         (list (+ (* 20 (/ (float (- end start))
                           len))
+                 (* 60 (- end start))
                  (* 80 (/ (float (- len start)) len)))
               start
               end)))))
@@ -113,6 +150,16 @@
               (cl-mapcan (lambda (p) (list p (1+ p)))
                          positions))))))
 
+(defun fussy-orderless-literal-prefix-score (string query)
+  "Use QUERY and STRING calc score."
+  (let* ((case-fold-search t)
+         (query-len (length query))
+         (string-len (length string)))
+    (when (and (> query-len 0) (>= string-len query-len))
+      (if (string-prefix-p query string case-fold-search)
+          (list (round (* 100 (/ (float query-len) string-len))) 0 query-len)
+        (list 0)))))
+
 (defun fussy-orderless-score (str prefix-items items-len)
   "Score STR for PREFIX-ITEMS using orderless.
 ITEMS-LEN is all items length."
@@ -128,9 +175,16 @@ ITEMS-LEN is all items length."
                                                score)))
                                     (cdr res)))))
                       prefix-items))
-         (filtered-lst (seq-filter 'identity lst)))
-    (cons (apply #'+ (mapcar #'car filtered-lst))
-          (apply #'append (mapcar #'cdr filtered-lst)))))
+         (filtered-lst (seq-filter 'identity lst))
+         (total-score 0)
+         (match-pos))
+    (dolist (item filtered-lst)
+      (setq total-score (+ total-score (car item)))
+      (setq match-pos
+            (append match-pos
+                    (cdr filtered-lst))))
+    (cons total-score
+          match-pos)))
 
 (defun fussy-orderless-score-with-flx (str query &rest args)
   "Score STR for QUERY with ARGS using orderless."
