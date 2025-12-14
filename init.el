@@ -21,7 +21,10 @@
 (require 'init-dired)
 (require 'init-helpful)
 
+(require 'init-calendar)
 (require 'init-tools)
+
+(require 'init-language)
 
 (require 'init-org)
 

@@ -136,7 +136,16 @@
     ace-window
 
     diredfl
-    org-superstar))
+    org-superstar
+
+    cal-china-x
+
+    rime
+    pyim
+    pyim-basedict
+    (pyim-tsinghua-dict
+     :fetcher github
+     :repo "redguardtoo/pyim-tsinghua-dict")))
 
 (packages! *package-early-install-list*)
 
