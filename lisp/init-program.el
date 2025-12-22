@@ -155,6 +155,9 @@ ARGS is ORIG-FN args."
     ("s-n" . compilation-next-error)
     ("s-p" . compilation-previous-error)))
 
+;;; eshell
+(require 'init-eshell)
+
 ;;; lisp
 (add-hook 'before-save-hook
           #'(lambda ()
