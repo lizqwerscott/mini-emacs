@@ -50,6 +50,11 @@
                           fussy-default-regex-fn 'fussy-pattern-first-letter
                           fussy-prefer-prefix nil))))
 
+;;; orderless
+(with-eval-after-load 'orderless
+  (add-to-list 'orderless-affix-dispatch-alist
+               `(?& . ,#'orderless-literal)))
+
 ;;; corfu
 (require 'init-corfu)
 
