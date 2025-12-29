@@ -24,6 +24,12 @@
 
 ;;; Code:
 
+(defun +complete ()
+  "TAB complete."
+  (interactive)
+  (or (yas-expand)
+      (corfu-complete)))
+
 (require 'corfu)
 (setq corfu-auto t
       corfu-quit-no-match t
@@ -34,6 +40,9 @@
 
 (custom-set-faces
  '(corfu-border ((t (:inherit region :background unspecified)))))
+
+(keymap-binds corfu-map
+  ("TAB" . +complete))
 
 (add-hook 'after-init-hook #'global-corfu-mode)
 (add-hook 'global-corfu-mode-hook #'corfu-popupinfo-mode)
