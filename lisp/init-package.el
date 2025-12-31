@@ -137,6 +137,7 @@
 
     diredfl
     org-superstar
+    (org-modern-indent :fetcher github :repo "jdtsmith/org-modern-indent")
 
     cal-china-x
 
