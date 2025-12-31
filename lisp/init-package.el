@@ -136,7 +136,8 @@
     ace-window
 
     diredfl
-    org-superstar))
+    org-superstar
+    (org-modern-indent :fetcher github :repo "jdtsmith/org-modern-indent")))
 
 (packages! *package-early-install-list*)
 
