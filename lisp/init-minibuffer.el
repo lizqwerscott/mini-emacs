@@ -279,8 +279,12 @@ configuration of the virtual buffer sources."
  ("C-x C-d" . consult-dir))
 
 (keymap-binds minibuffer-local-map
-  ("M-s" . consult-history)
-  ("M-r" . consult-history)
+  (("s-s" "M-s") . consult-history)
+  (("s-r" "M-r") . consult-history)
+
+  (("s-n" "M-n") . next-history-element)
+  (("s-p" "M-p") . previous-history-element)
+
   ("C-i" . (lambda ()
              "Insert the currunt symbol."
              (interactive)
