@@ -255,8 +255,15 @@ ARGS is ORIG-FN args."
 (setf (alist-get 'cargo-fmt apheleia-formatters)
       '("cargo" "fmt"))
 
+(defun format-code-buffer ()
+  "Format now buffer."
+  (interactive)
+  (save-buffer)
+  (call-interactively #'apheleia-format-buffer)
+  (revert-buffer t t))
+
 (global-bind-keys
- ("C-c j f" . apheleia-format-buffer))
+ ("C-c j f" . format-code-buffer))
 
 ;;; language
 (add-to-list 'auto-mode-alist '("\\.launch$" . xml-mode))
