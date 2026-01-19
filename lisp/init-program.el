@@ -268,27 +268,8 @@ ARGS is ORIG-FN args."
 ;;; language
 (add-to-list 'auto-mode-alist '("\\.launch$" . xml-mode))
 (add-to-list 'auto-mode-alist '("\\.urdf\\'" . nxml-mode))
-(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
 (add-to-list 'auto-mode-alist '("\\Dockerfile\\'" . dockerfile-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.lua\\'" . lua-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-ts-mode))
-
-(add-list-to-list 'major-mode-remap-alist
-                  '((sh-mode . bash-ts-mode)
-                    (rust-mode . rust-ts-mode)
-                    (python-mode . python-ts-mode)
-                    (c++-mode . c++-ts-mode)
-                    (c-mode . c-ts-mode)
-                    (go-mode . go-ts-mode)
-                    (csharp-mode . csharp-ts-mode)
-                    (conf-toml-mode . toml-ts-mode)
-                    (js-json-mode . json-ts-mode)))
-
-(add-hook 'json-mode-hook #'(lambda () (treesit-parser-create 'json)))
-(add-hook 'sh-mode-hook #'(lambda () (treesit-parser-create 'bash)))
 
 ;;; c++
 ;; config c++ style
@@ -316,7 +297,7 @@ ARGS is ORIG-FN args."
   (keymap-binds (c-ts-mode-map c++-ts-mode-map)
     (";" . insert-trailing-semi-and-indent)))
 
-;; elisp
+;;; elisp
 (defun eval-buffer-and-message ()
   "Eval elisp buffer and message finish."
   (interactive)
@@ -330,6 +311,44 @@ ARGS is ORIG-FN args."
   ("C-c r" . eval-buffer-and-message)
   ("C-c C-p" . ielm)
   ("C-h ?" . helpful-at-point))
+
+;;; python
+(with-eval-after-load 'eglot
+  (defun random-hex-string (n)
+    "Generate random N len hex string."
+    (let ((str ""))
+      (dotimes (_ n str)
+        (setq str (format "%s%02x" str (random 256))))))
+
+  (add-to-list 'eglot-server-programs
+               `((python-mode python-ts-mode) . ,(lambda (_interactive _project)
+                                                   (list "basedpyright-langserver"
+                                                         "--stdio"
+                                                         (format "--cancellationReceive=file:%s"
+                                                                 (random-hex-string 21))))))
+
+  (setq-default eglot-workspace-configuration
+                '(:basedpyright (:typeCheckingMode "basic"))))
+
+(when (executable-find "ty")
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-server-programs
+                 '((python-mode python-ts-mode) . ("ty" "server")))))
+
+;;; bash
+(add-hook 'sh-mode-hook #'(lambda () (treesit-parser-create 'bash)))
+
+;;; json
+(add-hook 'json-mode-hook #'(lambda () (treesit-parser-create 'json)))
+(setq json-ts-mode-indent-offset 4)
+
+;;; yaml
+(add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-ts-mode))
+
+;;; markdown
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+(setopt markdown-fontify-code-blocks-natively t)
 
 (provide 'init-program)
 ;;; init-program.el ends heres.
