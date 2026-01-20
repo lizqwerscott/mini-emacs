@@ -122,6 +122,7 @@ and update transparent."
                   (number-to-string (length package-activated-list)))))
 
 ;;; Highlight the current line
+(setopt global-hl-line-sticky-flag 'window)
 (global-hl-line-mode 1)
 (add-hooks '(eshell-mode shell-mode term-mode)
            #'(lambda () (setq-local global-hl-line-mode nil)))
