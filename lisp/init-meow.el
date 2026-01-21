@@ -55,7 +55,6 @@
                               (?p  . paragraph)
                               (?u . url)
                               (?c . comment)))
-(meow-normal-define-key (cons "\\" wrap-keymap))
 
 (defun my/meow-reverse ()
   "Just exchange point and mark.
