@@ -8,7 +8,7 @@
     ("M-p" . scroll-down-1/3)))
 
 ;;; Ibuffer
-;; Ibuffer filters
+;; Ibuffer group filters
 (setq ibuffer-saved-filter-groups
       '(("default"
          ("org" (or
@@ -39,7 +39,22 @@
 (add-hook 'ibuffer-mode-hook
           (lambda ()
             (ibuffer-switch-to-saved-filter-groups "default")))
-(setq ibuffer-show-empty-filter-groups nil) ; don't show empty groups
+
+(setq ibuffer-filter-group-name-face '(:inherit (font-lock-string-face bold)))
+
+(require 'ibuffer-color)
+
+(setq ibuffer-formats '((mark modified read-only locked
+                              " " (name 18 18 :left :elide)
+                              " " (size-h 9 -1 :right)
+                              " " (mode+ 16 16 :left :elide)
+                              " " (recency+ 9 9 :left :elide)
+                              " " filename-and-process+)
+                        (mark " " (name 16 -1)
+                              " " filename)))
+
+(setq ibuffer-show-empty-filter-groups nil ; don't show empty groups
+      ibuffer-human-readable-size t)
 
 (defun ibuffer-refersh ()
   "Open and refresh ibuffer."
