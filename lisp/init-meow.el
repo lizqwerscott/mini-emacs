@@ -87,7 +87,7 @@ This command supports `meow-selection-command-fallback'."
   :transient-non-suffix 'transient--do-stay
   [["Basic"
     ("w" "Sub or super word" toggle-sub-word-or-super-word
-     :toggle (lambda () (bound-and-true-p subword-mode)) :transient t)
+     :toggle (bound-and-true-p subword-mode) :transient t)
     ("e" "Electric pair" electric-pair-mode :toggle t :transient t)
     ("s" "Auto save" super-save-mode :toggle t :transient t)]
 
@@ -95,20 +95,17 @@ This command supports `meow-selection-command-fallback'."
     ("h l" "Line highlight" global-hl-line-mode :toggle t :transient t)
     ("h p" "Paren highlight" show-paren-mode :toggle t :transient t)
     ("h w" "Whitespace"
-     (lambda ()
-       (interactive)
-       (setq-default show-trailing-whitespace
-                     (not show-trailing-whitespace)))
-     :toggle (lambda () show-trailing-whitespace) :transient t)
+     (setq-default show-trailing-whitespace
+                     (not show-trailing-whitespace))
+     :toggle show-trailing-whitespace :transient t)
     ("h d" "Rainbow delimiters" rainbow-delimiters-mode :toggle t :transient t)]
 
    ["Ui"
     ("n" "Line number" display-line-numbers-mode :toggle t :transient t)
     ("d" "Dark theme" +lizqwer/toggle-dark-theme
-     :toggle (lambda () (cl-find user/night-theme custom-enabled-themes)) :transient t)
+     :toggle (cl-find user/night-theme custom-enabled-themes) :transient t)
     ("T" "Transparent" +lizqwer/toggle-transparent
-     :toggle (lambda ()
-               (not (eq (frame-parameter (selected-frame) 'alpha-background) 100)))
+     :toggle (not (eq (frame-parameter (selected-frame) 'alpha-background) 100))
      :transient t)
     ("o" "Outline" outli-mode :toggle t :transient t)
     ("m t" "Modeline time" display-time-mode :toggle t :transient t)
@@ -119,14 +116,9 @@ This command supports `meow-selection-command-fallback'."
     ("v" "Diff-hl gutter" global-diff-hl-mode :toggle t :transient t)
     ("M" "Margin gutter" diff-hl-margin-mode :toggle t :transient t)
     ("E" "Debug on error" toggle-debug-on-error
-     :toggle (lambda () (default-value 'debug-on-error)) :transient t)
+     :toggle (default-value 'debug-on-error) :transient t)
     ("Q" "Debug on quit" toggle-debug-on-quit
-     :toggle (lambda () (default-value 'debug-on-quit)) :transient t)]
-   
-   ["Customize"
-    ("S" "Customize save variable" customize-save-variable)
-    ("C" "Customize set variable" customize-set-variable)
-    ("G" "Customize set group" customize-group)]]
+     :toggle (default-value 'debug-on-quit) :transient t)]]
 
   [("q" "Quit" transient-quit-one)])
 

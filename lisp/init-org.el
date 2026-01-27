@@ -105,30 +105,30 @@ prepended to the element after the #+HEADER: tag."
 (pretty-transient-define-prefix transient-org-template ()
   "Transient org template menu."
   [["Basic"
-    ("e" "example" (lambda () (interactive) (hot-expand "<e")))
-    ("l" "latex" (lambda () (interactive) (hot-expand "<l")))
-    ("x" "quote" (lambda () (interactive) (hot-expand "<q")))
-    ("v" "verse" (lambda () (interactive) (hot-expand "<v")))
-    ("b" "bash" (lambda () (interactive) (hot-expand "<s" "bash")))]
+    ("e" "example" (hot-expand "<e"))
+    ("l" "latex" (hot-expand "<l"))
+    ("x" "quote" (hot-expand "<q"))
+    ("v" "verse" (hot-expand "<v"))
+    ("b" "bash" (hot-expand "<s" "bash"))]
    ["Head"
-    ("i" "index" (lambda () (interactive) (hot-expand "<i")))
-    ("I" "INCLUDE" (lambda () (interactive) (hot-expand "<I")))
-    ("S" "Startup" (lambda () (interactive) (insert "#+STARTUP: ")))
-    ("L" "LaTeX" (lambda () (interactive) (hot-expand "<L")))
-    ("P" "Latex Preview" (lambda () (interactive) (insert "#+STARTUP: latexpreview ")))
-    ("Mb" "Html Bigblow Theme" (lambda () (interactive) (insert "#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-bigblow.setup")))
-    ("Mr" "Html Readtheorg Theme" (lambda () (interactive) (insert "#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup")))
-    ("Mn" "Html Normal Css" (lambda () (interactive) (insert "#+HTML_HEAD: <link rel=\"stylesheet\" type=\"text/css\" href=\"http://gongzhitaao.org/orgcss/org.css\"/>")))]
+    ("i" "index" (hot-expand "<i"))
+    ("I" "INCLUDE" (hot-expand "<I"))
+    ("S" "Startup" (insert "#+STARTUP: "))
+    ("L" "LaTeX" (hot-expand "<L"))
+    ("P" "Latex Preview" (insert "#+STARTUP: latexpreview "))
+    ("Mb" "Html Bigblow Theme" (insert "#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-bigblow.setup"))
+    ("Mr" "Html Readtheorg Theme" (insert "#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup"))
+    ("Mn" "Html Normal Css" (insert "#+HTML_HEAD: <link rel=\"stylesheet\" type=\"text/css\" href=\"http://gongzhitaao.org/orgcss/org.css\"/>"))]
    ["Source"
-    ("ss" "src" (lambda () (interactive) (hot-expand "<s")))
-    ("se" "emacs-lisp" (lambda () (interactive) (hot-expand "<s" "emacs-lisp")))
-    ("sp" "python" (lambda () (interactive) (hot-expand "<s" "python")))
-    ("sP" "python" (lambda () (interactive) (hot-expand "<s" "python :results output")))
-    ("sc" "c++" (lambda () (interactive) (hot-expand "<s" "c++")))
-    ("sy" "yaml" (lambda () (interactive) (hot-expand "<s" "yaml-ts")))]
+    ("ss" "src" (hot-expand "<s"))
+    ("se" "emacs-lisp" (hot-expand "<s" "emacs-lisp"))
+    ("sp" "python" (hot-expand "<s" "python"))
+    ("sP" "python" (hot-expand "<s" "python :results output"))
+    ("sc" "c++" (hot-expand "<s" "c++"))
+    ("sy" "yaml" (hot-expand "<s" "yaml-ts"))]
    ["Misc"
-    ("u" "plantuml" (lambda () (interactive) (hot-expand "<s" "plantuml :file chart.png")))
-    ("G" "gnuplot" (lambda () (interactive) (hot-expand "<s" "gnuplot :results output :file ./result.png")))
+    ("u" "plantuml" (hot-expand "<s" "plantuml :file chart.png"))
+    ("G" "gnuplot" (hot-expand "<s" "gnuplot :results output :file ./result.png"))
     ("<" "ins" self-insert-command)]]
   [("q" "Quit" transient-quit-one)])
 
@@ -136,10 +136,10 @@ prepended to the element after the #+HEADER: tag."
   "Transient org menu."
   :transient-non-suffix 'transient--do-stay
   [["Display"
-    ("l" "Display Link" org-toggle-link-display :toggle (lambda () (not org-link-descriptive)) :transient t)
-    ("m" "Hide Emphasis Markers" org-toggle-display-emphasis-markers :toggle (lambda () org-hide-emphasis-markers) :transient t)
-    ("e" "Display Pretty Entities" org-toggle-pretty-entities :toggle (lambda () org-pretty-entities) :transient t)
-    ("i" "Display inline images" org-toggle-inline-images :toggle (lambda () org-inline-image-overlays) :transient t)]
+    ("l" "Display Link" org-toggle-link-display :toggle (not org-link-descriptive) :transient t)
+    ("m" "Hide Emphasis Markers" org-toggle-display-emphasis-markers :toggle org-hide-emphasis-markers :transient t)
+    ("e" "Display Pretty Entities" org-toggle-pretty-entities :toggle org-pretty-entities :transient t)
+    ("i" "Display inline images" org-toggle-inline-images :toggle org-inline-image-overlays :transient t)]
    ["Org Management"
     ("p" "Set Property" org-set-property)
     ("E" "Export" org-export-dispatch)
