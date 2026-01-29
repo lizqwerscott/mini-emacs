@@ -165,7 +165,7 @@ OPEN and CLOSE. Otherwise, insert the delimiters with space for text in between.
 (pretty-transient-define-prefix transient-org-line-template ()
   "Transient org line menu."
   [["Link"
-    ("l" "Normal" org-insert-link)]
+    ("l" "Normal" ar/org-insert-link-dwim)]
    ["Emphasize"
     ("=" "Verbatim" (lambda ()
                       (interactive)
@@ -213,6 +213,8 @@ OPEN and CLOSE. Otherwise, insert the delimiters with space for text in between.
   ("s-H" . org-metaleft)
   ("s-L" . org-metaright)
 
+  ("C-c C-l" . ar/org-insert-link-dwim)
+  
   ("M-g o" . consult-org-heading)
 
   ("C-c o" . transient-org-toggles)
