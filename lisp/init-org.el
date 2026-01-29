@@ -167,33 +167,17 @@ OPEN and CLOSE. Otherwise, insert the delimiters with space for text in between.
   [["Link"
     ("l" "Normal" ar/org-insert-link-dwim)]
    ["Emphasize"
-    ("=" "Verbatim" (lambda ()
-                      (interactive)
-                      (org-emphasize ?=)))
-    ("~" "Code" (lambda ()
-                  (interactive)
-                  (org-emphasize ?~)))
-    ("+" "Delete" (lambda ()
-                    (interactive)
-                    (org-emphasize ?+)))
-    ("_" "Underline" (lambda ()
-                       (interactive)
-                       (org-emphasize ?_)))
+    ("=" "Verbatim" (org-emphasize ?=))
+    ("~" "Code" (org-emphasize ?=))
+    ("+" "Delete" (org-emphasize ?+))
+    ("_" "Underline" (org-emphasize ?_))
 
-    ("/" "Italic" (lambda ()
-                    (interactive)
-                    (org-emphasize ?/)))
-    ("*" "Bold" (lambda ()
-                  (interactive)
-                  (org-emphasize ?*)))
+    ("/" "Italic" (org-emphasize ?/))
+    ("*" "Bold" (org-emphasize ?*))
     ("e" "Emphasize" org-emphasize)]
    ["Latex"
-    ("i" "Inline math" (lambda ()
-                         (interactive)
-                         (org-insert-or-surround "(" ")")))
-    ("I" "Display math" (lambda ()
-                          (interactive)
-                          (org-insert-or-surround "[" "]")))
+    ("i" "Inline math" (org-insert-or-surround "(" ")"))
+    ("I" "Display math" (org-insert-or-surround "[" "]"))
     ("L" "Convert to latex" latex-math-from-calc :if region-active-p)]
    ["Misc"
     (">" "ins" self-insert-command)]]
@@ -214,7 +198,7 @@ OPEN and CLOSE. Otherwise, insert the delimiters with space for text in between.
   ("s-L" . org-metaright)
 
   ("C-c C-l" . ar/org-insert-link-dwim)
-  
+
   ("M-g o" . consult-org-heading)
 
   ("C-c o" . transient-org-toggles)
