@@ -27,8 +27,9 @@
 (defun +complete ()
   "TAB complete."
   (interactive)
-  (or (yas-expand)
-      (corfu-complete)))
+  (when (meow-insert-mode-p)
+    (or (yas-expand)
+        (corfu-complete))))
 
 (require 'corfu)
 (setq corfu-auto t

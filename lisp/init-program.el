@@ -169,7 +169,8 @@ ARGS is ORIG-FN args."
 (setq yas-snippet-dirs
       (list
        (expand-file-name "config/yasnippet/snippets/"
-                         user-emacs-directory)))
+                         user-emacs-directory))
+      yas-buffer-local-condition #'meow-insert-mode-p)
 
 (require 'yasnippet)
 (yas-global-mode 1)
