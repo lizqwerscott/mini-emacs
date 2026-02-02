@@ -11,8 +11,6 @@
         (text-mode . normal)
         (prog-mode . normal)
         (conf-mode . normal)
-        (helpful-mode . normal)
-        (help-mode . normal)
         (compilation-mode . normal)
         (messages-buffer-mode . normal)
         (eww-mode . normal)
