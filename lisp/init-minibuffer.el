@@ -338,7 +338,8 @@ DEFS is a plist associating completion categories to commands."
   ("C-x C-j" . consult-dir-jump-file))
 
 (global-bind-keys
- (("s-x" "M-x") . execute-extended-command))
+ (("s-x" "M-x") . execute-extended-command)
+ (("s-X" "M-X") . execute-extended-command-for-buffer))
 
 (provide 'init-minibuffer)
 ;;; init-minibuffer.el ends here.
