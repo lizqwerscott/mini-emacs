@@ -143,7 +143,6 @@ prepended to the element after the #+HEADER: tag."
     ("e" "Display Pretty Entities" org-toggle-pretty-entities :toggle org-pretty-entities :transient t)
     ("i" "Display inline images" org-toggle-inline-images :toggle org-inline-image-overlays :transient t)]
    ["Org Management"
-    ("p" "Set Property" org-set-property)
     ("E" "Export" org-export-dispatch)
     ("L" "List export file" org-list-export-file)]]
   [("q" "Quit" transient-quit-one)])
