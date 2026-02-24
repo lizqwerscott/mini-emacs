@@ -29,6 +29,8 @@
       '((sequence "TODO(t)" "DOING(i)" "HANGUP(h)" "|" "DONE(d)" "CANCEL(c)")
         (sequence "⚑(T)" "🏴(I)" "❓(H)" "|" "✔(D)" "✘(C)")))
 
+(setq org-priority-lowest ?D)
+
 (setq org-format-latex-options
       (plist-put org-format-latex-options :scale 4.0))
 
