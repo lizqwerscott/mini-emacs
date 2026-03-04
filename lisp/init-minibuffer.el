@@ -265,6 +265,49 @@ DEFS is a plist associating completion categories to commands."
 (define-minibuffer-key "\C-s"
                        'file #'consult-find-for-minibuffer)
 
+;; consult buffer
+(defvar my:consult-source-normal-buffer
+  `( :name     "Normal Buffer"
+     :narrow   ?b
+     :category buffer
+     :face     consult-buffer
+     :history  buffer-name-history
+     :state    ,#'consult--buffer-state
+     :default  t
+     :items
+     ,(lambda () (consult--buffer-query :sort 'visibility
+                                        :filter t
+                                        :filter t
+                                        :exclude '("^\\*.*\\*$" "^magit.*:.*" "^ .*")
+                                        :include nil
+                                        :as #'consult--buffer-pair)))
+  "Normal Buffer source for `consult-buffer'.
+Only buffers returned by the `consult-buffer-list-function' are taken into
+account.")
+
+(defvar my:consult-source-special-buffer
+  `( :name     "Special Buffer"
+     :narrow   ?s
+     :category buffer
+     :face     consult-buffer
+     :history  buffer-name-history
+     :state    ,#'consult--buffer-state
+     :default  t
+     :items
+     ,(lambda () (consult--buffer-query :sort 'visibility
+                                        :filter t
+                                        :include '("^\\*.*\\*$" "^magit.*")
+                                        :as #'consult--buffer-pair)))
+  "Special Buffer source for `consult-buffer'.
+Only buffers returned by the `consult-buffer-list-function' are taken into
+account.")
+
+(add-to-list 'consult-buffer-sources 'my:consult-source-special-buffer)
+(add-to-list 'consult-buffer-sources 'my:consult-source-normal-buffer)
+
+(with-eval-after-load 'consult
+  (delq 'consult-source-buffer consult-buffer-sources))
+
 ;; meow while translate i into TAB
 (keymap-unset goto-map "TAB")
 (global-unset-key (kbd "C-x C-r"))
