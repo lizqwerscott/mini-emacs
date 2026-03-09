@@ -148,5 +148,109 @@ Returns an alist where keys are export formats and values are file paths."
           (t
            (call-interactively 'org-insert-link)))))
 
+;;; menu
+(require 'lib-transient)
+
+(defun hot-expand (str &optional mod)
+  "Expand org template.
+
+STR is a structure template string recognised by org like <s. MOD is a
+string with additional parameters to add the begin line of the
+structure element. HEADER string includes more parameters that are
+prepended to the element after the #+HEADER: tag."
+  (let (text)
+    (when (region-active-p)
+      (setq text (buffer-substring (region-beginning) (region-end)))
+      (delete-region (region-beginning) (region-end)))
+    (insert str)
+    (if (fboundp 'org-try-structure-completion)
+        (org-try-structure-completion) ; < org 9
+      (progn
+        ;; New template expansion since org 9
+        (require 'org-tempo nil t)
+        (org-tempo-complete-tag)))
+    (when mod (insert mod) (forward-line))
+    (when text (insert text))))
+
+(pretty-transient-define-prefix transient-org-template ()
+  "Transient org template menu."
+  [["Basic"
+    ("e" "example" (hot-expand "<e"))
+    ("l" "latex" (hot-expand "<l"))
+    ("x" "quote" (hot-expand "<q"))
+    ("v" "verse" (hot-expand "<v"))
+    ("b" "bash" (hot-expand "<s" "bash"))]
+   ["Head"
+    ("i" "index" (hot-expand "<i"))
+    ("I" "INCLUDE" (hot-expand "<I"))
+    ("S" "Startup" (insert "#+STARTUP: "))
+    ("L" "LaTeX" (hot-expand "<L"))
+    ("P" "Latex Preview" (insert "#+STARTUP: latexpreview "))
+    ("Mb" "Html Bigblow Theme" (insert "#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-bigblow.setup"))
+    ("Mr" "Html Readtheorg Theme" (insert "#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup"))
+    ("Mn" "Html Normal Css" (insert "#+HTML_HEAD: <link rel=\"stylesheet\" type=\"text/css\" href=\"http://gongzhitaao.org/orgcss/org.css\"/>"))]
+   ["Source"
+    ("ss" "src" (hot-expand "<s"))
+    ("se" "emacs-lisp" (hot-expand "<s" "emacs-lisp"))
+    ("sp" "python" (hot-expand "<s" "python"))
+    ("sP" "python" (hot-expand "<s" "python :results output"))
+    ("sc" "c++" (hot-expand "<s" "c++"))
+    ("sy" "yaml" (hot-expand "<s" "yaml-ts"))]
+   ["Misc"
+    ("u" "plantuml" (hot-expand "<s" "plantuml :file chart.png"))
+    ("G" "gnuplot" (hot-expand "<s" "gnuplot :results output :file ./result.png"))
+    ("<" "ins" self-insert-command)]]
+  [("q" "Quit" transient-quit-one)])
+
+(defun org-insert-or-surround (open close)
+  "Insert or surround text with LaTeX-style delimiters.
+
+If the region is active, wrap the selected text with the delimiters specified by
+OPEN and CLOSE. Otherwise, insert the delimiters with space for text in between."
+  (if (use-region-p)
+      (let ((begin (region-beginning))
+            (end (region-end)))
+        (save-excursion
+          (goto-char begin)
+          (insert (format "\\%s " open))
+          (goto-char (+ end 3))
+          (insert (format " \\%s" close))))
+    (insert (format "\\%s  \\%s" open close))
+    (backward-char 3)))
+
+(pretty-transient-define-prefix transient-org-line-template ()
+  "Transient org line menu."
+  [["Link"
+    ("l" "Normal" ar/org-insert-link-dwim)]
+   ["Emphasize"
+    ("=" "Verbatim" (org-emphasize ?=))
+    ("~" "Code" (org-emphasize ?=))
+    ("+" "Delete" (org-emphasize ?+))
+    ("_" "Underline" (org-emphasize ?_))
+
+    ("/" "Italic" (org-emphasize ?/))
+    ("*" "Bold" (org-emphasize ?*))
+    ("e" "Emphasize" org-emphasize)]
+   ["Latex"
+    ("i" "Inline math" (org-insert-or-surround "(" ")"))
+    ("I" "Display math" (org-insert-or-surround "[" "]"))
+    ("L" "Convert to latex" latex-math-from-calc :if region-active-p)]
+   ["Misc"
+    (">" "ins" self-insert-command)]]
+  [("q" "Quit" transient-quit-one)])
+
+(pretty-transient-define-prefix transient-org-toggles ()
+  "Transient org menu."
+  :transient-non-suffix 'transient--do-stay
+  [["Display"
+    ("l" "Display Link" org-toggle-link-display :toggle (not org-link-descriptive) :transient t)
+    ("m" "Hide Emphasis Markers" org-toggle-display-emphasis-markers :toggle org-hide-emphasis-markers :transient t)
+    ("e" "Display Pretty Entities" org-toggle-pretty-entities :toggle org-pretty-entities :transient t)
+    ("i" "Display inline images" org-toggle-inline-images :toggle org-inline-image-overlays :transient t)]
+   ["Org Management"
+    ("E" "Export" org-export-dispatch)
+    ("L" "List export file" org-list-export-file)]]
+  [("q" "Quit" transient-quit-one)])
+
 (provide 'lib-org)
 ;;; lib-org.el ends here
