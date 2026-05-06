@@ -72,6 +72,47 @@ and update transparent."
 ;;; mode lines
 (require 'init-modeline)
 
+;;; tab bar
+
+(defun tab-bar-switch-or-create (tab-name)
+  "Create TAB-NAME tabbar or switch it."
+  (interactive (list
+                (consult--read (mapcar (lambda (tab)
+                                         (alist-get 'name tab))
+                                       (tab-bar--tabs-recent))
+                               :prompt "Input Tab bar name (Default Temp): "
+                               :default "Temp"
+                               :predicate nil)))
+  (let ((tab-index (tab-bar--tab-index-by-name tab-name)))
+    (if tab-index
+        (tab-bar-select-tab (1+ tab-index))
+      (tab-bar-new-tab)
+      (tab-bar-rename-tab tab-name))
+    tab-index))
+
+(setq tab-bar-separator " ")
+(setopt tab-bar-close-button-show nil
+        tab-bar-new-button-show nil
+        tab-bar-new-tab-to 'rightmost
+        tab-bar-tab-hints t
+        tab-bar-show 1
+        tab-bar-tab-name-truncated-max 20
+        tab-bar-auto-width t
+        ;; Add spaces for tab-name
+        tab-bar-format '(tab-bar-format-tabs
+                         tab-bar-format-add-tab
+                         tab-bar-format-align-right))
+
+(tab-rename "Main")
+
+(global-bind-keys
+ ("C-c l l" . ("Switch Tab" . tab-bar-switch-to-tab))
+ ("C-c l b" . consult-buffer-other-tab)
+ ("C-c l f" . find-file-other-tab)
+ ("C-c l n" . ("Switch or Create Tab" . tab-bar-switch-or-create))
+ ("C-c l k" . ("Close Tab" . tab-bar-close-tab)))
+
+
 ;;; Line number
 (add-hooks '(prog-mode conf-mode)
            #'(lambda ()
