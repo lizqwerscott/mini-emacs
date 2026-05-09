@@ -95,6 +95,7 @@
 (defvar *package-early-install-list*
   '(no-littering
     exec-path-from-shell
+    treesit-auto
 
     mct
     vertico

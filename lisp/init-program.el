@@ -19,7 +19,22 @@
    '("@" . "C-c @")))
 
 ;;; Tree-sitter
+(require 'treesit-auto)
+
+(setq treesit-auto-install 'prompt)
+(delete 'markdown treesit-auto-langs)
+
+(treesit-auto-add-to-auto-mode-alist 'all)
+(global-treesit-auto-mode)
+
+(defun +treesit-install-required-language-grammars ()
+  "Install all required language grammar."
+  (interactive)
+  (let ((treesit-auto-langs '(bash c cpp lua python rust zig yaml toml)))
+    (treesit-auto-install-all)))
+
 (require 'treesit)
+
 (customize-set-variable 'treesit-font-lock-level 4)
 
 (treesit-font-lock-recompute-features
@@ -335,17 +350,6 @@ ARGS is ORIG-FN args."
   (with-eval-after-load 'eglot
     (add-to-list 'eglot-server-programs
                  '((python-mode python-ts-mode) . ("ty" "server")))))
-
-;;; bash
-(add-hook 'sh-mode-hook #'(lambda () (treesit-parser-create 'bash)))
-
-;;; json
-(add-hook 'json-mode-hook #'(lambda () (treesit-parser-create 'json)))
-(setq json-ts-mode-indent-offset 4)
-
-;;; yaml
-(add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-ts-mode))
 
 ;;; markdown
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
