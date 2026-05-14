@@ -175,6 +175,31 @@
 ;; not auto preview
 (setq consult-preview-key "C-o")
 
+(defun selected-region-or-symbol-at-point ()
+  "Return the selected region, otherwise return the symbol at point."
+  (if (region-active-p)
+      (buffer-substring-no-properties (region-beginning) (region-end))
+    (thing-at-point 'symbol t)))
+
+(consult-customize
+ consult-goto-line consult-xref consult-notes-search-in-all-notes :preview-key 'any
+ consult-line consult-line-multi
+ consult-ripgrep consult-git-grep consult-grep
+ :initial (selected-region-or-symbol-at-point)
+ :preview-key 'any)
+
+(defun my/consult--read (fn &rest args)
+  "Select initial texts in `consult--read'."
+  (minibuffer-with-setup-hook
+      (lambda ()
+        "Select initial texts."
+        (when (> (- (point-max) (minibuffer-prompt-end))
+                 0)
+          (set-mark (point-max))
+          (goto-char (minibuffer-prompt-end))))
+    (apply fn args)))
+(advice-add #'consult--read :around #'my/consult--read)
+
 (add-hook 'completion-list-mode-hook 'consult-preview-at-point-mode)
 
 (defun buffer-list-filter ()
@@ -382,7 +407,9 @@ account.")
                        (set-buffer (window-buffer (minibuffer-selected-window)))
                        (or (thing-at-point 'symbol t) "")))))
   ("C-x C-d" . consult-dir)
-  ("C-x C-j" . consult-dir-jump-file))
+  ("C-x C-j" . consult-dir-jump-file)
+
+  ("C-y" . yank))
 
 (global-bind-keys
  (("s-x" "M-x") . execute-extended-command)
