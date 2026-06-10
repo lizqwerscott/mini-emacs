@@ -95,7 +95,7 @@ Return the cached regexp pattern if found, or nil if no entry exists for KEY."
     (gethash hash-key fussy-orderless--chinese-regexp-cache)))
 
 (defun fussy-orderless-chinese-regexp-score (string query)
-  "Use QUERY and STRING calc chinese regexp score."
+  "Use QUERY and STRING calc chinese regexp score with pyim."
   (require 'pyim)
   (when-let* (((string-match-p "\\cc" string))
               (regexp (when (fboundp 'pyim-cregexp-build)
@@ -115,6 +115,57 @@ Return the cached regexp pattern if found, or nil if no entry exists for KEY."
                  (* 80 (/ (float (- len start)) len)))
               start
               end)))))
+
+(defun fussy-orderless-match-all-occurrences (regexp string)
+  "Return a list of all matches of REGEXP in STRING.
+Each match is a list (START END MATCHED-STRING)."
+  (let ((start 0)
+        result)
+    (while (string-match regexp string start)
+      (let ((m-start (match-beginning 0))
+            (m-end (match-end 0)))
+        (push (list m-start m-end (substring string m-start m-end)) result)
+        (setq start m-end)))
+    (nreverse result)))
+
+(defun fussy-orderless-rime-chinese-regexp-score (string query)
+  "Use QUERY and STRING calc chinese regexp score with rime."
+  (require 'rime)
+  (when-let* (((string-match-p "\\cc" string))
+              (regexp-c (when (fboundp 'rime-candidates-regexp)
+                          (let* ((cache (fussy-orderless--chinese-cache-get query)))
+                            (if cache
+                                cache
+                              (let ((regexp (rime-candidates-regexp query)))
+                                (fussy-orderless--chinese-cache-put query regexp)
+                                regexp)))))
+              (regexp (car regexp-c))
+              (matches (fussy-orderless-match-all-occurrences regexp string))
+              (len (length string))
+              (all-score 0))
+    (let* ((match-pos nil)
+           (all-score 0)
+           (candidates (cdr regexp-c))
+           (candidates-len (length candidates)))
+      (dolist (match matches)
+        (pcase-let* ((`(,start ,end ,match-str) match)
+                     (index (cl-position match-str candidates :test #'equal)))
+          (when (<= end len)
+            (cl-incf all-score
+                     (+ (* 20 (/ (float (- end start))
+                                 len))
+                        (* 80 (/ (float (- len start)) len))
+                        (if candidates
+                            (* 100
+                               (if index
+                                   (/ (float (- candidates-len index)) candidates-len)
+                                 0))
+                          0)))
+            (setq match-pos
+                  (append match-pos
+                          (list start end))))))
+      (append (list all-score) match-pos))))
+
 
 (defun fussy-orderless-not-score (_ _)
   "Use QUERY and STRING calc score."
@@ -203,16 +254,20 @@ ITEMS-LEN is all items length."
   "Score STR for NORMAL-ITEMS using NORMAL-SCORE-FN.
 ITEMS-LEN is all items length.
 ARGS is normal score fn args."
-  (let* ((lst (mapcar (lambda (item)
+  (let* ((trim-str (string-trim-left str))
+         (space-str-len (- (length str) (length trim-str)))
+         (lst (mapcar (lambda (item)
                         (pcase-let* ((`(,query ,index) item))
                           (when-let* ((res (apply normal-score-fn
-                                                  (append (list str query)
+                                                  (append (list trim-str query)
                                                           (list args))))
-                                      (score (car res)))
+                                      (score (car res))
+                                      (position (cdr res)))
                             (append (list
                                      (round (* (1+ (- items-len index))
                                                score)))
-                                    (cdr res)))))
+                                    (mapcar (lambda (i) (+ i space-str-len))
+                                            position)))))
                       normal-items))
          (total-score 0)
          (match-pos))
@@ -225,22 +280,19 @@ ARGS is normal score fn args."
     (cons total-score
           match-pos)))
 
+;;;###autoload
 (defun fussy-orderless-score-with-flx (str query &rest args)
   "Score STR for QUERY with ARGS using orderless."
   (require 'flx)
   (pcase-let* ((keys (fussy-orderless--get-dispatch-key))
                (`(,prefix-items ,normal-items ,len) (fussy-orderless--split-string-with-prefixs query keys))
                (prefix-scores (fussy-orderless-score str prefix-items len))
-               (normal-scores (fussy-orderless-normal-score (fussy-without-bad-char str) normal-items len #'flx-score (car args))))
-    (if normal-scores
-        (if prefix-scores
-            (append (list (+ (car prefix-scores) (car normal-scores)))
-                    (sort (append (cdr normal-scores)
-                                  (cdr prefix-scores))
-                          '<))
-          normal-scores)
-      prefix-scores)))
+               (normal-scores (fussy-orderless-normal-score str normal-items len #'flx-score (car args))))
+    (list (+ (car prefix-scores) (car normal-scores))
+          (sort (cdr normal-scores) '<)
+          (cdr prefix-scores))))
 
+;;;###autoload
 (defun fussy-orderless-score-with-flx-rs (str query &rest args)
   "Score STR for QUERY with ARGS using orderless."
   (require 'flx-rs)
@@ -248,15 +300,99 @@ ARGS is normal score fn args."
                (`(,prefix-items ,normal-items ,len) (fussy-orderless--split-string-with-prefixs query keys))
                (prefix-scores (fussy-orderless-score str prefix-items len))
                (normal-scores (when (fboundp 'flx-rs-score)
-                                (fussy-orderless-normal-score (fussy-without-bad-char str) normal-items len #'flx-rs-score args))))
-    (if normal-scores
-        (if prefix-scores
-            (append (list (+ (car prefix-scores) (car normal-scores)))
-                    (sort (append (cdr normal-scores)
-                                  (cdr prefix-scores))
-                          '<))
-          normal-scores)
-      prefix-scores)))
+                                (fussy-orderless-normal-score str normal-items len #'flx-rs-score args))))
+    (list (+ (car prefix-scores) (car normal-scores))
+          (sort (cdr normal-scores) '<)
+          (cdr prefix-scores))))
+
+(defun fussy-orderless-highlight-prefix (str pos)
+  "Apply `orderless-match-faces' to STR at positions given by POS.
+
+POS is a list of integers representing character positions pairwise (start, end)
+in STR. Each pair is highlighted with a consecutive face from
+`orderless-match-faces', cycling through available faces starting from index 2."
+  (let* ((n (- (length orderless-match-faces) 2))
+         (i 0))
+    (dolist (item (seq-partition pos 2))
+      (pcase-let* ((`(,x ,y) item))
+        (add-face-text-property x y
+                                (aref orderless-match-faces
+                                      (+ (mod i n)
+                                         2))
+                                nil str)
+        (incf i)))
+    str))
+
+;;;###autoload
+(defun fussy-orderless-scores (candidates string &optional cache)
+  "Score and propertize CANDIDATES using STRING.
+
+Use CACHE for scoring.
+
+Set a text-property \='completion-score on candidates with their score.
+`completion--adjust-metadata' later uses this \='completion-score for sorting."
+  (let ((result '()))
+    (dolist (x candidates)
+      (if (> (length x) fussy-max-word-length-to-score)
+          ;; Don't score x but don't filter it out either.
+          (unless fussy-filter-unscored-candidates
+            (push (copy-sequence x) result))
+
+        (pcase-let* ((`(,score ,normal-position ,prefix-position) (fussy-orderless-score-with-flx x string cache)))
+          (fussy--debug "fn: %S candidate: %s query: %s score %S"
+                        'fussy-score x string score)
+          ;; Candidates with a score of N or less are filtered.
+          (when (fussy-valid-score-p (append (list score) normal-position))
+            (setf x (copy-sequence x))
+            (put-text-property 0 1 'completion-score score x)
+
+            ;; If we're using pcm highlight, we don't need to propertize the
+            ;; string here. This is faster than the pcm highlight but doesn't
+            ;; seem to work with `find-file'.
+            (when (fussy--should-propertize-p)
+              (setf x (funcall fussy-propertize-fn x (append (list score) normal-position))))
+
+            (when prefix-position
+              (setf x (fussy-orderless-highlight-prefix x prefix-position)))
+
+            (push x result)))))
+    ;; Returns nil if empty.
+    result))
+
+(defun fussy-orderless-filter-orderless-flex (string table pred point)
+  "Match STRING to the entries in TABLE.
+
+Use `orderless' for filtering by passing STRING, TABLE and PRED to
+
+`orderless-filter'.  _POINT is not used. This version sets up `orderless'
+to only use the `orderless-flex' pattern."
+  (require 'orderless)
+  (let ((orderless-matching-styles '(orderless-flex)))
+    (fussy-orderless-filter string table pred point)))
+
+(defun fussy-orderless-filter (string table pred _point)
+  "Match STRING to the entries in TABLE.
+
+Use `orderless' for filtering by passing STRING, TABLE and PRED to
+
+`orderless-filter'.  _POINT is not used."
+  (require 'orderless)
+  (when (and (fboundp 'orderless--filter)
+             (fboundp 'orderless--compile))
+    (pcase-let ((`(,prefix ,regexps ,ignore-case ,pred)
+                 (orderless--compile string table pred)))
+      (when-let* ((completions (orderless--filter
+                                prefix regexps ignore-case table pred)))
+        (list completions regexps prefix)))))
+
+;;;###autoload
+(defun fussy-orderless-setup ()
+  "Set up `fussy' for orderless flx."
+  (fussy-setup)
+  (setq fussy-filter-fn 'fussy-orderless-filter-orderless-flex)
+  (setq fussy-score-ALL-fn 'fussy-orderless-scores)
+  (setq fussy-AND-component-separator " +")
+  (setq fussy-use-cache nil))
 
 (provide 'fussy-orderless)
 ;;; fussy-orderless.el ends here
