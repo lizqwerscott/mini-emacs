@@ -113,7 +113,9 @@ LANG is the language symbol, and REST are the remaining arguments."
         (note "i" compilation-info)))
 
 (add-hook 'prog-mode-hook
-          #'flymake-mode)
+             (lambda ()
+               (when (derived-mode-p 'lisp-mode 'emacs-lisp-mode)
+                 (flymake-mode))))
 
 (setq flymake-popon-width 80)
 
@@ -272,7 +274,6 @@ ARGS is ORIG-FN args."
 (setq eglot-stay-out-of
       '(imenu))
 
-;;; keymap
 (defun eglot-restart ()
   "Restart eglot."
   (interactive)
@@ -287,9 +288,10 @@ ARGS is ORIG-FN args."
   ("M-g u" . eglot-find-implementation))
 
 (add-hook 'prog-mode-hook
-          #'(lambda ()
-              (unless (derived-mode-p 'emacs-lisp-mode 'lisp-mode 'makefile-mode 'snippet-mode 'json-ts-mode)
-                (eglot-ensure))))
+          (lambda ()
+            (unless (derived-mode-p 'emacs-lisp-mode 'lisp-mode 'makefile-mode 'snippet-mode 'json-ts-mode 'plantuml-mode 'cmake-ts-mode)
+              (eglot-ensure)))
+          -100)
 
 ;; Emacs LSP booster
 (when (executable-find "emacs-lsp-booster")
