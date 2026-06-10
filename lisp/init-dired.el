@@ -15,7 +15,7 @@
 (setq dired-listing-switches "-AFhlv --group-directories-first")
 ;; (setq dired-listing-switches
 ;;       "-l --almost-all --human-readable --time-style=long-iso --group-directories-first --no-group")
-(setq dired-kill-when-opening-new-dired-buffer t)
+;; (setq dired-kill-when-opening-new-dired-buffer t)
 
 ;; Dont prompt about killing buffer visiting delete file
 (setq dired-clean-confirm-killing-deleted-buffers nil)
@@ -38,7 +38,16 @@
 
 (setq ls-lisp-dirs-first t)
 (when sys/macp
-  (setq insert-directory-program "/opt/homebrew/bin/gls"))
+  (if (executable-find "gls")
+      (progn
+        ;; Use GNU ls as `gls' from `coreutils' if available.
+        (setq insert-directory-program "gls")
+        ;; Using `insert-directory-program'
+        (setq ls-lisp-use-insert-directory-program t))
+    (progn
+      ;; Suppress the warning: `ls does not support --dired'.
+      (setq dired-use-ls-dired nil)
+      (setq dired-listing-switches "-alh"))))
 
 ;; Enable the disabled dired commands
 (put 'dired-find-alternate-file 'disabled nil)
